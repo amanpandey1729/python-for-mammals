@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Python for Mammals</title>
+
+<style>
+:root{
+    --blue:#3776ab;
+    --yellow:#ffd43b;
+    --dark:#1f2937;
+    --muted:#64748b;
+    --bg:#f8fafc;
+    --card:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, sans-serif;
+    background:var(--bg);
+    color:var(--dark);
+    line-height:1.6;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.hero{
+    text-align:center;
+    padding:40px 20px;
+}
+
+.hero img{
+    width:180px;
+    max-width:100%;
+}
+
+.hero h1{
+    margin-top:20px;
+    font-size:3rem;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:1.1rem;
+    max-width:700px;
+    margin:15px auto;
+}
+
+.cta{
+    margin-top:25px;
+}
+
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:12px;
+    margin:8px;
+    font-weight:600;
+}
+
+.primary{
+    background:var(--blue);
+    color:white;
+}
+
+.secondary{
+    background:white;
+    border:1px solid #ddd;
+    color:var(--dark);
+}
+
+.section-title{
+    text-align:center;
+    margin:60px 0 30px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.card p{
+    color:var(--muted);
+    font-size:.95rem;
+}
+
+.card a{
+    text-decoration:none;
+    color:var(--blue);
+    font-weight:bold;
+}
+
+.footer{
+    margin-top:70px;
+    text-align:center;
+    color:var(--muted);
+    padding-bottom:40px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="hero">
+
+<img src="assets/python-for-mammals-logo.png">
+
+<h1>🐍 Python for Mammals</h1>
+
+<p>
+A practical 45-Day Python Challenge designed for beginners,
+IT professionals, and curious learners who want to automate
+real-world tasks without becoming software developers.
+</p>
+
+<div class="cta">
+
+<a href="README.md" class="btn primary">
+📖 Read README
+</a>
+
+<a href="https://discord.gg/WhX45nvG" class="btn secondary">
+💬 Join Discord
+</a>
+
+</div>
+
+</div>
+
+<h2 class="section-title">
+🚀 Learning Journey
+</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Day 1</h3>
+<p>Installation, VS Code, Python setup and Hello Mammals.</p>
+<a href="days/day01/interactive/">Open →</a>
+</div>
+
+<div class="card">
+<h3>Day 2</h3>
+<p>Variables, comments, print(), arithmetic and data types.</p>
+<a href="days/day02/interactive/">Open →</a>
+</div>
+
+<div class="card">
+<h3>Day 3</h3>
+<p>Coming Soon</p>
+</div>
+
+<div class="card">
+<h3>Day 4</h3>
+<p>Coming Soon</p>
+</div>
+
+</div>
+
+<h2 class="section-title">
+🎯 End Goal
+</h2>
+
+<div class="card">
+
+<p>
+By the end of the challenge you will be able to build useful
+automation projects such as:
+
+<ul style="margin-left:20px;margin-top:10px;">
+<li>Health Check Automation</li>
+<li>CSV Reports</li>
+<li>Excel Reports</li>
+<li>Log Analysis</li>
+<li>Inventory Collection</li>
+<li>Backup Verification</li>
+<li>Monitoring Utilities</li>
+</ul>
+
+</p>
+
+</div>
+
+<div class="footer">
+
+Built with ❤️ by the Python for Mammals Community
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -148,6 +148,12 @@ Join the Python for Mammals Discord Community to:
 * Get help from peers
 * Learn together
 
+Discord:
+https://discord.gg/WhX45nvG
+
+LinkedIn:
+https://linkedin.com/in/amanpandey1729
+
 We learn by building.
 
 Happy Automating! 🚀
