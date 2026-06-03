@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 1 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:38px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:850;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    h2{font-size:28px; letter-spacing:-.03em; margin:0 0 10px}
+    h3{margin:0 0 8px; letter-spacing:-.02em}
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:230px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:92px;
+    }
+    .mini b{display:block; font-size:20px; color:var(--blue2)}
+    .mini span{display:block; color:var(--muted); font-size:13px; margin-top:3px}
+
+    section{padding:30px 0}
+    .section-head{display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:16px}
+    .section-head p{margin:0; color:var(--muted); max-width:680px}
+
+    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 10px 28px rgba(31,41,51,.06);
+    }
+    .card p{color:#475569; margin:0}
+    .icon{font-size:28px; margin-bottom:8px}
+
+    .setup-flow{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+    .step{
+      position:relative;
+      padding:18px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      cursor:pointer;
+      transition:.2s transform,.2s border,.2s box-shadow;
+    }
+    .step:hover{transform:translateY(-2px); border-color:#bfdbfe}
+    .step.active{border-color:var(--blue); box-shadow:0 14px 30px rgba(43,111,159,.12)}
+    .num{
+      width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+      background:#e8f3fb; color:var(--blue2); font-weight:900; margin-bottom:10px;
+    }
+    .step small{color:var(--muted); font-weight:700}
+    .detail-box{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .detail-title{font-size:22px; font-weight:900; letter-spacing:-.03em}
+    .detail-text{color:#475569; margin-top:8px}
+    .tip{
+      background:#fff7d6;
+      border:1px solid #f6df8e;
+      border-radius:16px;
+      padding:14px;
+      color:#5b4707;
+      font-weight:650;
+      margin-top:14px;
+    }
+
+    .terminal{
+      background:#0f172a;
+      color:#e5e7eb;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid #0b1220;
+      box-shadow:0 16px 35px rgba(15,23,42,.18);
+    }
+    .terminal-bar{
+      display:flex; gap:7px; padding:12px 14px; background:#111827; border-bottom:1px solid #243244;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#64748b}
+    .screen{padding:18px; font-family:Consolas, Monaco, monospace; font-size:14px; min-height:184px; white-space:pre-wrap}
+    .prompt{color:#93c5fd}.ok{color:#86efac}.warn{color:#fde68a}.err{color:#fca5a5}
+    .input-row{display:flex; gap:10px; padding:14px; border-top:1px solid #243244; background:#111827}
+    input{
+      flex:1;
+      border:1px solid #334155;
+      background:#0f172a;
+      color:#fff;
+      border-radius:12px;
+      padding:12px 14px;
+      font:inherit;
+      outline:none;
+    }
+    input:focus{border-color:#60a5fa}
+
+    .checklist{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+    .check{
+      display:flex; gap:12px; align-items:flex-start;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:14px;
+      cursor:pointer;
+      transition:.2s border,.2s background;
+    }
+    .box{
+      width:22px; height:22px; border-radius:7px; border:2px solid #cbd5e1; flex:0 0 22px;
+      display:grid; place-items:center; font-size:13px; color:#fff; font-weight:900;
+    }
+    .check.done{border-color:#bbf7d0; background:#f0fdf4}
+    .check.done .box{background:var(--green); border-color:var(--green)}
+    .check strong{display:block}.check span{display:block; color:var(--muted); font-size:13px; margin-top:2px}
+    .progress-wrap{margin-top:14px; background:#e5e7eb; border-radius:999px; overflow:hidden; height:12px}
+    .progress{height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--green)); transition:.25s width}
+    .progress-label{font-weight:850; margin-top:8px; color:var(--blue2)}
+
+    .quiz-options{display:grid; gap:10px; margin-top:14px}
+    .option{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:12px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:750;
+    }
+    .option.correct{border-color:#86efac; background:#f0fdf4; color:#166534}
+    .option.wrong{border-color:#fecaca; background:#fff1f2; color:#991b1b}
+    .feedback{margin-top:12px; font-weight:800; color:var(--blue2)}
+
+    .code-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .code-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line)}
+    pre{margin:0; padding:18px; overflow:auto; background:#0f172a; color:#e5e7eb; font-size:14px; line-height:1.7}
+    code{font-family:Consolas, Monaco, monospace}
+
+    footer{padding:34px 0 44px; color:var(--muted); text-align:center}
+
+    @media(max-width:900px){
+      .hero,.detail-box{grid-template-columns:1fr}
+      .grid,.setup-flow{grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .shell{width:min(100% - 22px,1120px)}
+      .hero{padding-top:28px}
+      .quick-grid,.grid,.setup-flow,.checklist{grid-template-columns:1fr}
+      .course-nav{border-radius:18px; flex-wrap:wrap}
+      .screen{font-size:13px}
+      .input-row{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 1 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#blueprint">Setup</a>
+        <a href="#terminal">Verify</a>
+        <a href="#checklist">Checklist</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="course-nav">
+      <span>Day 1</span>
+      <a href="../../../index.html">🏠 Home</a>
+      <a href="../../day02/interactive/">Day 2 ➜</a>
+    </div>
+  </div>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="badge">🛠️ Day 1 • Setup Blueprint</div>
+        <h1>Install once. Verify properly. Start confidently.</h1>
+        <p class="lead">Today is not about writing big code. Today is about preparing your machine so every future Python practice feels smooth, predictable and beginner-friendly.</p>
+        <div class="cta">
+          <a class="button primary" href="#blueprint">Start Setup Flow</a>
+          <a class="button secondary" href="#terminal">Try Verification</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div class="quick-grid">
+          <div class="mini"><b>1</b><span>Install Python</span></div>
+          <div class="mini"><b>2</b><span>Install an IDE</span></div>
+          <div class="mini"><b>3</b><span>Check version</span></div>
+          <div class="mini"><b>4</b><span>Run first file</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Why Day 1 matters</h2>
+          <p>A broken setup silently kills learning momentum. A clean setup gives you confidence before variables, conditions, loops and automation begin.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="icon">🐍</div><h3>Python Interpreter</h3><p>The actual engine that reads and runs your Python code.</p></div>
+        <div class="card"><div class="icon">🧠</div><h3>IDE / Editor</h3><p>A comfortable place to write, save, run and debug code.</p></div>
+        <div class="card"><div class="icon">✅</div><h3>Verification</h3><p>A tiny test that proves your machine is ready for the challenge.</p></div>
+      </div>
+    </section>
+
+    <section id="blueprint">
+      <div class="section-head">
+        <div>
+          <h2>Interactive Setup Blueprint</h2>
+          <p>Click each step. Read what it does. Move from installation to successful execution.</p>
+        </div>
+      </div>
+
+      <div class="setup-flow" id="steps"></div>
+
+      <div class="detail-box">
+        <div class="card">
+          <div class="detail-title" id="detailTitle">Python Download</div>
+          <div class="detail-text" id="detailText">Download Python from python.org and choose the latest stable version for your operating system.</div>
+          <div class="tip" id="detailTip">Windows users: during installation, select “Add Python to PATH”.</div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="screen" id="flowScreen"><span class="prompt">setup&gt;</span> Select a step to see the command or action.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="terminal">
+      <div class="section-head">
+        <div>
+          <h2>Mini Terminal Simulator</h2>
+          <p>Practice the two checks you will run on your real machine. Type a command and press Enter.</p>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="screen" id="terminalScreen"><span class="prompt">mammal@python:~$</span> Try: python --version
+<span class="prompt">mammal@python:~$</span> Or: print("Hello Mammals")</div>
+        <div class="input-row">
+          <input id="cmdInput" placeholder="Type here: python --version" autocomplete="off" />
+          <button class="primary" onclick="runCommand()">Run</button>
+          <button class="secondary" onclick="resetTerminal()">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Your first Python file</h2>
+          <p>Create a file named <strong>day01.py</strong>, paste this code and run it from VS Code.</p>
+        </div>
+      </div>
+      <div class="code-card">
+        <div class="code-head"><strong>day01.py</strong><button class="secondary" onclick="copyCode()">Copy Code</button></div>
+        <pre><code id="firstCode"># Day 1 - Python for Mammals
+# Purpose: Test that Python is installed and running correctly.
+
+print("Hello Mammals")
+print("Python setup is successful")
+print("I am ready for the 45-Day Challenge")</code></pre>
+      </div>
+    </section>
+
+    <section id="checklist">
+      <div class="section-head">
+        <div>
+          <h2>Day 1 Completion Checklist</h2>
+          <p>Mark each item after completing it on your machine. This progress stays only in your browser.</p>
+        </div>
+      </div>
+      <div class="checklist" id="checks"></div>
+      <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+      <div class="progress-label" id="progressLabel">0% complete</div>
+    </section>
+
+    <section id="quiz">
+      <div class="section-head">
+        <div>
+          <h2>Quick Confidence Check</h2>
+          <p>One question before Day 2. Choose the best answer.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Why do we check <code>python --version</code> after installation?</h3>
+        <div class="quiz-options">
+          <div class="option" onclick="answer(this,false)">To make Python faster</div>
+          <div class="option" onclick="answer(this,true)">To confirm the system can find and run Python</div>
+          <div class="option" onclick="answer(this,false)">To install VS Code automatically</div>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">Built for Python for Mammals • Day 1 complete means your machine is ready 🐾</footer>
+
+  <script>
+    const setupSteps = [
+      {n:1, icon:'🌐', title:'Download Python', small:'Get the engine', text:'Visit python.org and download the latest stable Python release for your operating system.', tip:'Use the official website whenever possible.', screen:'Open browser → python.org → Downloads → Download Python'},
+      {n:2, icon:'⚙️', title:'Run Installer', small:'Install correctly', text:'Run the installer. On Windows, the most important checkbox is Add Python to PATH.', tip:'Missing PATH is the most common Day 1 issue.', screen:'Windows installer → check “Add Python to PATH” → Install Now'},
+      {n:3, icon:'🧪', title:'Check Version', small:'Verify install', text:'Open Terminal, CMD or PowerShell and run python --version. A version number means Python is available.', tip:'If python does not work, try py --version on Windows.', screen:'python --version\nPython 3.x.x'},
+      {n:4, icon:'📝', title:'Install IDE', small:'Choose workspace', text:'Install VS Code or any IDE/editor you like. VS Code is recommended because it is beginner-friendly and widely used.', tip:'Install the official Microsoft Python extension in VS Code.', screen:'VS Code → Extensions → Search “Python” → Install Microsoft Python extension'},
+      {n:5, icon:'🐾', title:'Run First Code', small:'Hello Mammals', text:'Create day01.py, write a few print statements and run the file. This confirms the complete setup works.', tip:'Seeing output is your first win. Small win, big confidence.', screen:'print("Hello Mammals")\nOutput: Hello Mammals'}
+    ];
+
+    const checks = [
+      ['Python downloaded','Installed from official source or trusted package manager'],
+      ['PATH verified','python --version or py --version shows output'],
+      ['IDE installed','VS Code or another editor is ready'],
+      ['Python extension installed','VS Code can understand Python files'],
+      ['day01.py created','Your first file exists'],
+      ['Hello Mammals executed','Output appeared successfully']
+    ];
+
+    function renderSteps(){
+      const box = document.getElementById('steps');
+      box.innerHTML = setupSteps.map((s,i)=>`<div class="step ${i===0?'active':''}" onclick="selectStep(${i})"><div class="num">${s.n}</div><div class="icon">${s.icon}</div><h3>${s.title}</h3><small>${s.small}</small></div>`).join('');
+      selectStep(0);
+    }
+    function selectStep(i){
+      document.querySelectorAll('.step').forEach((el,idx)=>el.classList.toggle('active',idx===i));
+      const s = setupSteps[i];
+      document.getElementById('detailTitle').textContent = `${s.icon} ${s.title}`;
+      document.getElementById('detailText').textContent = s.text;
+      document.getElementById('detailTip').textContent = s.tip;
+      document.getElementById('flowScreen').innerHTML = `<span class="prompt">setup&gt;</span> ${s.screen.replace(/\n/g,'\n<span class="ok">✓</span> ')}`;
+    }
+
+    function runCommand(){
+      const input = document.getElementById('cmdInput');
+      const cmd = input.value.trim();
+      if(!cmd) return;
+      const screen = document.getElementById('terminalScreen');
+      let output = '';
+      const normalized = cmd.toLowerCase();
+      if(normalized === 'python --version' || normalized === 'py --version' || normalized === 'python3 --version'){
+        output = '\n<span class="ok">Python 3.x.x</span>\n<span class="ok">Great. Python is visible from terminal.</span>';
+      }else if(cmd.includes('print(') && cmd.includes('Hello Mammals')){
+        output = '\n<span class="ok">Hello Mammals</span>\n<span class="ok">Your first Python output is ready.</span>';
+      }else if(normalized === 'pip --version'){
+        output = '\n<span class="ok">pip is available.</span>\n<span class="warn">We will use packages later in the challenge.</span>';
+      }else{
+        output = '\n<span class="err">Not recognized in this mini simulator.</span>\n<span class="warn">Try: python --version or print("Hello Mammals")</span>';
+      }
+      screen.innerHTML += `\n<span class="prompt">mammal@python:~$</span> ${escapeHtml(cmd)}${output}`;
+      input.value = '';
+      screen.scrollTop = screen.scrollHeight;
+    }
+    function resetTerminal(){
+      document.getElementById('terminalScreen').innerHTML = '<span class="prompt">mammal@python:~$</span> Try: python --version\n<span class="prompt">mammal@python:~$</span> Or: print("Hello Mammals")';
+    }
+    document.getElementById('cmdInput').addEventListener('keydown', e=>{if(e.key==='Enter') runCommand();});
+    function escapeHtml(str){return str.replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+    function renderChecks(){
+      const box = document.getElementById('checks');
+      box.innerHTML = checks.map((c,i)=>`<div class="check" onclick="toggleCheck(${i})"><div class="box"></div><div><strong>${c[0]}</strong><span>${c[1]}</span></div></div>`).join('');
+      updateProgress();
+    }
+    function toggleCheck(i){
+      document.querySelectorAll('.check')[i].classList.toggle('done');
+      document.querySelectorAll('.box')[i].textContent = document.querySelectorAll('.check')[i].classList.contains('done') ? '✓' : '';
+      updateProgress();
+    }
+    function updateProgress(){
+      const total = checks.length;
+      const done = document.querySelectorAll('.check.done').length;
+      const pct = Math.round(done/total*100);
+      document.getElementById('progress').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = `${pct}% complete • ${done}/${total} done`;
+    }
+
+    function copyCode(){
+      navigator.clipboard.writeText(document.getElementById('firstCode').innerText);
+      const btn = event.target;
+      const old = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(()=>btn.textContent=old,1200);
+    }
+    function answer(el, correct){
+      document.querySelectorAll('.option').forEach(o=>o.classList.remove('correct','wrong'));
+      el.classList.add(correct?'correct':'wrong');
+      document.getElementById('feedback').textContent = correct ? 'Correct. This proves your system can find the Python interpreter.' : 'Not quite. The version check confirms Python is accessible from your terminal.';
+    }
+
+    renderSteps();
+    renderChecks();
+  </script>
+</body>
+</html>
