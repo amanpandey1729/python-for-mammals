@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 2 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 2 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • No prior coding needed</span>
+        <h1>Day 2: Make Python feel less like theory and more like play.</h1>
+        <p class="lead">Today you will touch the building blocks: comments, print, arithmetic, variables, assignment, data types and <code>type()</code>. Use the mini labs below to change values, predict outputs and build confidence.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">A small playground for people who want to learn Python by doing, not by memorizing.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>7</b><span>Day 2 concepts</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>15m</b><span>Quick revision</span></div>
+          <div class="mini"><b>1</b><span>Practical mini challenge</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Each concept is tiny. Together they become the base of every useful Python script you will write later.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill"># comments</span><h3>Leave notes for humans</h3><p>Comments explain why a line exists. Python ignores them, future-you thanks you.</p></article>
+        <article class="card"><span class="pill">print()</span><h3>Talk to the screen</h3><p>Use <code>print()</code> to display messages, results and checkpoints while learning.</p></article>
+        <article class="card"><span class="pill">math</span><h3>Calculate instantly</h3><p>Add, subtract, multiply, divide and use powers or remainders in seconds.</p></article>
+        <article class="card"><span class="pill">variables</span><h3>Name your values</h3><p>A variable is a label for data, like <code>coffee_count = 2</code>.</p></article>
+        <article class="card"><span class="pill">assignment</span><h3>Store and update</h3><p>The <code>=</code> sign assigns a value. It does not mean “equal” like maths class.</p></article>
+        <article class="card"><span class="pill">type()</span><h3>Ask Python what it sees</h3><p>Use <code>type()</code> to check whether data is text, number, decimal or true/false.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values and watch the output update. This is not a full Python interpreter, but it is enough to practice Day 2 concepts safely.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 2 labs">
+          <button class="tab active" data-panel="printlab">1. Print Builder<small>Make Python speak</small></button>
+          <button class="tab" data-panel="mathlab">2. Arithmetic Lab<small>Calculate with operators</small></button>
+          <button class="tab" data-panel="varlab">3. Variable Mixer<small>Store and reuse values</small></button>
+          <button class="tab" data-panel="typelab">4. Type Detective<small>Guess the data type</small></button>
+          <button class="tab" data-panel="fixlab">5. Fix the Code<small>Spot beginner mistakes</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="printlab">
+            <div class="workspace-head"><h3>Print Builder</h3><button class="secondary" onclick="resetPrintLab()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Your name</label><input id="nameInput" value="Mammal" /></div>
+                  <div><label>Today’s mood</label><input id="moodInput" value="curious" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="printCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="printOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="mathlab">
+            <div class="workspace-head"><h3>Arithmetic Lab</h3><button class="secondary" onclick="randomMath()">Try random values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>First number</label><input id="numA" type="number" value="10" /></div>
+                  <div><label>Second number</label><input id="numB" type="number" value="3" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="mathCode"></pre></div>
+                <div class="explain">Notice how <code>/</code> gives decimal division, <code>//</code> gives floor division and <code>%</code> gives the remainder.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="mathOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="varlab">
+            <div class="workspace-head"><h3>Variable Mixer</h3><button class="secondary" onclick="swapSnack()">Swap example</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Snack name</label><input id="snackName" value="samosa" /></div>
+                  <div><label>Quantity</label><input id="snackQty" type="number" value="2" /></div>
+                  <div><label>Price per item</label><input id="snackPrice" type="number" value="18" /></div>
+                  <div><label>Friend count</label><input id="friendCount" type="number" value="3" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="varCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="varOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="typelab">
+            <div class="workspace-head"><h3>Type Detective</h3><button class="secondary" onclick="newTypeQuestion()">New question</button></div>
+            <div class="workspace-body">
+              <p class="hint">Before clicking check, predict what <code>type()</code> will return.</p>
+              <div class="quiz-row">
+                <div class="codebox"><div class="bar">Python code</div><pre id="typeQuestion"></pre></div>
+                <select id="typeAnswer" aria-label="Choose type">
+                  <option value="str">str</option><option value="int">int</option><option value="float">float</option><option value="bool">bool</option>
+                </select>
+              </div>
+              <button class="primary" onclick="checkTypeAnswer()">Check answer</button>
+              <div class="result" id="typeResult"></div>
+              <div class="explain" id="typeExplain">Tip: Text inside quotes is usually <code>str</code>. Whole numbers are <code>int</code>. Decimal numbers are <code>float</code>. <code>True</code> and <code>False</code> are <code>bool</code>.</div>
+            </div>
+          </article>
+
+          <article class="panel" id="fixlab">
+            <div class="workspace-head"><h3>Fix the Code</h3><button class="secondary" onclick="showFixHint()">Need a hint?</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">Edit the broken code mentally first. Then reveal the corrected version.</p>
+                <div class="codebox"><div class="bar">Broken code</div><pre>message = Hello Mammals
+print(message)
+
+cups = "2"
+extra = 1
+print(cups + extra)</pre></div>
+                <div class="cta"><button class="primary" onclick="showFixedCode()">Reveal corrected code</button></div>
+                <div class="explain" id="fixHint" style="display:none">Hint: Text needs quotes. Also, Python cannot directly add text <code>"2"</code> and number <code>1</code>.</div>
+              </div>
+              <div class="output"><div class="bar">Corrected version</div><div class="outcontent" id="fixedOutput">Click “Reveal corrected code”.</div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build a tiny bill splitter</h2>
+          <p>Create variables for an item, price, quantity and number of people. Calculate the total and how much each person pays. It is simple, but it uses almost everything from Day 2.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I used comments to explain my code.</label>
+            <label class="check"><input type="checkbox" /> I used variables instead of repeating values.</label>
+            <label class="check"><input type="checkbox" /> I used arithmetic operators correctly.</label>
+            <label class="check"><input type="checkbox" /> I printed a readable final message.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># Tiny bill splitter
+item = "pizza"
+price = 250
+quantity = 2
+people = 4
+
+total = price * quantity
+share = total / people
+
+print("Item:", item)
+print("Total bill:", total)
+print("Each person pays:", share)</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 2: comments, print, arithmetic, variables, assignment, data types and type()
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('"','\\"'); }
+
+    function updatePrintLab(){
+      const name = $('nameInput').value || 'Mammal';
+      const mood = $('moodInput').value || 'curious';
+      $('printCode').textContent = `# This is a comment. Python ignores it.\nprint("Hello, ${q(name)}!")\nprint("Today I feel ${q(mood)}.")`;
+      $('printOutput').textContent = `Hello, ${name}!\nToday I feel ${mood}.`;
+    }
+    function resetPrintLab(){ $('nameInput').value='Mammal'; $('moodInput').value='curious'; updatePrintLab(); }
+
+    function safeNum(id, fallback){ const v = parseFloat($(id).value); return Number.isFinite(v) ? v : fallback; }
+    function updateMath(){
+      const a = safeNum('numA', 0), b = safeNum('numB', 1);
+      const div = b === 0 ? 'Cannot divide by zero' : (a / b);
+      const floor = b === 0 ? 'Cannot divide by zero' : Math.floor(a / b);
+      const rem = b === 0 ? 'Cannot divide by zero' : (a % b);
+      $('mathCode').textContent = `a = ${a}\nb = ${b}\n\nprint(a + b)   # addition\nprint(a - b)   # subtraction\nprint(a * b)   # multiplication\nprint(a / b)   # division\nprint(a // b)  # floor division\nprint(a % b)   # remainder`;
+      $('mathOutput').textContent = `${a + b}\n${a - b}\n${a * b}\n${div}\n${floor}\n${rem}`;
+    }
+    function randomMath(){ $('numA').value = Math.floor(Math.random()*30)+2; $('numB').value = Math.floor(Math.random()*9)+1; updateMath(); }
+
+    const snacks = [['book',1,399,2],['coffee',2,120,3],['notebook',3,80,4],['ticket',2,250,5],['mango',6,25,3]];
+    let snackIndex = 0;
+    function updateVar(){
+      const item = $('snackName').value || 'item';
+      const qty = safeNum('snackQty',0);
+      const price = safeNum('snackPrice',0);
+      const friends = safeNum('friendCount',1) || 1;
+      const total = qty * price;
+      const share = total / friends;
+      $('varCode').textContent = `# Variables store information\nitem = "${q(item)}"\nquantity = ${qty}\nprice = ${price}\nfriends = ${friends}\n\ntotal = quantity * price\nshare = total / friends\n\nprint(item)\nprint(total)\nprint(share)`;
+      $('varOutput').textContent = `${item}\n${total}\n${Number.isInteger(share) ? share : share.toFixed(2)}`;
+    }
+    function swapSnack(){
+      snackIndex = (snackIndex + 1) % snacks.length;
+      const [item,qty,price,friends] = snacks[snackIndex];
+      $('snackName').value=item; $('snackQty').value=qty; $('snackPrice').value=price; $('friendCount').value=friends; updateVar();
+    }
+
+    const typeQuestions = [
+      {code:'value = "42"\nprint(type(value))', ans:'str', why:'It is inside quotes, so Python treats it as text.'},
+      {code:'value = 42\nprint(type(value))', ans:'int', why:'A whole number without quotes is an integer.'},
+      {code:'value = 42.0\nprint(type(value))', ans:'float', why:'A number with a decimal point is a float.'},
+      {code:'value = True\nprint(type(value))', ans:'bool', why:'True and False are Boolean values.'},
+      {code:'value = "True"\nprint(type(value))', ans:'str', why:'Quotes change it into text, even if it looks like True.'}
+    ];
+    let currentQ = 0;
+    function newTypeQuestion(){
+      currentQ = Math.floor(Math.random() * typeQuestions.length);
+      $('typeQuestion').textContent = typeQuestions[currentQ].code;
+      $('typeResult').textContent = '';
+    }
+    function checkTypeAnswer(){
+      const chosen = $('typeAnswer').value;
+      const qn = typeQuestions[currentQ];
+      const good = chosen === qn.ans;
+      $('typeResult').innerHTML = good ? `<span class="ok">Correct.</span> Python returns &lt;class '${qn.ans}'&gt;.` : `<span class="bad">Not yet.</span> Correct answer is <code>${qn.ans}</code>.`;
+      $('typeExplain').innerHTML = qn.why;
+    }
+
+    function showFixHint(){ $('fixHint').style.display = 'block'; }
+    function showFixedCode(){
+      $('fixedOutput').textContent = `message = "Hello Mammals"\nprint(message)\n\ncups = 2\nextra = 1\nprint(cups + extra)\n\nOutput:\nHello Mammals\n3`;
+    }
+
+    ['nameInput','moodInput'].forEach(id => $(id).addEventListener('input', updatePrintLab));
+    ['numA','numB'].forEach(id => $(id).addEventListener('input', updateMath));
+    ['snackName','snackQty','snackPrice','friendCount'].forEach(id => $(id).addEventListener('input', updateVar));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updatePrintLab(); updateMath(); updateVar(); newTypeQuestion();
+  </script>
+</body>
+</html>
