@@ -1,249 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Python for Mammals</title>
-
 <style>
 :root{
-    --blue:#3776ab;
-    --yellow:#ffd43b;
-    --dark:#1f2937;
-    --muted:#64748b;
-    --bg:#f8fafc;
+    --bg:#f7f9fc;
     --card:#ffffff;
+    --text:#172033;
+    --muted:#64748b;
+    --line:#e5e7eb;
+    --blue:#2f78b7;
+    --blue-dark:#245f92;
+    --green:#16a34a;
+    --yellow:#f2c94c;
+    --soft-blue:#eaf4ff;
+    --shadow:0 18px 45px rgba(31,41,55,.08);
+    --radius:22px;
 }
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-    font-family:Segoe UI, sans-serif;
-    background:var(--bg);
-    color:var(--dark);
-    line-height:1.6;
+    margin:0;
+    font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(55,118,171,.12), transparent 34%),
+        radial-gradient(circle at top right, rgba(242,201,76,.18), transparent 28%),
+        var(--bg);
+    color:var(--text);
+    line-height:1.65;
 }
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:30px;
+.container{max-width:1120px;margin:auto;padding:34px 22px 56px}
+.hero{text-align:center;padding:34px 0 44px}
+.logo{
+    width:220px;
+    max-width:58vw;
+    border-radius:28px;
+    box-shadow:0 12px 30px rgba(31,41,55,.08);
 }
-
-.hero{
-    text-align:center;
-    padding:40px 20px;
-}
-
-.hero img{
-    width:180px;
-    max-width:100%;
-}
-
-.hero h1{
-    margin-top:20px;
-    font-size:3rem;
-}
-
-.hero p{
-    color:var(--muted);
-    font-size:1.1rem;
-    max-width:700px;
-    margin:15px auto;
-}
-
-.cta{
-    margin-top:25px;
-}
-
-.btn{
-    display:inline-block;
-    text-decoration:none;
-    padding:12px 22px;
-    border-radius:12px;
-    margin:8px;
-    font-weight:600;
-}
-
-.primary{
-    background:var(--blue);
-    color:white;
-}
-
-.secondary{
-    background:white;
-    border:1px solid #ddd;
-    color:var(--dark);
-}
-
-.section-title{
-    text-align:center;
-    margin:60px 0 30px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:var(--card);
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-4px);
-}
-
-.card h3{
-    margin-bottom:10px;
-}
-
-.card p{
-    color:var(--muted);
-    font-size:.95rem;
-}
-
-.card a{
-    text-decoration:none;
-    color:var(--blue);
-    font-weight:bold;
-}
-
-.course-nav{
-    max-width:760px;
-    margin:18px auto 0;
-    padding:10px 14px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:12px;
-    background:#ffffff;
-    border:1px solid #e5e7eb;
-    border-radius:999px;
-    font-size:14px;
-}
-
-.course-nav a,
-.course-nav span{
-    text-decoration:none;
-    color:#334155;
-    font-weight:600;
-}
-
-.course-nav a:hover{
-    color:#2b6f9f;
-}
-
-.footer{
-    margin-top:70px;
-    text-align:center;
-    color:var(--muted);
-    padding-bottom:40px;
-}
+h1{font-size:clamp(2.3rem,5vw,4rem);line-height:1.05;margin:28px 0 14px;letter-spacing:-1.4px}
+.hero-text{max-width:760px;margin:0 auto;color:var(--muted);font-size:clamp(1rem,2vw,1.2rem)}
+.progress-wrap{max-width:620px;margin:28px auto 0;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 12px;box-shadow:0 10px 24px rgba(31,41,55,.06)}
+.progress-top{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;font-weight:700;color:#334155;margin:0 6px 8px}
+.progress-track{height:10px;background:#edf2f7;border-radius:999px;overflow:hidden}
+.progress-fill{width:4.44%;height:100%;background:linear-gradient(90deg,var(--blue),var(--yellow));border-radius:999px}
+.cta{margin-top:28px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;padding:13px 20px;border-radius:14px;font-weight:800;transition:.2s;border:1px solid transparent}
+.btn.primary{background:var(--blue);color:#fff;box-shadow:0 12px 24px rgba(47,120,183,.2)}
+.btn.primary:hover{background:var(--blue-dark);transform:translateY(-2px)}
+.btn.secondary{background:#fff;color:var(--text);border-color:var(--line)}
+.btn.secondary:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(31,41,55,.08)}
+.section{margin-top:34px}
+.section-head{text-align:center;margin:0 auto 24px;max-width:720px}
+.section-head h2{font-size:clamp(1.5rem,3vw,2rem);margin:0 0 8px;letter-spacing:-.4px}
+.section-head p{margin:0;color:var(--muted)}
+.mission{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.mission-card{background:linear-gradient(180deg,#f8fbff,#fff);border:1px solid var(--line);border-radius:18px;padding:20px}
+.mission-card h3{margin:0 0 8px;font-size:1.08rem}.mission-card p{margin:0;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
+.day-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 12px 30px rgba(31,41,55,.06);transition:.2s;min-height:188px;display:flex;flex-direction:column}
+.day-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.day-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.day-num{font-weight:900;color:var(--blue)}
+.badge{font-size:.76rem;font-weight:900;border-radius:999px;padding:5px 9px}.live{background:#dcfce7;color:#166534}.done{background:#e0f2fe;color:#075985}.soon{background:#f1f5f9;color:#64748b}
+.day-card h3{margin:0 0 8px;font-size:1.2rem}.day-card p{margin:0;color:var(--muted);font-size:.94rem;flex:1}.day-card a{margin-top:18px;text-decoration:none;font-weight:900;color:var(--blue)}
+.day-card.locked{opacity:.72}.day-card.locked:hover{transform:none;box-shadow:0 12px 30px rgba(31,41,55,.06)}
+.goal{background:#0f172a;color:#fff;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+.goal p{color:#cbd5e1;margin-top:0}.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.goal-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:13px;font-weight:700;color:#e5e7eb}
+.footer{text-align:center;color:var(--muted);padding:50px 0 0;font-size:.95rem}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.mission{grid-template-columns:1fr}.goal-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.container{padding:22px 14px 42px}.hero{padding-top:18px}.logo{width:170px}.cards,.goal-grid{grid-template-columns:1fr}.day-card{min-height:auto}.progress-top{font-size:.78rem}.btn{width:100%;justify-content:center}.mission{padding:16px}}
 </style>
 </head>
-
 <body>
-
 <div class="container">
+    <section class="hero">
+        <img class="logo" src="assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <h1>Python for Mammals</h1>
+        <p class="hero-text">A practical 45-Day Python Challenge for beginners and curious learners who want to automate real-world tasks without becoming software developers.</p>
+        <div class="progress-wrap" aria-label="Challenge progress">
+            <div class="progress-top"><span>📚 Progress</span><span>Day 2 / 45 completed</span></div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+        </div>
+        <div class="cta">
+            <a class="btn primary" href="README.md">📖 Read README</a>
+            <a class="btn secondary" href="https://discord.gg/YOUR_INVITE">💬 Join Discord</a>
+        </div>
+    </section>
 
-<div class="hero">
+    <section class="section mission">
+        <div class="mission-card">
+            <h3>Why this exists</h3>
+            <p>Most Python courses teach programming. Python for Mammals teaches useful automation through small, daily, beginner-friendly steps.</p>
+        </div>
+        <div class="mission-card">
+            <h3>What you will build</h3>
+            <p>By the end, you should be comfortable creating scripts for reports, file handling, logs, checks, data cleanup, and repeatable daily tasks.</p>
+        </div>
+    </section>
 
-<img src="assets/python-for-mammals-logo.png">
+    <section class="section">
+        <div class="section-head">
+            <h2>🚀 Learning Journey</h2>
+            <p>Open a day, practice interactively, then share your progress with the community.</p>
+        </div>
+        <div class="cards">
+            <article class="day-card">
+                <div class="day-top"><span class="day-num">Day 1</span><span class="badge done">READY</span></div>
+                <h3>Setup Blueprint</h3>
+                <p>Install Python, set up an IDE, verify the terminal, and run your first script.</p>
+                <a href="days/day01/interactive/">Open Day 1 →</a>
+            </article>
+            <article class="day-card">
+                <div class="day-top"><span class="day-num">Day 2</span><span class="badge live">LIVE</span></div>
+                <h3>Python Basics</h3>
+                <p>Practice comments, variables, print(), arithmetic, and data types with interactive tasks.</p>
+                <a href="days/day02/interactive/">Open Day 2 →</a>
+            </article>
+            <article class="day-card locked">
+                <div class="day-top"><span class="day-num">Day 3</span><span class="badge soon">SOON</span></div>
+                <h3>Input & Decisions</h3>
+                <p>Coming soon: user input, simple decisions, and beginner-friendly logic.</p>
+            </article>
+            <article class="day-card locked">
+                <div class="day-top"><span class="day-num">Day 4</span><span class="badge soon">SOON</span></div>
+                <h3>Conditions</h3>
+                <p>Coming soon: if, elif, else, and real-world decision flows.</p>
+            </article>
+        </div>
+    </section>
 
-<h1>🐍 Python for Mammals</h1>
+    <section class="section goal">
+        <h2>🎯 End Goal</h2>
+        <p>The goal is not to memorize Python. The goal is to become capable of automating boring, repetitive work with confidence.</p>
+        <div class="goal-grid">
+            <div class="goal-item">Health Checks</div>
+            <div class="goal-item">CSV Reports</div>
+            <div class="goal-item">Excel Reports</div>
+            <div class="goal-item">Log Analysis</div>
+            <div class="goal-item">File Automation</div>
+            <div class="goal-item">Mini Projects</div>
+        </div>
+    </section>
 
-<p>
-A practical 45-Day Python Challenge designed for beginners,
-IT professionals, and curious learners who want to automate
-real-world tasks without becoming software developers.
-</p>
-
-<div class="cta">
-
-<a href="README.md" class="btn primary">
-📖 Read README
-</a>
-
-<a href="https://discord.gg/WhX45nvG" class="btn secondary">
-💬 Join Discord
-</a>
-
+    <footer class="footer">Built with ❤️ by the Python for Mammals Community</footer>
 </div>
-
-</div>
-
-<h2 class="section-title">
-🚀 Learning Journey
-</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>Day 1</h3>
-<p>Installation, VS Code, Python setup and Hello Mammals.</p>
-<a href="days/day01/interactive/">Open →</a>
-</div>
-
-<div class="card">
-<h3>Day 2</h3>
-<p>Variables, comments, print(), arithmetic and data types.</p>
-<a href="days/day02/interactive/">Open →</a>
-</div>
-
-<div class="card">
-<h3>Day 3</h3>
-<p>Coming Soon</p>
-</div>
-
-<div class="card">
-<h3>Day 4</h3>
-<p>Coming Soon</p>
-</div>
-
-</div>
-
-<h2 class="section-title">
-🎯 End Goal
-</h2>
-
-<div class="card">
-
-<p>
-By the end of the challenge you will be able to build useful
-automation projects such as:
-
-<ul style="margin-left:20px;margin-top:10px;">
-<li>Health Check Automation</li>
-<li>CSV Reports</li>
-<li>Excel Reports</li>
-<li>Log Analysis</li>
-<li>Inventory Collection</li>
-<li>Backup Verification</li>
-<li>Monitoring Utilities</li>
-</ul>
-
-</p>
-
-</div>
-
-<div class="footer">
-
-Built with ❤️ by the Python for Mammals Community
-
-</div>
-
-</div>
-
 </body>
 </html>
