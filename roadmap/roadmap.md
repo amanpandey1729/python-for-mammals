@@ -42,7 +42,7 @@ Build a strong foundation before writing automation.
 | --- | ------------------------------- | ------ |
 | 1   | Setup & Installation            | ✅      |
 | 2   | Variables, Data Types & print() | ✅      |
-| 3   | Input & User Interaction        | ⬜      |
+| 3   | Input & User Interaction        | ✅      |
 | 4   | Strings                         | ⬜      |
 | 5   | Operators                       | ⬜      |
 | 6   | Conditions (if, else)           | ⬜      |
@@ -159,7 +159,7 @@ Day 2 / 45
 Completion:
 
 ```text
-████░░░░░░░░░░░░░░░░ 4%
+██████░░░░░░░░░░░░░░░ 6.6%
 ```
 
 ---

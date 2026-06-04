@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Day 2 | Python for Mammals</title>
+  <title>Day 3 | Python for Mammals</title>
   <style>
     :root{
       --bg:#f7f7f2;
@@ -333,7 +333,7 @@
     <div class="shell nav">
       <div class="brand">
         <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
-        <div><strong>Python for Mammals</strong><span>Day 2 Interactive Lab</span></div>
+        <div><strong>Python for Mammals</strong><span>Day 3 Interactive Lab</span></div>
       </div>
       <nav>
         <a href="#concepts">Concepts</a>
@@ -344,17 +344,17 @@
   </header>
 
   <div class="course-nav">
-    <a href="../../day01/interactive/">⬅ Day 1</a>
+    <a href="../../day02/interactive/">⬅ Day 2</a>
     <a href="../../../index.html">🏠 Home</a>
-    <a href="../../day03/interactive/">Day 3 ➜</a>
-</div>
+    <span>Day 4 Coming Soon ➡</span>
+  </div>
 
   <main class="shell">
     <section class="hero" id="top">
       <div>
-        <span class="badge">🐾 Beginner friendly • Python Basics</span>
-        <h1>Day 2: Make Python feel less like theory and more like play.</h1>
-        <p class="lead">Today you will touch the building blocks: comments, print, arithmetic, variables, assignment, data types and <code>type()</code>. Use the mini labs below to change values, predict outputs and build confidence.</p>
+        <span class="badge">🐾 Beginner friendly • Input and decisions</span>
+        <h1>Day 3: Make Python ask questions and make simple decisions.</h1>
+        <p class="lead">Today you will learn <code>input()</code>, type conversion, comparison operators, and beginner-friendly <code>if</code>, <code>elif</code>, <code>else</code> decisions. This is where scripts start behaving like small automation helpers.</p>
         <div class="cta">
           <a class="button primary" href="#lab">Start Interactive Practice</a>
           <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
@@ -362,12 +362,12 @@
       </div>
       <aside class="hero-card" aria-label="Community card">
         <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
-        <p style="text-align:center;margin:0;color:#475569">A small playground for people who want to learn Python by doing, not by memorizing.</p>
+        <p style="text-align:center;margin:0;color:#475569">Today your code stops being static. It asks for values, checks conditions, and responds based on the situation.</p>
         <div class="quick-grid">
-          <div class="mini"><b>7</b><span>Day 2 concepts</span></div>
+          <div class="mini"><b>6</b><span>Day 3 concepts</span></div>
           <div class="mini"><b>5</b><span>Interactive labs</span></div>
-          <div class="mini"><b>15m</b><span>Quick revision</span></div>
-          <div class="mini"><b>1</b><span>Practical mini challenge</span></div>
+          <div class="mini"><b>20m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Decision-based challenge</span></div>
         </div>
       </aside>
     </section>
@@ -376,16 +376,16 @@
       <div class="section-title">
         <div>
           <h2>What you are learning today</h2>
-          <p class="hint">Each concept is tiny. Together they become the base of every useful Python script you will write later.</p>
+          <p class="hint">These concepts are the starting point for real automation: ask for input, validate a value, compare it with a threshold, and print a useful result.</p>
         </div>
       </div>
       <div class="cards">
-        <article class="card"><span class="pill"># comments</span><h3>Leave notes for humans</h3><p>Comments explain why a line exists. Python ignores them, future-you thanks you.</p></article>
-        <article class="card"><span class="pill">print()</span><h3>Talk to the screen</h3><p>Use <code>print()</code> to display messages, results and checkpoints while learning.</p></article>
-        <article class="card"><span class="pill">math</span><h3>Calculate instantly</h3><p>Add, subtract, multiply, divide and use powers or remainders in seconds.</p></article>
-        <article class="card"><span class="pill">variables</span><h3>Name your values</h3><p>A variable is a label for data, like <code>coffee_count = 2</code>.</p></article>
-        <article class="card"><span class="pill">assignment</span><h3>Store and update</h3><p>The <code>=</code> sign assigns a value. It does not mean “equal” like maths class.</p></article>
-        <article class="card"><span class="pill">type()</span><h3>Ask Python what it sees</h3><p>Use <code>type()</code> to check whether data is text, number, decimal or true/false.</p></article>
+        <article class="card"><span class="pill">input()</span><h3>Ask the user</h3><p>Use <code>input()</code> when a script needs values like name, file path, server name, or usage percentage.</p></article>
+        <article class="card"><span class="pill">conversion</span><h3>Convert text to numbers</h3><p>User input arrives as text. Convert it with <code>int()</code> or <code>float()</code> before doing calculations.</p></article>
+        <article class="card"><span class="pill">comparison</span><h3>Check a condition</h3><p>Use operators like <code>></code>, <code>&lt;</code>, <code>==</code>, and <code>!=</code> to compare values.</p></article>
+        <article class="card"><span class="pill">if</span><h3>Run code when true</h3><p>An <code>if</code> block runs only when the condition is true.</p></article>
+        <article class="card"><span class="pill">elif</span><h3>Check another possibility</h3><p><code>elif</code> lets your script test multiple situations without writing messy code.</p></article>
+        <article class="card"><span class="pill">else</span><h3>Handle everything else</h3><p><code>else</code> gives your program a safe default path when no earlier condition matched.</p></article>
       </div>
     </section>
 
@@ -393,78 +393,77 @@
       <div class="section-title">
         <div>
           <h2>Interactive practice lab</h2>
-          <p class="hint">Pick a topic, change the values and watch the output update. This is not a full Python interpreter, but it is enough to practice Day 2 concepts safely.</p>
+          <p class="hint">Pick a topic, change the values and watch the output update. This is not a full Python interpreter, but it is enough to practice Day 3 concepts safely.</p>
         </div>
       </div>
 
       <div class="lab">
-        <div class="tabs" role="tablist" aria-label="Day 2 labs">
-          <button class="tab active" data-panel="printlab">1. Print Builder<small>Make Python speak</small></button>
-          <button class="tab" data-panel="mathlab">2. Arithmetic Lab<small>Calculate with operators</small></button>
-          <button class="tab" data-panel="varlab">3. Variable Mixer<small>Store and reuse values</small></button>
-          <button class="tab" data-panel="typelab">4. Type Detective<small>Guess the data type</small></button>
+        <div class="tabs" role="tablist" aria-label="Day 3 labs">
+          <button class="tab active" data-panel="inputlab">1. Input Builder<small>Ask and reuse values</small></button>
+          <button class="tab" data-panel="convertlab">2. Conversion Lab<small>Turn text into numbers</small></button>
+          <button class="tab" data-panel="comparelab">3. Threshold Checker<small>Compare with limits</small></button>
+          <button class="tab" data-panel="decisionlab">4. Decision Tree<small>if, elif, else</small></button>
           <button class="tab" data-panel="fixlab">5. Fix the Code<small>Spot beginner mistakes</small></button>
         </div>
 
         <div class="workspace">
-          <article class="panel active" id="printlab">
-            <div class="workspace-head"><h3>Print Builder</h3><button class="secondary" onclick="resetPrintLab()">Reset</button></div>
+          <article class="panel active" id="inputlab">
+            <div class="workspace-head"><h3>Input Builder</h3><button class="secondary" onclick="resetInputLab()">Reset</button></div>
             <div class="workspace-body split">
               <div>
                 <div class="formgrid">
                   <div><label>Your name</label><input id="nameInput" value="Mammal" /></div>
-                  <div><label>Today’s mood</label><input id="moodInput" value="curious" /></div>
+                  <div><label>Task to automate</label><input id="taskInput" value="daily report" /></div>
                 </div>
-                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="printCode"></pre></div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="inputCode"></pre></div>
               </div>
-              <div class="output"><div class="bar">Output</div><div class="outcontent" id="printOutput"></div></div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="inputOutput"></div></div>
             </div>
           </article>
 
-          <article class="panel" id="mathlab">
-            <div class="workspace-head"><h3>Arithmetic Lab</h3><button class="secondary" onclick="randomMath()">Try random values</button></div>
+          <article class="panel" id="convertlab">
+            <div class="workspace-head"><h3>Conversion Lab</h3><button class="secondary" onclick="randomBill()">Try random bill</button></div>
             <div class="workspace-body split">
               <div>
                 <div class="formgrid">
-                  <div><label>First number</label><input id="numA" type="number" value="10" /></div>
-                  <div><label>Second number</label><input id="numB" type="number" value="3" /></div>
+                  <div><label>Price text</label><input id="priceText" value="499" /></div>
+                  <div><label>Quantity text</label><input id="qtyText" value="3" /></div>
                 </div>
-                <div class="codebox"><div class="bar">Python code</div><pre id="mathCode"></pre></div>
-                <div class="explain">Notice how <code>/</code> gives decimal division, <code>//</code> gives floor division and <code>%</code> gives the remainder.</div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="convertCode"></pre></div>
+                <div class="explain">Important: <code>input()</code> always returns text. Use <code>int()</code> for whole numbers and <code>float()</code> for decimal numbers.</div>
               </div>
-              <div class="output"><div class="bar">Output</div><div class="outcontent" id="mathOutput"></div></div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="convertOutput"></div></div>
             </div>
           </article>
 
-          <article class="panel" id="varlab">
-            <div class="workspace-head"><h3>Variable Mixer</h3><button class="secondary" onclick="swapSnack()">Swap example</button></div>
+          <article class="panel" id="comparelab">
+            <div class="workspace-head"><h3>Threshold Checker</h3><button class="secondary" onclick="swapThreshold()">Swap example</button></div>
             <div class="workspace-body split">
               <div>
                 <div class="formgrid">
-                  <div><label>Snack name</label><input id="snackName" value="samosa" /></div>
-                  <div><label>Quantity</label><input id="snackQty" type="number" value="2" /></div>
-                  <div><label>Price per item</label><input id="snackPrice" type="number" value="18" /></div>
-                  <div><label>Friend count</label><input id="friendCount" type="number" value="3" /></div>
+                  <div><label>Metric name</label><input id="metricName" value="disk usage" /></div>
+                  <div><label>Current value %</label><input id="metricValue" type="number" value="82" /></div>
+                  <div><label>Warning limit %</label><input id="warnLimit" type="number" value="75" /></div>
+                  <div><label>Critical limit %</label><input id="critLimit" type="number" value="90" /></div>
                 </div>
-                <div class="codebox"><div class="bar">Python code</div><pre id="varCode"></pre></div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="compareCode"></pre></div>
               </div>
-              <div class="output"><div class="bar">Output</div><div class="outcontent" id="varOutput"></div></div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="compareOutput"></div></div>
             </div>
           </article>
 
-          <article class="panel" id="typelab">
-            <div class="workspace-head"><h3>Type Detective</h3><button class="secondary" onclick="newTypeQuestion()">New question</button></div>
-            <div class="workspace-body">
-              <p class="hint">Before clicking check, predict what <code>type()</code> will return.</p>
-              <div class="quiz-row">
-                <div class="codebox"><div class="bar">Python code</div><pre id="typeQuestion"></pre></div>
-                <select id="typeAnswer" aria-label="Choose type">
-                  <option value="str">str</option><option value="int">int</option><option value="float">float</option><option value="bool">bool</option>
-                </select>
+          <article class="panel" id="decisionlab">
+            <div class="workspace-head"><h3>Decision Tree</h3><button class="secondary" onclick="randomScore()">Random score</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Practice score</label><input id="practiceScore" type="number" value="68" /></div>
+                  <div><label>Learner name</label><input id="learnerName" value="Riya" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="decisionCode"></pre></div>
+                <div class="explain">The first true condition wins. Python checks from top to bottom.</div>
               </div>
-              <button class="primary" onclick="checkTypeAnswer()">Check answer</button>
-              <div class="result" id="typeResult"></div>
-              <div class="explain" id="typeExplain">Tip: Text inside quotes is usually <code>str</code>. Whole numbers are <code>int</code>. Decimal numbers are <code>float</code>. <code>True</code> and <code>False</code> are <code>bool</code>.</div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="decisionOutput"></div></div>
             </div>
           </article>
 
@@ -473,14 +472,14 @@
             <div class="workspace-body split">
               <div>
                 <p class="hint">Edit the broken code mentally first. Then reveal the corrected version.</p>
-                <div class="codebox"><div class="bar">Broken code</div><pre>message = Hello Mammals
-print(message)
+                <div class="codebox"><div class="bar">Broken code</div><pre>age = input("Enter age: ")
 
-cups = "2"
-extra = 1
-print(cups + extra)</pre></div>
+if age >= 18
+    print("Adult")
+else
+print("Minor")</pre></div>
                 <div class="cta"><button class="primary" onclick="showFixedCode()">Reveal corrected code</button></div>
-                <div class="explain" id="fixHint" style="display:none">Hint: Text needs quotes. Also, Python cannot directly add text <code>"2"</code> and number <code>1</code>.</div>
+                <div class="explain" id="fixHint" style="display:none">Hint: Convert input to a number, add colons after <code>if</code> and <code>else</code>, and indent code inside each block.</div>
               </div>
               <div class="output"><div class="bar">Corrected version</div><div class="outcontent" id="fixedOutput">Click “Reveal corrected code”.</div></div>
             </div>
@@ -493,27 +492,29 @@ print(cups + extra)</pre></div>
       <div class="challenge">
         <div>
           <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
-          <h2 style="margin-top:12px">Build a tiny bill splitter</h2>
-          <p>Create variables for an item, price, quantity and number of people. Calculate the total and how much each person pays. It is simple, but it uses almost everything from Day 2.</p>
+          <h2 style="margin-top:12px">Build a simple health status checker</h2>
+          <p>Create variables for a system name and usage percentage. Print <strong>OK</strong>, <strong>WARNING</strong>, or <strong>CRITICAL</strong> based on the value. This is the first step toward real monitoring automation.</p>
           <div class="checklist">
-            <label class="check"><input type="checkbox" /> I used comments to explain my code.</label>
-            <label class="check"><input type="checkbox" /> I used variables instead of repeating values.</label>
-            <label class="check"><input type="checkbox" /> I used arithmetic operators correctly.</label>
-            <label class="check"><input type="checkbox" /> I printed a readable final message.</label>
+            <label class="check"><input type="checkbox" /> I used input or variables for the value.</label>
+            <label class="check"><input type="checkbox" /> I converted numeric text before comparison.</label>
+            <label class="check"><input type="checkbox" /> I used if, elif, and else correctly.</label>
+            <label class="check"><input type="checkbox" /> I printed a clear final status message.</label>
           </div>
         </div>
-        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># Tiny bill splitter
-item = "pizza"
-price = 250
-quantity = 2
-people = 4
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># Simple health status checker
+system_name = "server-01"
+usage = 82
 
-total = price * quantity
-share = total / people
+if usage >= 90:
+    status = "CRITICAL"
+elif usage >= 75:
+    status = "WARNING"
+else:
+    status = "OK"
 
-print("Item:", item)
-print("Total bill:", total)
-print("Each person pays:", share)</textarea></div>
+print("System:", system_name)
+print("Usage:", usage, "%")
+print("Status:", status)</textarea></div>
       </div>
     </section>
   </main>
@@ -521,7 +522,7 @@ print("Each person pays:", share)</textarea></div>
   <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
 
   <footer class="shell">
-    Made for Python for Mammals • Day 2: comments, print, arithmetic, variables, assignment, data types and type()
+    Made for Python for Mammals • Day 3: input(), type conversion, comparisons, if, elif and else
   </footer>
 
   <script>
@@ -537,77 +538,78 @@ print("Each person pays:", share)</textarea></div>
     });
 
     function q(s){ return String(s).replaceAll('"','\\"'); }
-
-    function updatePrintLab(){
-      const name = $('nameInput').value || 'Mammal';
-      const mood = $('moodInput').value || 'curious';
-      $('printCode').textContent = `# This is a comment. Python ignores it.\nprint("Hello, ${q(name)}!")\nprint("Today I feel ${q(mood)}.")`;
-      $('printOutput').textContent = `Hello, ${name}!\nToday I feel ${mood}.`;
-    }
-    function resetPrintLab(){ $('nameInput').value='Mammal'; $('moodInput').value='curious'; updatePrintLab(); }
-
     function safeNum(id, fallback){ const v = parseFloat($(id).value); return Number.isFinite(v) ? v : fallback; }
-    function updateMath(){
-      const a = safeNum('numA', 0), b = safeNum('numB', 1);
-      const div = b === 0 ? 'Cannot divide by zero' : (a / b);
-      const floor = b === 0 ? 'Cannot divide by zero' : Math.floor(a / b);
-      const rem = b === 0 ? 'Cannot divide by zero' : (a % b);
-      $('mathCode').textContent = `a = ${a}\nb = ${b}\n\nprint(a + b)   # addition\nprint(a - b)   # subtraction\nprint(a * b)   # multiplication\nprint(a / b)   # division\nprint(a // b)  # floor division\nprint(a % b)   # remainder`;
-      $('mathOutput').textContent = `${a + b}\n${a - b}\n${a * b}\n${div}\n${floor}\n${rem}`;
-    }
-    function randomMath(){ $('numA').value = Math.floor(Math.random()*30)+2; $('numB').value = Math.floor(Math.random()*9)+1; updateMath(); }
 
-    const snacks = [['book',1,399,2],['coffee',2,120,3],['notebook',3,80,4],['ticket',2,250,5],['mango',6,25,3]];
-    let snackIndex = 0;
-    function updateVar(){
-      const item = $('snackName').value || 'item';
-      const qty = safeNum('snackQty',0);
-      const price = safeNum('snackPrice',0);
-      const friends = safeNum('friendCount',1) || 1;
-      const total = qty * price;
-      const share = total / friends;
-      $('varCode').textContent = `# Variables store information\nitem = "${q(item)}"\nquantity = ${qty}\nprice = ${price}\nfriends = ${friends}\n\ntotal = quantity * price\nshare = total / friends\n\nprint(item)\nprint(total)\nprint(share)`;
-      $('varOutput').textContent = `${item}\n${total}\n${Number.isInteger(share) ? share : share.toFixed(2)}`;
+    function updateInputLab(){
+      const name = $('nameInput').value || 'Mammal';
+      const task = $('taskInput').value || 'daily report';
+      $('inputCode').textContent = `name = input("Enter your name: ")\ntask = input("Which task do you want to automate? ")\n\nprint("Hello,", name)\nprint("Let us automate:", task)`;
+      $('inputOutput').textContent = `Enter your name: ${name}\nWhich task do you want to automate? ${task}\nHello, ${name}\nLet us automate: ${task}`;
     }
-    function swapSnack(){
-      snackIndex = (snackIndex + 1) % snacks.length;
-      const [item,qty,price,friends] = snacks[snackIndex];
-      $('snackName').value=item; $('snackQty').value=qty; $('snackPrice').value=price; $('friendCount').value=friends; updateVar();
+    function resetInputLab(){ $('nameInput').value='Mammal'; $('taskInput').value='daily report'; updateInputLab(); }
+
+    function updateConvert(){
+      const priceText = $('priceText').value || '0';
+      const qtyText = $('qtyText').value || '0';
+      const price = parseFloat(priceText);
+      const qty = parseFloat(qtyText);
+      const valid = Number.isFinite(price) && Number.isFinite(qty);
+      const total = valid ? price * qty : 'Invalid number';
+      $('convertCode').textContent = `price_text = "${q(priceText)}"\nquantity_text = "${q(qtyText)}"\n\nprice = float(price_text)\nquantity = int(quantity_text)\n\ntotal = price * quantity\nprint(total)`;
+      $('convertOutput').textContent = valid ? `${Number.isInteger(total) ? total : total.toFixed(2)}` : 'Invalid number. Try values like 499 and 3.';
+    }
+    function randomBill(){
+      const prices = [99, 149, 299, 499, 799, 1200];
+      $('priceText').value = prices[Math.floor(Math.random()*prices.length)];
+      $('qtyText').value = Math.floor(Math.random()*5)+1;
+      updateConvert();
     }
 
-    const typeQuestions = [
-      {code:'value = "42"\nprint(type(value))', ans:'str', why:'It is inside quotes, so Python treats it as text.'},
-      {code:'value = 42\nprint(type(value))', ans:'int', why:'A whole number without quotes is an integer.'},
-      {code:'value = 42.0\nprint(type(value))', ans:'float', why:'A number with a decimal point is a float.'},
-      {code:'value = True\nprint(type(value))', ans:'bool', why:'True and False are Boolean values.'},
-      {code:'value = "True"\nprint(type(value))', ans:'str', why:'Quotes change it into text, even if it looks like True.'}
-    ];
-    let currentQ = 0;
-    function newTypeQuestion(){
-      currentQ = Math.floor(Math.random() * typeQuestions.length);
-      $('typeQuestion').textContent = typeQuestions[currentQ].code;
-      $('typeResult').textContent = '';
+    const thresholds = [['disk usage',82,75,90],['cpu usage',93,70,90],['memory usage',64,75,90],['backup age hours',28,24,48],['failed jobs',3,1,5]];
+    let thresholdIndex = 0;
+    function updateCompare(){
+      const metric = $('metricName').value || 'metric';
+      const value = safeNum('metricValue',0);
+      const warn = safeNum('warnLimit',75);
+      const crit = safeNum('critLimit',90);
+      let status = 'OK';
+      if(value >= crit){ status = 'CRITICAL'; }
+      else if(value >= warn){ status = 'WARNING'; }
+      $('compareCode').textContent = `metric = "${q(metric)}"\nvalue = ${value}\nwarning_limit = ${warn}\ncritical_limit = ${crit}\n\nif value >= critical_limit:\n    print("CRITICAL")\nelif value >= warning_limit:\n    print("WARNING")\nelse:\n    print("OK")`;
+      $('compareOutput').textContent = `${metric}: ${value}%\nStatus: ${status}`;
     }
-    function checkTypeAnswer(){
-      const chosen = $('typeAnswer').value;
-      const qn = typeQuestions[currentQ];
-      const good = chosen === qn.ans;
-      $('typeResult').innerHTML = good ? `<span class="ok">Correct.</span> Python returns &lt;class '${qn.ans}'&gt;.` : `<span class="bad">Not yet.</span> Correct answer is <code>${qn.ans}</code>.`;
-      $('typeExplain').innerHTML = qn.why;
+    function swapThreshold(){
+      thresholdIndex = (thresholdIndex + 1) % thresholds.length;
+      const [metric,value,warn,crit] = thresholds[thresholdIndex];
+      $('metricName').value = metric; $('metricValue').value = value; $('warnLimit').value = warn; $('critLimit').value = crit; updateCompare();
     }
+
+    function updateDecision(){
+      const score = safeNum('practiceScore',0);
+      const learner = $('learnerName').value || 'Learner';
+      let message = '';
+      if(score >= 80){ message = 'Excellent progress'; }
+      else if(score >= 60){ message = 'Good, keep practicing'; }
+      else if(score >= 40){ message = 'Revise and try again'; }
+      else{ message = 'Start slowly and do not quit'; }
+      $('decisionCode').textContent = `name = "${q(learner)}"\nscore = ${score}\n\nif score >= 80:\n    print("Excellent progress")\nelif score >= 60:\n    print("Good, keep practicing")\nelif score >= 40:\n    print("Revise and try again")\nelse:\n    print("Start slowly and do not quit")`;
+      $('decisionOutput').textContent = `${learner}: ${score}\n${message}`;
+    }
+    function randomScore(){ $('practiceScore').value = Math.floor(Math.random()*101); updateDecision(); }
 
     function showFixHint(){ $('fixHint').style.display = 'block'; }
     function showFixedCode(){
-      $('fixedOutput').textContent = `message = "Hello Mammals"\nprint(message)\n\ncups = 2\nextra = 1\nprint(cups + extra)\n\nOutput:\nHello Mammals\n3`;
+      $('fixedOutput').textContent = `age_text = input("Enter age: ")\nage = int(age_text)\n\nif age >= 18:\n    print("Adult")\nelse:\n    print("Minor")\n\nExample output:\nEnter age: 21\nAdult`;
     }
 
-    ['nameInput','moodInput'].forEach(id => $(id).addEventListener('input', updatePrintLab));
-    ['numA','numB'].forEach(id => $(id).addEventListener('input', updateMath));
-    ['snackName','snackQty','snackPrice','friendCount'].forEach(id => $(id).addEventListener('input', updateVar));
+    ['nameInput','taskInput'].forEach(id => $(id).addEventListener('input', updateInputLab));
+    ['priceText','qtyText'].forEach(id => $(id).addEventListener('input', updateConvert));
+    ['metricName','metricValue','warnLimit','critLimit'].forEach(id => $(id).addEventListener('input', updateCompare));
+    ['practiceScore','learnerName'].forEach(id => $(id).addEventListener('input', updateDecision));
 
     window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
 
-    updatePrintLab(); updateMath(); updateVar(); newTypeQuestion();
+    updateInputLab(); updateConvert(); updateCompare(); updateDecision();
   </script>
 </body>
 </html>
