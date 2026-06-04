@@ -153,7 +153,7 @@ By the end of the challenge, you should be comfortable:
 Current Progress:
 
 ```text
-Day 2 / 45
+Day 3 / 45
 ```
 
 Completion:
