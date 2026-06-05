@@ -43,7 +43,7 @@ Build a strong foundation before writing automation.
 | 1   | Setup & Installation            | ✅      |
 | 2   | Variables, Data Types & print() | ✅      |
 | 3   | Input & User Interaction        | ✅      |
-| 4   | Strings                         | ⬜      |
+| 4   | Strings                         | ✅      |
 | 5   | Operators                       | ⬜      |
 | 6   | Conditions (if, else)           | ⬜      |
 | 7   | Loops (for, while)              | ⬜      |
@@ -153,13 +153,13 @@ By the end of the challenge, you should be comfortable:
 Current Progress:
 
 ```text
-Day 3 / 45
+Day 4 / 45
 ```
 
 Completion:
 
 ```text
-██████░░░░░░░░░░░░░░░ 6.6%
+███████░░░░░░░░░░░░░░░ 8.8%
 ```
 
 ---

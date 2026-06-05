@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 4 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 4 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day03/interactive/">⬅ Day 3</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 5 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Strings and text cleanup</span>
+        <h1>Day 4: Learn to clean, search, and shape text.</h1>
+        <p class="lead">Today you will learn strings, indexing, slicing, and useful string methods like <code>strip()</code>, <code>upper()</code>, <code>replace()</code>, <code>split()</code>, <code>startswith()</code>, and <code>endswith()</code>. This is the foundation for log analysis, alert cleanup, file-name validation, and report formatting.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code learns to handle real-world messy text: extra spaces, mixed case, file names, and log messages.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>8</b><span>Day 4 concepts</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>25m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Text cleanup challenge</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Strings are not just “text”. In operations automation, strings are server names, log lines, file names, backup statuses, ticket IDs, alert subjects, and report rows.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">string</span><h3>Store text</h3><p>Create text values like <code>"SUCCESS"</code>, <code>"server-01"</code>, and <code>"backup.log"</code>.</p></article>
+        <article class="card"><span class="pill">len()</span><h3>Measure text</h3><p>Use <code>len()</code> to check username length, ticket length, or whether text is empty.</p></article>
+        <article class="card"><span class="pill">index</span><h3>Pick characters</h3><p>Use indexes like <code>text[0]</code> and <code>text[-1]</code> to read specific characters.</p></article>
+        <article class="card"><span class="pill">slice</span><h3>Extract parts</h3><p>Use slicing to extract environment codes, dates, file prefixes, and server numbers.</p></article>
+        <article class="card"><span class="pill">clean</span><h3>Normalize messy input</h3><p>Use <code>strip()</code>, <code>upper()</code>, <code>lower()</code>, and <code>replace()</code> to clean text before checking it.</p></article>
+        <article class="card"><span class="pill">search</span><h3>Find useful words</h3><p>Use <code>in</code>, <code>startswith()</code>, <code>endswith()</code>, and <code>split()</code> to classify logs and files.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values and watch the output update. This is not a full Python interpreter, but it is enough to practice Day 4 string concepts safely.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 4 labs">
+          <button class="tab active" data-panel="cleanlab">1. Text Cleaner<small>strip and case methods</small></button>
+          <button class="tab" data-panel="slicelab">2. Slice Builder<small>Extract text parts</small></button>
+          <button class="tab" data-panel="filelab">3. File Checker<small>startswith and endswith</small></button>
+          <button class="tab" data-panel="loglab">4. Log Classifier<small>Search keywords</small></button>
+          <button class="tab" data-panel="splitlab">5. Split Parser<small>Break report lines</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="cleanlab">
+            <div class="workspace-head"><h3>Text Cleaner</h3><button class="secondary" onclick="resetCleanLab()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Raw backup status</label><input id="rawStatus" value="  success  " /></div>
+                  <div><label>Owner/team text</label><input id="ownerText" value="platform operations team" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="cleanCode"></pre></div>
+                <div class="explain">Use <code>strip()</code> before comparison. Then use <code>upper()</code> or <code>lower()</code> to make input predictable.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="cleanOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="slicelab">
+            <div class="workspace-head"><h3>Slice Builder</h3><button class="secondary" onclick="swapServer()">Swap example</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Server name</label><input id="serverName" value="prod-db-server-01" /></div>
+                  <div><label>Prefix characters</label><input id="prefixCount" type="number" value="4" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="sliceCode"></pre></div>
+                <div class="explain">Python indexes start from 0. Slicing is useful when names follow a standard pattern.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="sliceOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="filelab">
+            <div class="workspace-head"><h3>File Checker</h3><button class="secondary" onclick="swapFile()">Swap file</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>File name</label><input id="fileName" value="daily_report_20260604.csv" /></div>
+                  <div><label>Expected prefix</label><input id="filePrefix" value="daily_report_" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="fileCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="fileOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="loglab">
+            <div class="workspace-head"><h3>Log Classifier</h3><button class="secondary" onclick="swapLog()">Swap log</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Log line</label><input id="logLine" value="backup failed on app-server-01" /></div>
+                  <div><label>Server</label><input id="logServer" value="app-server-01" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="logCode"></pre></div>
+                <div class="explain">For reliable searching, normalize the log line using <code>upper()</code> before checking keywords.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="logOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="splitlab">
+            <div class="workspace-head"><h3>Split Parser</h3><button class="secondary" onclick="swapRow()">Swap row</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">Practice turning one report line into separate useful fields.</p>
+                <div class="formgrid">
+                  <div><label>CSV-like row</label><input id="csvRow" value="db-server-01,DISK,92,CRITICAL" /></div>
+                  <div><label>Separator</label><input id="separator" value="," /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="splitCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="splitOutput"></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build a daily text cleanup assistant</h2>
+          <p>Create a script that asks for server name, backup status, log line, and file name. Clean the text, normalize the status, classify the log, validate the file name, and print a clean operational summary.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I cleaned extra spaces using strip().</label>
+            <label class="check"><input type="checkbox" /> I normalized status/log text using upper() or lower().</label>
+            <label class="check"><input type="checkbox" /> I searched for ERROR, FAILED, WARNING, or SUCCESS.</label>
+            <label class="check"><input type="checkbox" /> I validated file names using endswith().</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># Daily text cleanup assistant
+server_name = "  app-server-01  "
+backup_status = " success "
+log_line = "backup completed successfully"
+file_name = "daily_report_20260604.csv"
+
+server_name = server_name.strip()
+backup_status = backup_status.strip().upper()
+normalized_log = log_line.strip().upper()
+
+if backup_status == "FAILED" or "ERROR" in normalized_log or "FAILED" in normalized_log:
+    final_status = "CRITICAL"
+elif "WARNING" in normalized_log:
+    final_status = "WARNING"
+elif backup_status == "SUCCESS":
+    final_status = "OK"
+else:
+    final_status = "UNKNOWN"
+
+print("Server:", server_name)
+print("Backup:", backup_status)
+print("File:", file_name)
+print("Final Status:", final_status)</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 4: strings, slicing, cleanup, searching, and split()
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('"','\\"'); }
+    function safeNum(id, fallback){ const v = parseInt($(id).value, 10); return Number.isFinite(v) ? v : fallback; }
+
+    function updateCleanLab(){
+      const raw = $('rawStatus').value;
+      const owner = $('ownerText').value;
+      const clean = raw.trim().toUpperCase();
+      const ownerTitle = owner.trim().replace(/\w\S*/g, t => t[0].toUpperCase() + t.slice(1).toLowerCase());
+      $('cleanCode').textContent = `raw_status = "${q(raw)}"\nowner = "${q(owner)}"\n\nclean_status = raw_status.strip().upper()\nowner_name = owner.strip().title()\n\nprint(clean_status)\nprint(owner_name)`;
+      $('cleanOutput').textContent = `${clean}\n${ownerTitle}`;
+    }
+    function resetCleanLab(){ $('rawStatus').value='  success  '; $('ownerText').value='platform operations team'; updateCleanLab(); }
+
+    const servers = ['prod-db-server-01','dev-app-server-02','test-web-server-15','qa-report-node-07'];
+    let serverIndex = 0;
+    function updateSliceLab(){
+      const name = $('serverName').value || '';
+      const count = safeNum('prefixCount', 4);
+      const prefix = name.slice(0, count);
+      const lastTwo = name.slice(-2);
+      $('sliceCode').textContent = `server_name = "${q(name)}"\n\nenvironment_code = server_name[:${count}]\nserver_number = server_name[-2:]\n\nprint(environment_code)\nprint(server_number)`;
+      $('sliceOutput').textContent = `${prefix}\n${lastTwo}`;
+    }
+    function swapServer(){ serverIndex = (serverIndex + 1) % servers.length; $('serverName').value = servers[serverIndex]; updateSliceLab(); }
+
+    const files = ['daily_report_20260604.csv','backup_prod_20260604.log','notes.txt','DAILY_REPORT_20260604.CSV'];
+    let fileIndex = 0;
+    function updateFileLab(){
+      const file = $('fileName').value.trim();
+      const prefix = $('filePrefix').value;
+      const normalized = file.toLowerCase();
+      let type = 'Unsupported file type';
+      if(normalized.endsWith('.csv')){ type = 'CSV report detected'; }
+      else if(normalized.endsWith('.log')){ type = 'Log file detected'; }
+      const prefixStatus = file.startsWith(prefix) ? 'Prefix matched' : 'Prefix not matched';
+      $('fileCode').textContent = `file_name = "${q(file)}"\nexpected_prefix = "${q(prefix)}"\n\nif file_name.startswith(expected_prefix):\n    print("Prefix matched")\n\nif file_name.lower().endswith(".csv"):\n    print("CSV report detected")\nelif file_name.lower().endswith(".log"):\n    print("Log file detected")\nelse:\n    print("Unsupported file type")`;
+      $('fileOutput').textContent = `${file.startsWith(prefix) ? 'Prefix matched\n' : ''}${type}`;
+    }
+    function swapFile(){ fileIndex = (fileIndex + 1) % files.length; $('fileName').value = files[fileIndex]; updateFileLab(); }
+
+    const logs = ['backup failed on app-server-01','WARNING disk usage reached 82 percent','ORA-00060 deadlock detected','backup completed successfully','job started normally'];
+    let logIndex = 0;
+    function updateLogLab(){
+      const line = $('logLine').value;
+      const server = $('logServer').value;
+      const normalized = line.toUpperCase();
+      let severity = 'UNKNOWN';
+      let reason = 'No known keyword found';
+      if(normalized.includes('ERROR') || normalized.includes('FAILED') || normalized.includes('ORA-') || normalized.includes('TIMEOUT')){ severity = 'CRITICAL'; reason = 'Error-like keyword found'; }
+      else if(normalized.includes('WARNING')){ severity = 'WARNING'; reason = 'Warning keyword found'; }
+      else if(normalized.includes('SUCCESS')){ severity = 'OK'; reason = 'Success keyword found'; }
+      $('logCode').textContent = `log_line = "${q(line)}"\nnormalized_log = log_line.upper()\n\nif "ERROR" in normalized_log or "FAILED" in normalized_log or "ORA-" in normalized_log:\n    print("CRITICAL")\nelif "WARNING" in normalized_log:\n    print("WARNING")\nelif "SUCCESS" in normalized_log:\n    print("OK")\nelse:\n    print("UNKNOWN")`;
+      $('logOutput').textContent = severity;
+    }
+    function swapLog(){ logIndex = (logIndex + 1) % logs.length; $('logLine').value = logs[logIndex]; updateLogLab(); }
+
+    const rows = ['db-server-01,DISK,92,CRITICAL','app-server-01,CPU,86,WARNING','web-server-02,MEMORY,64,OK'];
+    let rowIndex = 0;
+    function updateSplitLab(){
+      const row = $('csvRow').value;
+      const sep = $('separator').value || ',';
+      const parts = row.split(sep).map(x => x.trim());
+      const server = parts[0] || '';
+      const metric = parts[1] || '';
+      const value = parts[2] || '';
+      const status = parts[3] || '';
+      $('splitCode').textContent = `row = "${q(row)}"\nparts = row.split("${q(sep)}")\n\nserver = parts[0]\nmetric = parts[1]\nvalue = parts[2]\nstatus = parts[3]\n\nprint(server, metric, value, status)`;
+      $('splitOutput').textContent = `${server} ${metric} ${value} ${status}`.trim();
+    }
+    function swapRow(){ rowIndex = (rowIndex + 1) % rows.length; $('csvRow').value = rows[rowIndex]; updateSplitLab(); }
+
+    ['rawStatus','ownerText'].forEach(id => $(id).addEventListener('input', updateCleanLab));
+    ['serverName','prefixCount'].forEach(id => $(id).addEventListener('input', updateSliceLab));
+    ['fileName','filePrefix'].forEach(id => $(id).addEventListener('input', updateFileLab));
+    ['logLine','logServer'].forEach(id => $(id).addEventListener('input', updateLogLab));
+    ['csvRow','separator'].forEach(id => $(id).addEventListener('input', updateSplitLab));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updateCleanLab(); updateSliceLab(); updateFileLab(); updateLogLab(); updateSplitLab();
+  </script>
+</body>
+</html>
