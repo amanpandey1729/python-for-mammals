@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 5 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 5 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day04/interactive/">⬅ Day 4</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 6 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • String practice for real operations</span>
+        <h1>Day 5: Extract meaning from logs, alerts, emails, and file names.</h1>
+        <p class="lead">Today you will practice strings on practical operational text: log messages, alert text, email subjects, file names, and ORA error lines. The mini project is a simple ORA Error Extractor.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code starts reading the kind of messy text professionals actually handle: logs, alerts, subjects, file names, and ORA errors.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Practice areas</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>ORA extractor</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Day 4 introduced string tools. Day 5 uses those tools on real operational text so you can start building useful automation logic.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">logs</span><h3>Classify log lines</h3><p>Search for words like <code>ERROR</code>, <code>FAILED</code>, <code>WARNING</code>, <code>SUCCESS</code>, and <code>TIMEOUT</code>.</p></article>
+        <article class="card"><span class="pill">alerts</span><h3>Clean alert text</h3><p>Remove extra spaces, normalize case, and decide whether an alert needs action.</p></article>
+        <article class="card"><span class="pill">email</span><h3>Parse email-like text</h3><p>Clean subjects, remove labels like <code>Subject:</code>, and identify priority words.</p></article>
+        <article class="card"><span class="pill">files</span><h3>Manipulate file names</h3><p>Check file extensions, create safe report names, and split naming standards into useful parts.</p></article>
+        <article class="card"><span class="pill">ORA-</span><h3>Detect Oracle errors</h3><p>Find <code>ORA-</code>, extract the ORA code, and capture the message after it.</p></article>
+        <article class="card"><span class="pill">project</span><h3>Build an extractor</h3><p>Create a small ORA Error Extractor that produces a clean operational summary.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values, and watch the output update. Every displayed output line comes directly from the visible code shown in the lab.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 5 labs">
+          <button class="tab active" data-panel="loglab">1. Log Scanner<small>ERROR, FAILED, WARNING</small></button>
+          <button class="tab" data-panel="alertlab">2. Alert Cleaner<small>Clean and classify text</small></button>
+          <button class="tab" data-panel="emaillab">3. Email Parser<small>Subject cleanup</small></button>
+          <button class="tab" data-panel="filelab">4. File Name Tool<small>Safe report names</small></button>
+          <button class="tab" data-panel="oralab">5. ORA Extractor<small>Find ORA code</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="loglab">
+            <div class="workspace-head"><h3>Log Scanner</h3><button class="secondary" onclick="swapLog()">Swap log</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Log line</label><input id="logLine" value="2026-06-05 ERROR connection timeout for app-server-01" /></div>
+                  <div><label>Server name</label><input id="logServer" value="app-server-01" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="logCode"></pre></div>
+                <div class="explain">Normalize the log line using <code>upper()</code>, then search for important operational keywords.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="logOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="alertlab">
+            <div class="workspace-head"><h3>Alert Cleaner</h3><button class="secondary" onclick="resetAlert()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Raw alert</label><input id="rawAlert" value="  warning: disk usage reached 82 percent  " /></div>
+                  <div><label>Source tool</label><input id="sourceTool" value="monitoring" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="alertCode"></pre></div>
+                <div class="explain">The same cleanup pattern works for monitoring alerts, support notes, pasted messages, and report rows.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="alertOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="emaillab">
+            <div class="workspace-head"><h3>Email Subject Parser</h3><button class="secondary" onclick="swapEmail()">Swap email</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Email subject</label><input id="emailSubject" value="  Subject: CRITICAL - Backup failed on db-server-01  " /></div>
+                  <div><label>Remove label</label><input id="emailLabel" value="Subject:" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="emailCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="emailOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="filelab">
+            <div class="workspace-head"><h3>File Name Tool</h3><button class="secondary" onclick="resetFile()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Report title</label><input id="reportTitle" value=" Daily ORA Error Summary " /></div>
+                  <div><label>Environment</label><input id="environment" value="PROD" /></div>
+                  <div><label>Date</label><input id="reportDate" value="20260605" /></div>
+                  <div><label>Extension</label><input id="extension" value=".txt" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="fileCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="fileOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="oralab">
+            <div class="workspace-head"><h3>ORA Error Extractor</h3><button class="secondary" onclick="swapOra()">Swap ORA line</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">This is the Day 5 mini project idea in a small interactive form.</p>
+                <div class="formgrid">
+                  <div><label>Log or alert line</label><input id="oraLine" value="Job failed with ORA-00060 deadlock detected while updating records" /></div>
+                  <div><label>Code length</label><input id="oraLength" type="number" value="9" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="oraCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="oraOutput"></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build an ORA Error Extractor</h2>
+          <p>Create a script that asks for one log line, checks whether it contains <code>ORA-</code>, extracts the ORA code, extracts the message after the code, and prints a clean summary with severity.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I cleaned the input using strip().</label>
+            <label class="check"><input type="checkbox" /> I used upper() before searching for ORA-.</label>
+            <label class="check"><input type="checkbox" /> I used find() before slicing.</label>
+            <label class="check"><input type="checkbox" /> I printed code, message, severity, and hint.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># ORA Error Extractor
+log_line = "Job failed with ORA-00060 deadlock detected"
+clean_line = log_line.strip()
+upper_line = clean_line.upper()
+ora_position = upper_line.find("ORA-")
+
+if ora_position != -1:
+    ora_code = clean_line[ora_position:ora_position + 9]
+    ora_message = clean_line[ora_position + 10:]
+    print("ORA Found: Yes")
+    print("ORA Code:", ora_code)
+    print("Message:", ora_message)
+else:
+    print("ORA Found: No")</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 5: logs, alerts, emails, file names, and ORA Error Extractor
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function safeNum(id, fallback){ const v = parseInt($(id).value, 10); return Number.isFinite(v) ? v : fallback; }
+
+    const logExamples = [
+      '2026-06-05 ERROR connection timeout for app-server-01',
+      'backup completed successfully for db-server-01',
+      'WARNING disk usage reached 82 percent',
+      'job failed during nightly run',
+      'job started normally'
+    ];
+    let logIndex = 0;
+    function updateLogLab(){
+      const line = $('logLine').value;
+      const server = $('logServer').value;
+      const normalized = line.toUpperCase();
+      let severity = 'UNKNOWN';
+      if(normalized.includes('ERROR') || normalized.includes('FAILED') || normalized.includes('TIMEOUT')){ severity = 'CRITICAL'; }
+      else if(normalized.includes('WARNING')){ severity = 'WARNING'; }
+      else if(normalized.includes('SUCCESS')){ severity = 'OK'; }
+      $('logCode').textContent = `log_line = "${q(line)}"\nserver_name = "${q(server)}"\nnormalized_log = log_line.upper()\n\nif "ERROR" in normalized_log or "FAILED" in normalized_log or "TIMEOUT" in normalized_log:\n    print("Severity: CRITICAL")\nelif "WARNING" in normalized_log:\n    print("Severity: WARNING")\nelif "SUCCESS" in normalized_log:\n    print("Severity: OK")\nelse:\n    print("Severity: UNKNOWN")`;
+      $('logOutput').textContent = `Severity: ${severity}`;
+    }
+    function swapLog(){ logIndex = (logIndex + 1) % logExamples.length; $('logLine').value = logExamples[logIndex]; updateLogLab(); }
+
+    function updateAlertLab(){
+      const raw = $('rawAlert').value;
+      const tool = $('sourceTool').value;
+      const clean = raw.trim();
+      const normalized = clean.toUpperCase();
+      let status = 'UNKNOWN';
+      if(normalized.includes('ERROR') || normalized.includes('FAILED')){ status = 'CRITICAL'; }
+      else if(normalized.includes('WARNING')){ status = 'WARNING'; }
+      else if(normalized.includes('SUCCESS')){ status = 'OK'; }
+      $('alertCode').textContent = `raw_alert = "${q(raw)}"\nsource_tool = "${q(tool)}"\n\nclean_alert = raw_alert.strip()\nnormalized_alert = clean_alert.upper()\n\nprint("Clean alert:", clean_alert)\n\nif "ERROR" in normalized_alert or "FAILED" in normalized_alert:\n    print("Alert status:", "CRITICAL")\nelif "WARNING" in normalized_alert:\n    print("Alert status:", "WARNING")\nelif "SUCCESS" in normalized_alert:\n    print("Alert status:", "OK")\nelse:\n    print("Alert status:", "UNKNOWN")`;
+      $('alertOutput').textContent = `Clean alert: ${clean}\nAlert status: ${status}`;
+    }
+    function resetAlert(){ $('rawAlert').value='  warning: disk usage reached 82 percent  '; $('sourceTool').value='monitoring'; updateAlertLab(); }
+
+    const emailExamples = [
+      '  Subject: CRITICAL - Backup failed on db-server-01  ',
+      'Subject: WARNING - Disk usage high on linux-prod-01',
+      'Subject: Daily report completed successfully',
+      'Subject: ORA-01555 on prod-db-01'
+    ];
+    let emailIndex = 0;
+    function updateEmailLab(){
+      const subject = $('emailSubject').value;
+      const label = $('emailLabel').value;
+      const cleanSubject = subject.trim().replace(label, '').trim();
+      const upperSubject = cleanSubject.toUpperCase();
+      let priority = 'Normal Priority';
+      if(upperSubject.includes('CRITICAL') || upperSubject.includes('FAILED') || upperSubject.includes('ERROR')){ priority = 'High Priority'; }
+      else if(upperSubject.includes('WARNING')){ priority = 'Medium Priority'; }
+      $('emailCode').textContent = `email_subject = "${q(subject)}"\nlabel = "${q(label)}"\n\nclean_subject = email_subject.strip().replace(label, "").strip()\nsubject_upper = clean_subject.upper()\n\nprint("Clean subject:", clean_subject)\n\nif "CRITICAL" in subject_upper or "FAILED" in subject_upper or "ERROR" in subject_upper:\n    print("Priority:", "High Priority")\nelif "WARNING" in subject_upper:\n    print("Priority:", "Medium Priority")\nelse:\n    print("Priority:", "Normal Priority")`;
+      $('emailOutput').textContent = `Clean subject: ${cleanSubject}\nPriority: ${priority}`;
+    }
+    function swapEmail(){ emailIndex = (emailIndex + 1) % emailExamples.length; $('emailSubject').value = emailExamples[emailIndex]; updateEmailLab(); }
+
+    function updateFileLab(){
+      const title = $('reportTitle').value;
+      const env = $('environment').value;
+      const date = $('reportDate').value;
+      const ext = $('extension').value;
+      const safeTitle = title.trim().toLowerCase().replaceAll(' ', '_');
+      const fileName = `${env.trim().toLowerCase()}_${safeTitle}_${date.trim()}${ext.trim()}`;
+      $('fileCode').textContent = `environment = "${q(env)}"\nreport_title = "${q(title)}"\nreport_date = "${q(date)}"\nextension = "${q(ext)}"\n\nsafe_title = report_title.strip().lower().replace(" ", "_")\nfile_name = environment.strip().lower() + "_" + safe_title + "_" + report_date.strip() + extension.strip()\n\nprint("File name:", file_name)`;
+      $('fileOutput').textContent = `File name: ${fileName}`;
+    }
+    function resetFile(){ $('reportTitle').value=' Daily ORA Error Summary '; $('environment').value='PROD'; $('reportDate').value='20260605'; $('extension').value='.txt'; updateFileLab(); }
+
+    const oraExamples = [
+      'Job failed with ORA-00060 deadlock detected while updating records',
+      'Report failed due to ORA-01555 snapshot too old during long query',
+      'Trace shows ORA-00600 internal error code',
+      'Backup completed successfully',
+      'Alert raised for ORA-12170 connect timeout occurred'
+    ];
+    let oraIndex = 0;
+    function updateOraLab(){
+      const line = $('oraLine').value;
+      const length = safeNum('oraLength', 9);
+      const cleanLine = line.trim();
+      const upperLine = cleanLine.toUpperCase();
+      const pos = upperLine.indexOf('ORA-');
+      let output = 'ORA Found : No\nSeverity  : UNKNOWN';
+      if(pos !== -1){
+        const code = cleanLine.slice(pos, pos + length);
+        const message = cleanLine.slice(pos + length + 1).trim();
+        let severity = 'UNKNOWN';
+        if(code.toUpperCase() === 'ORA-00060' || code.toUpperCase() === 'ORA-00600'){ severity = 'CRITICAL'; }
+        else if(code.toUpperCase() === 'ORA-01555'){ severity = 'WARNING'; }
+        output = `ORA Found : Yes\nORA Code  : ${code}\nMessage   : ${message}\nSeverity  : ${severity}`;
+      }
+      $('oraCode').textContent = `log_line = "${q(line)}"\nclean_line = log_line.strip()\nupper_line = clean_line.upper()\nora_position = upper_line.find("ORA-")\n\nif ora_position != -1:\n    ora_code = clean_line[ora_position:ora_position + ${length}]\n    ora_message = clean_line[ora_position + ${length + 1}:].strip()\n    print("ORA Found : Yes")\n    print("ORA Code  :", ora_code)\n    print("Message   :", ora_message)\n\n    if ora_code.upper() == "ORA-00060" or ora_code.upper() == "ORA-00600":\n        print("Severity  : CRITICAL")\n    elif ora_code.upper() == "ORA-01555":\n        print("Severity  : WARNING")\n    else:\n        print("Severity  : UNKNOWN")\nelse:\n    print("ORA Found : No")\n    print("Severity  : UNKNOWN")`;
+      $('oraOutput').textContent = output;
+    }
+    function swapOra(){ oraIndex = (oraIndex + 1) % oraExamples.length; $('oraLine').value = oraExamples[oraIndex]; updateOraLab(); }
+
+    ['logLine','logServer'].forEach(id => $(id).addEventListener('input', updateLogLab));
+    ['rawAlert','sourceTool'].forEach(id => $(id).addEventListener('input', updateAlertLab));
+    ['emailSubject','emailLabel'].forEach(id => $(id).addEventListener('input', updateEmailLab));
+    ['reportTitle','environment','reportDate','extension'].forEach(id => $(id).addEventListener('input', updateFileLab));
+    ['oraLine','oraLength'].forEach(id => $(id).addEventListener('input', updateOraLab));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updateLogLab(); updateAlertLab(); updateEmailLab(); updateFileLab(); updateOraLab();
+  </script>
+</body>
+</html>
