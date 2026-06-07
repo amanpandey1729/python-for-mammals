@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 6 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 6 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day05/interactive/">⬅ Day 5</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 7 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Operators and useful calculations</span>
+        <h1>Day 6: Calculate useful values for reports, checks, and operational decisions.</h1>
+        <p class="lead">Today you will learn arithmetic operators, assignment operators, comparison revision, operator precedence, and practical calculations used in capacity checks, backup summaries, SLA reviews, and daily reports.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code starts calculating the values behind useful automation: usage percentage, free capacity, counters, thresholds, and status.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>7</b><span>Operator types</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Calculator project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Day 5 helped us extract meaning from text. Day 6 helps us calculate useful operational values from numbers.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">math</span><h3>Arithmetic operators</h3><p>Use <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>, <code>%</code>, and <code>**</code> for daily calculations.</p></article>
+        <article class="card"><span class="pill">update</span><h3>Assignment operators</h3><p>Use <code>+=</code> and <code>-=</code> to update counters such as incidents, failed checks, and successful jobs.</p></article>
+        <article class="card"><span class="pill">compare</span><h3>Comparison revision</h3><p>Compare calculated values with thresholds to decide whether something is OK, WARNING, or CRITICAL.</p></article>
+        <article class="card"><span class="pill">order</span><h3>Operator precedence</h3><p>Understand why brackets matter in percentage calculations and report formulas.</p></article>
+        <article class="card"><span class="pill">capacity</span><h3>Practical calculations</h3><p>Calculate disk usage, free space, backup duration, pass percentage, and SLA delay.</p></article>
+        <article class="card"><span class="pill">project</span><h3>Build a calculator</h3><p>Create a small Operational Calculator that prints usage percentage and status based on thresholds.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values, and watch the output update. Every displayed output line comes directly from the visible code shown in the lab.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 6 labs">
+          <button class="tab active" data-panel="disklab">1. Disk Calculator<small>Free space and usage %</small></button>
+          <button class="tab" data-panel="counterlab">2. Counter Updates<small>+= and -=</small></button>
+          <button class="tab" data-panel="thresholdlab">3. Threshold Check<small>OK, WARNING, CRITICAL</small></button>
+          <button class="tab" data-panel="precedencelab">4. Precedence<small>Why brackets matter</small></button>
+          <button class="tab" data-panel="operationlab">5. Operational Calculator<small>Mini project logic</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="disklab">
+            <div class="workspace-head"><h3>Disk Usage Calculator</h3><button class="secondary" onclick="swapDisk()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Total disk GB</label><input id="totalDisk" type="number" value="250" /></div>
+                  <div><label>Used disk GB</label><input id="usedDisk" type="number" value="211" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="diskCode"></pre></div>
+                <div class="explain">This is the calculation pattern behind many capacity and health-check reports.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="diskOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="counterlab">
+            <div class="workspace-head"><h3>Assignment Operator Counter</h3><button class="secondary" onclick="resetCounter()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Initial incidents</label><input id="initialIncidents" type="number" value="0" /></div>
+                  <div><label>New incidents</label><input id="newIncidents" type="number" value="4" /></div>
+                  <div><label>Resolved incidents</label><input id="resolvedIncidents" type="number" value="1" /></div>
+                  <div><label>Team name</label><input id="teamName" value="operations" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="counterCode"></pre></div>
+                <div class="explain">Counters are used in report summaries, incident dashboards, backup summaries, and validation scripts.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="counterOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="thresholdlab">
+            <div class="workspace-head"><h3>Threshold Checker</h3><button class="secondary" onclick="swapThreshold()">Swap usage</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Usage percent</label><input id="usagePercent" type="number" value="84" /></div>
+                  <div><label>Resource name</label><input id="thresholdResource" value="Disk /data" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="thresholdCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="thresholdOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="precedencelab">
+            <div class="workspace-head"><h3>Operator Precedence</h3><button class="secondary" onclick="resetPrecedence()">Reset</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Passed checks</label><input id="passedChecks" type="number" value="17" /></div>
+                  <div><label>Failed checks</label><input id="failedChecks" type="number" value="3" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="precedenceCode"></pre></div>
+                <div class="explain">Brackets make your formula clear and prevent wrong report numbers.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="precedenceOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="operationlab">
+            <div class="workspace-head"><h3>Operational Calculator</h3><button class="secondary" onclick="swapOperation()">Swap resource</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">This is the Day 6 mini project idea in a small interactive form.</p>
+                <div class="formgrid">
+                  <div><label>Resource name</label><input id="resourceName" value="Disk /backup" /></div>
+                  <div><label>Used value</label><input id="usedValue" type="number" value="450" /></div>
+                  <div><label>Total value</label><input id="totalValue" type="number" value="500" /></div>
+                  <div><label>Unit</label><input id="unitName" value="GB" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="operationCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="operationOutput"></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build an Operational Calculator</h2>
+          <p>Create a script that asks for a resource name, used value, total value, warning threshold, and critical threshold. It should calculate free value, usage percentage, and print a clear status.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I converted numeric input using float().</label>
+            <label class="check"><input type="checkbox" /> I calculated free value correctly.</label>
+            <label class="check"><input type="checkbox" /> I used brackets in the percentage formula.</label>
+            <label class="check"><input type="checkbox" /> I compared usage with warning and critical thresholds.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false"># Operational Calculator
+resource_name = "Disk /backup"
+used_value = 450
+total_value = 500
+
+free_value = total_value - used_value
+usage_percent = round((used_value / total_value) * 100, 2)
+
+print("Resource      :", resource_name)
+print("Free          :", free_value)
+print("Usage Percent :", usage_percent, "%")
+
+if usage_percent >= 90:
+    print("Status        : CRITICAL")
+elif usage_percent >= 80:
+    print("Status        : WARNING")
+else:
+    print("Status        : OK")</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 6: operators, calculations, thresholds, and capacity status
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function safeNum(id, fallback){ const v = parseFloat($(id).value); return Number.isFinite(v) ? v : fallback; }
+    function pyRound(value, digits){ return Number(value.toFixed(digits)); }
+    function pyFloatText(value){ return Number.isInteger(value) ? value.toFixed(1) : String(value); }
+
+    const diskExamples = [[250,211],[500,375],[1000,780],[300,236]];
+    let diskIndex = 0;
+    function updateDiskLab(){
+      const total = safeNum('totalDisk', 0);
+      const used = safeNum('usedDisk', 0);
+      const free = total - used;
+      const percent = total === 0 ? 0 : pyRound((used / total) * 100, 2);
+      $('diskCode').textContent = `total_disk = ${total}\nused_disk = ${used}\n\nfree_disk = total_disk - used_disk\nusage_percent = round((used_disk / total_disk) * 100, 2)\n\nprint("Total disk    :", total_disk, "GB")\nprint("Used disk     :", used_disk, "GB")\nprint("Free disk     :", free_disk, "GB")\nprint("Usage percent :", usage_percent, "%")`;
+      $('diskOutput').textContent = `Total disk    : ${total} GB\nUsed disk     : ${used} GB\nFree disk     : ${free} GB\nUsage percent : ${pyFloatText(percent)} %`;
+    }
+    function swapDisk(){ diskIndex = (diskIndex + 1) % diskExamples.length; $('totalDisk').value = diskExamples[diskIndex][0]; $('usedDisk').value = diskExamples[diskIndex][1]; updateDiskLab(); }
+
+    function updateCounterLab(){
+      const initial = safeNum('initialIncidents', 0);
+      const added = safeNum('newIncidents', 0);
+      const resolved = safeNum('resolvedIncidents', 0);
+      const team = $('teamName').value;
+      let count = initial;
+      count += added;
+      count -= resolved;
+      $('counterCode').textContent = `team_name = "${q(team)}"\nincident_count = ${initial}\n\nincident_count += ${added}\nincident_count -= ${resolved}\n\nprint("Team           :", team_name)\nprint("Open incidents :", incident_count)`;
+      $('counterOutput').textContent = `Team           : ${team}\nOpen incidents : ${count}`;
+    }
+    function resetCounter(){ $('initialIncidents').value='0'; $('newIncidents').value='4'; $('resolvedIncidents').value='1'; $('teamName').value='operations'; updateCounterLab(); }
+
+    const thresholdExamples = [75,84,92,80,90];
+    let thresholdIndex = 1;
+    function updateThresholdLab(){
+      const usage = safeNum('usagePercent', 0);
+      const resource = $('thresholdResource').value;
+      let status = 'OK';
+      if(usage >= 90){ status = 'CRITICAL'; }
+      else if(usage >= 80){ status = 'WARNING'; }
+      $('thresholdCode').textContent = `resource_name = "${q(resource)}"\nusage_percent = ${usage}\n\nprint("Resource      :", resource_name)\nprint("Usage Percent :", usage_percent, "%")\n\nif usage_percent >= 90:\n    print("Status        : CRITICAL")\nelif usage_percent >= 80:\n    print("Status        : WARNING")\nelse:\n    print("Status        : OK")`;
+      $('thresholdOutput').textContent = `Resource      : ${resource}\nUsage Percent : ${usage} %\nStatus        : ${status}`;
+    }
+    function swapThreshold(){ thresholdIndex = (thresholdIndex + 1) % thresholdExamples.length; $('usagePercent').value = thresholdExamples[thresholdIndex]; updateThresholdLab(); }
+
+    function updatePrecedenceLab(){
+      const passed = safeNum('passedChecks', 0);
+      const failed = safeNum('failedChecks', 0);
+      const total = passed + failed;
+      const wrong = total === 0 ? 0 : passed + failed / total * 100;
+      const correct = total === 0 ? 0 : (passed / total) * 100;
+      $('precedenceCode').textContent = `passed_checks = ${passed}\nfailed_checks = ${failed}\ntotal_checks = passed_checks + failed_checks\n\nwrong_percent = passed_checks + failed_checks / total_checks * 100\ncorrect_percent = (passed_checks / total_checks) * 100\n\nprint("Wrong calculation    :", wrong_percent)\nprint("Correct pass percent :", correct_percent)`;
+      $('precedenceOutput').textContent = `Wrong calculation    : ${pyFloatText(wrong)}\nCorrect pass percent : ${pyFloatText(correct)}`;
+    }
+    function resetPrecedence(){ $('passedChecks').value='17'; $('failedChecks').value='3'; updatePrecedenceLab(); }
+
+    const operationExamples = [
+      ['Disk /backup',450,500,'GB'],
+      ['Memory',14,16,'GB'],
+      ['Backup Mount',780,1000,'GB'],
+      ['Daily Checks',46,50,'checks']
+    ];
+    let operationIndex = 0;
+    function updateOperationLab(){
+      const resource = $('resourceName').value;
+      const used = safeNum('usedValue', 0);
+      const total = safeNum('totalValue', 0);
+      const unit = $('unitName').value;
+      const free = total - used;
+      const percent = total === 0 ? 0 : pyRound((used / total) * 100, 2);
+      let status = 'OK';
+      if(percent >= 90){ status = 'CRITICAL'; }
+      else if(percent >= 80){ status = 'WARNING'; }
+      $('operationCode').textContent = `resource_name = "${q(resource)}"\nused_value = ${used}\ntotal_value = ${total}\nunit = "${q(unit)}"\n\nfree_value = total_value - used_value\nusage_percent = round((used_value / total_value) * 100, 2)\n\nprint("Resource      :", resource_name)\nprint("Used          :", used_value, unit)\nprint("Total         :", total_value, unit)\nprint("Free          :", free_value, unit)\nprint("Usage Percent :", usage_percent, "%")\n\nif usage_percent >= 90:\n    print("Status        : CRITICAL")\nelif usage_percent >= 80:\n    print("Status        : WARNING")\nelse:\n    print("Status        : OK")`;
+      $('operationOutput').textContent = `Resource      : ${resource}\nUsed          : ${used} ${unit}\nTotal         : ${total} ${unit}\nFree          : ${free} ${unit}\nUsage Percent : ${pyFloatText(percent)} %\nStatus        : ${status}`;
+    }
+    function swapOperation(){ operationIndex = (operationIndex + 1) % operationExamples.length; const e = operationExamples[operationIndex]; $('resourceName').value=e[0]; $('usedValue').value=e[1]; $('totalValue').value=e[2]; $('unitName').value=e[3]; updateOperationLab(); }
+
+    ['totalDisk','usedDisk'].forEach(id => $(id).addEventListener('input', updateDiskLab));
+    ['initialIncidents','newIncidents','resolvedIncidents','teamName'].forEach(id => $(id).addEventListener('input', updateCounterLab));
+    ['usagePercent','thresholdResource'].forEach(id => $(id).addEventListener('input', updateThresholdLab));
+    ['passedChecks','failedChecks'].forEach(id => $(id).addEventListener('input', updatePrecedenceLab));
+    ['resourceName','usedValue','totalValue','unitName'].forEach(id => $(id).addEventListener('input', updateOperationLab));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updateDiskLab(); updateCounterLab(); updateThresholdLab(); updatePrecedenceLab(); updateOperationLab();
+  </script>
+</body>
+</html>

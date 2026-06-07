@@ -58,7 +58,7 @@ Build a strong foundation before writing automation.
 | 3   | Input & Decision Making                           |   ✅    |
 | 4   | Strings Fundamentals                              |   ✅    |
 | 5   | String Operations & Text Manipulation             |   ✅    |
-| 6   | Operators & Calculations                          |   ⬜    |
+| 6   | Operators & Calculations                          |   ✅    |
 | 7   | Conditions Deep Dive                              |   ⬜    |
 | 8   | For Loops                                         |   ⬜    |
 | 9   | While Loops, break & continue                     |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 5 / 45
+Day 6 / 45
 ```
 
 Completion:
 
 ```text
-██████████░░░░░░░░░░░░ 11.1%
+███████████░░░░░░░░░░░░ 13.3%
 ```
 
 ---
