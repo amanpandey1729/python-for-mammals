@@ -59,7 +59,7 @@ Build a strong foundation before writing automation.
 | 4   | Strings Fundamentals                              |   ✅    |
 | 5   | String Operations & Text Manipulation             |   ✅    |
 | 6   | Operators & Calculations                          |   ✅    |
-| 7   | Conditions Deep Dive                              |   ⬜    |
+| 7   | Conditions Deep Dive                              |   ✅    |
 | 8   | For Loops                                         |   ⬜    |
 | 9   | While Loops, break & continue                     |   ⬜    |
 | 10  | Mini Project #1 – Server Health Message Generator |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 6 / 45
+Day 7 / 45
 ```
 
 Completion:
 
 ```text
-███████████░░░░░░░░░░░░ 13.3%
+████████████░░░░░░░░░░░░ 15.5%
 ```
 
 ---

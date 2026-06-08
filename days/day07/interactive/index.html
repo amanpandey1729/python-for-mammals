@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 7 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 7 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day06/interactive/">⬅ Day 6</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 8 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Smarter conditions and validations</span>
+        <h1>Day 7: Handle complex decisions with nested if, and, or, not, and validations.</h1>
+        <p class="lead">Today you will go deeper into conditions so your scripts can decide what to do when multiple checks are involved: server reachability, environment, backup status, thresholds, and missing inputs.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code learns to make practical decisions from more than one signal: environment, thresholds, backup status, and validation checks.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>4</b><span>Decision tools</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Health validator</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Day 6 helped us calculate values. Day 7 helps us decide what action to take when more than one condition matters.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">nested</span><h3>Nested if</h3><p>Check one condition first, then check another condition only when it makes sense.</p></article>
+        <article class="card"><span class="pill">and</span><h3>Multiple conditions</h3><p>Use <code>and</code> when every condition must be true before an action happens.</p></article>
+        <article class="card"><span class="pill">or</span><h3>Alternative triggers</h3><p>Use <code>or</code> when any one condition can trigger the same review or alert.</p></article>
+        <article class="card"><span class="pill">not</span><h3>Stop checks clearly</h3><p>Use <code>not</code> to stop scripts when something is missing, unreachable, or not ready.</p></article>
+        <article class="card"><span class="pill">validate</span><h3>Input validation</h3><p>Check missing names, allowed values, percentage ranges, and invalid combinations.</p></article>
+        <article class="card"><span class="pill">project</span><h3>Health validator</h3><p>Build a small Operational Health Validator that prints status and action.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values, and watch the output update. Every displayed output line comes directly from the visible code shown in the lab.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 7 labs">
+          <button class="tab active" data-panel="andlab">1. and Condition<small>Production disk alert</small></button>
+          <button class="tab" data-panel="orlab">2. or Condition<small>Backup review rule</small></button>
+          <button class="tab" data-panel="nestedlab">3. Nested if<small>Reachability then disk</small></button>
+          <button class="tab" data-panel="validationlab">4. Validation<small>Missing and invalid inputs</small></button>
+          <button class="tab" data-panel="healthlab">5. Health Validator<small>Mini project logic</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="andlab">
+            <div class="workspace-head"><h3>Production Disk Alert with and</h3><button class="secondary" onclick="swapAndLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Environment</label><input id="andEnv" value="PROD" /></div>
+                  <div><label>Disk usage %</label><input id="andDisk" type="number" value="92" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="andCode"></pre></div>
+                <div class="explain">Use <b>and</b> when all conditions must be true, such as PROD and high disk usage.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="andOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="orlab">
+            <div class="workspace-head"><h3>Backup Review with or</h3><button class="secondary" onclick="swapOrLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Backup status</label><input id="backupStatus" value="SUCCESS" /></div>
+                  <div><label>Duration minutes</label><input id="backupDuration" type="number" value="145" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="orCode"></pre></div>
+                <div class="explain">Use <b>or</b> when any one problem is enough to trigger a review.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="orOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="nestedlab">
+            <div class="workspace-head"><h3>Nested if: Reachability then Disk</h3><button class="secondary" onclick="swapNestedLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Server reachable</label><select id="serverReachable"><option>True</option><option>False</option></select></div>
+                  <div><label>Disk usage %</label><input id="nestedDisk" type="number" value="87" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="nestedCode"></pre></div>
+                <div class="explain">Nested if is useful when a later check depends on an earlier check passing.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="nestedOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="validationlab">
+            <div class="workspace-head"><h3>Real-world Input Validation</h3><button class="secondary" onclick="swapValidationLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Server name</label><input id="serverName" value="   " /></div>
+                  <div><label>Environment</label><input id="validEnv" value="PRODUCTION" /></div>
+                  <div><label>Disk usage %</label><input id="validDisk" type="number" value="104" /></div>
+                  <div><label>Backup status</label><input id="validBackup" value="SUCCESS" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="validationCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="validationOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="healthlab">
+            <div class="workspace-head"><h3>Operational Health Validator</h3><button class="secondary" onclick="swapHealthLab()">Swap scenario</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">This is the Day 7 mini project idea in a small interactive form.</p>
+                <div class="formgrid">
+                  <div><label>Server name</label><input id="healthServer" value="app-server-01" /></div>
+                  <div><label>Environment</label><input id="healthEnv" value="PROD" /></div>
+                  <div><label>Reachable</label><select id="healthReachable"><option>True</option><option>False</option></select></div>
+                  <div><label>Disk usage %</label><input id="healthDisk" type="number" value="91" /></div>
+                  <div><label>Backup status</label><input id="healthBackup" value="SUCCESS" /></div>
+                  <div><label>Backup age hours</label><input id="healthAge" type="number" value="18" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="healthCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="healthOutput"></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build an Operational Health Validator</h2>
+          <p>Create a script that asks for server name, environment, reachability, CPU usage, memory usage, disk usage, backup status, and backup age. Validate the inputs and print a clear final status.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I collected all inputs once at the beginning.</label>
+            <label class="check"><input type="checkbox" /> I validated missing and invalid inputs.</label>
+            <label class="check"><input type="checkbox" /> I used nested if where the next check depends on the previous check.</label>
+            <label class="check"><input type="checkbox" /> I used and, or, and not correctly.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false">server_name = "app-server-01"
+environment = "PROD"
+server_reachable = True
+disk_usage = 91
+backup_status = "SUCCESS"
+backup_age_hours = 18
+
+print("Server name     :", server_name)
+print("Environment     :", environment)
+print("Server reachable:", server_reachable)
+print("Disk usage      :", disk_usage, "%")
+
+if not server_reachable:
+    print("Final status    : CRITICAL")
+elif environment == "PROD" and disk_usage >= 90:
+    print("Final status    : CRITICAL")
+elif backup_status != "SUCCESS" or backup_age_hours > 24:
+    print("Final status    : WARNING")
+else:
+    print("Final status    : OK")</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 7: nested if, and, or, not, and real-world validations
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function safeNum(id, fallback){ const v = parseFloat($(id).value); return Number.isFinite(v) ? v : fallback; }
+    function pyBoolText(v){ return v ? 'True' : 'False'; }
+
+    const andExamples = [['PROD',92],['DEV',95],['PROD',75],['TEST',91]];
+    let andIndex = 0;
+    function updateAndLab(){
+      const env = $('andEnv').value.trim().toUpperCase();
+      const disk = safeNum('andDisk', 0);
+      const action = (env === 'PROD' && disk >= 90) ? 'Raise high-priority ticket' : 'Normal monitoring';
+      $('andCode').textContent = `environment = "${q(env)}"\ndisk_usage = ${disk}\n\nprint("Environment:", environment)\nprint("Disk usage :", disk_usage, "%")\n\nif environment == "PROD" and disk_usage >= 90:\n    print("Action     : Raise high-priority ticket")\nelse:\n    print("Action     : Normal monitoring")`;
+      $('andOutput').textContent = `Environment: ${env}\nDisk usage : ${disk} %\nAction     : ${action}`;
+    }
+    function swapAndLab(){ andIndex = (andIndex + 1) % andExamples.length; const e = andExamples[andIndex]; $('andEnv').value=e[0]; $('andDisk').value=e[1]; updateAndLab(); }
+
+    const orExamples = [['SUCCESS',145],['FAILED',45],['SUCCESS',60],['FAILED',160]];
+    let orIndex = 0;
+    function updateOrLab(){
+      const status = $('backupStatus').value.trim().toUpperCase();
+      const duration = safeNum('backupDuration', 0);
+      const action = (status === 'FAILED' || duration > 120) ? 'Review backup job' : 'Backup looks normal';
+      $('orCode').textContent = `backup_status = "${q(status)}"\nbackup_duration_minutes = ${duration}\n\nprint("Backup status  :", backup_status)\nprint("Backup duration:", backup_duration_minutes, "minutes")\n\nif backup_status == "FAILED" or backup_duration_minutes > 120:\n    print("Action         : Review backup job")\nelse:\n    print("Action         : Backup looks normal")`;
+      $('orOutput').textContent = `Backup status  : ${status}\nBackup duration: ${duration} minutes\nAction         : ${action}`;
+    }
+    function swapOrLab(){ orIndex = (orIndex + 1) % orExamples.length; const e = orExamples[orIndex]; $('backupStatus').value=e[0]; $('backupDuration').value=e[1]; updateOrLab(); }
+
+    const nestedExamples = [[true,87],[true,93],[false,50],[true,74]];
+    let nestedIndex = 0;
+    function updateNestedLab(){
+      const reachable = $('serverReachable').value === 'True';
+      const disk = safeNum('nestedDisk', 0);
+      $('nestedCode').textContent = `server_reachable = ${pyBoolText(reachable)}\ndisk_usage = ${disk}\n\nprint("Server reachable:", server_reachable)\nprint("Disk usage      :", disk_usage, "%")\n\nif server_reachable:\n    print("Server check    : PASSED")\n\n    if disk_usage >= 90:\n        print("Disk status     : CRITICAL")\n    elif disk_usage >= 80:\n        print("Disk status     : WARNING")\n    else:\n        print("Disk status     : OK")\nelse:\n    print("Server check    : FAILED")\n    print("Disk status     : NOT CHECKED")`;
+      let out = `Server reachable: ${pyBoolText(reachable)}\nDisk usage      : ${disk} %\n`;
+      if(reachable){
+        out += 'Server check    : PASSED\n';
+        if(disk >= 90){ out += 'Disk status     : CRITICAL'; }
+        else if(disk >= 80){ out += 'Disk status     : WARNING'; }
+        else { out += 'Disk status     : OK'; }
+      } else {
+        out += 'Server check    : FAILED\nDisk status     : NOT CHECKED';
+      }
+      $('nestedOutput').textContent = out;
+    }
+    function swapNestedLab(){ nestedIndex = (nestedIndex + 1) % nestedExamples.length; const e = nestedExamples[nestedIndex]; $('serverReachable').value=pyBoolText(e[0]); $('nestedDisk').value=e[1]; updateNestedLab(); }
+
+    const validationExamples = [['   ','PRODUCTION',104,'SUCCESS'],['app01','PROD',91,'SUCCESS'],['db01','TEST',75,'FAILED'],['web01','QA',66,'SUCCESS']];
+    let validationIndex = 0;
+    function updateValidationLab(){
+      const serverRaw = $('serverName').value;
+      const server = serverRaw.trim();
+      const env = $('validEnv').value.trim().toUpperCase();
+      const disk = safeNum('validDisk', 0);
+      const backup = $('validBackup').value.trim().toUpperCase();
+      $('validationCode').textContent = `server_name = "${q(serverRaw)}".strip()\nenvironment = "${q(env)}"\ndisk_usage = ${disk}\nbackup_status = "${q(backup)}"\n\nprint("Server name  :", server_name)\nprint("Environment  :", environment)\nprint("Disk usage   :", disk_usage)\nprint("Backup status:", backup_status)\n\nif server_name == "":\n    print("Validation   : Server name is required")\nelif environment != "PROD" and environment != "DEV" and environment != "TEST":\n    print("Validation   : Invalid environment")\nelif disk_usage < 0 or disk_usage > 100:\n    print("Validation   : Invalid percentage")\nelif backup_status != "SUCCESS" and backup_status != "FAILED":\n    print("Validation   : Invalid backup status")\nelse:\n    print("Validation   : Inputs accepted")`;
+      let validation = 'Inputs accepted';
+      if(server === ''){ validation = 'Server name is required'; }
+      else if(env !== 'PROD' && env !== 'DEV' && env !== 'TEST'){ validation = 'Invalid environment'; }
+      else if(disk < 0 || disk > 100){ validation = 'Invalid percentage'; }
+      else if(backup !== 'SUCCESS' && backup !== 'FAILED'){ validation = 'Invalid backup status'; }
+      $('validationOutput').textContent = `Server name  : ${server}\nEnvironment  : ${env}\nDisk usage   : ${disk}\nBackup status: ${backup}\nValidation   : ${validation}`;
+    }
+    function swapValidationLab(){ validationIndex = (validationIndex + 1) % validationExamples.length; const e = validationExamples[validationIndex]; $('serverName').value=e[0]; $('validEnv').value=e[1]; $('validDisk').value=e[2]; $('validBackup').value=e[3]; updateValidationLab(); }
+
+    const healthExamples = [
+      ['app-server-01','PROD',true,91,'SUCCESS',18],
+      ['dev-server-01','DEV',true,65,'SUCCESS',8],
+      ['db-server-01','PROD',false,40,'SUCCESS',12],
+      ['backup-server-01','PROD',true,71,'FAILED',30]
+    ];
+    let healthIndex = 0;
+    function updateHealthLab(){
+      const server = $('healthServer').value.trim();
+      const env = $('healthEnv').value.trim().toUpperCase();
+      const reachable = $('healthReachable').value === 'True';
+      const disk = safeNum('healthDisk', 0);
+      const backup = $('healthBackup').value.trim().toUpperCase();
+      const age = safeNum('healthAge', 0);
+      let status = 'OK';
+      let action = 'No immediate action required';
+      if(!reachable){ status = 'CRITICAL'; action = 'Check network, host, or access immediately'; }
+      else if(env === 'PROD' && disk >= 90){ status = 'CRITICAL'; action = 'Cleanup or extend capacity urgently'; }
+      else if(backup !== 'SUCCESS' || age > 24){ status = 'WARNING'; action = 'Review backup job'; }
+      $('healthCode').textContent = `server_name = "${q(server)}"\nenvironment = "${q(env)}"\nserver_reachable = ${pyBoolText(reachable)}\ndisk_usage = ${disk}\nbackup_status = "${q(backup)}"\nbackup_age_hours = ${age}\n\nprint("Server name     :", server_name)\nprint("Environment     :", environment)\nprint("Server reachable:", server_reachable)\nprint("Disk usage      :", disk_usage, "%")\nprint("Backup status   :", backup_status)\nprint("Backup age      :", backup_age_hours, "hours")\n\nif not server_reachable:\n    print("Final status    : CRITICAL")\n    print("Action          : Check network, host, or access immediately")\nelif environment == "PROD" and disk_usage >= 90:\n    print("Final status    : CRITICAL")\n    print("Action          : Cleanup or extend capacity urgently")\nelif backup_status != "SUCCESS" or backup_age_hours > 24:\n    print("Final status    : WARNING")\n    print("Action          : Review backup job")\nelse:\n    print("Final status    : OK")\n    print("Action          : No immediate action required")`;
+      $('healthOutput').textContent = `Server name     : ${server}\nEnvironment     : ${env}\nServer reachable: ${pyBoolText(reachable)}\nDisk usage      : ${disk} %\nBackup status   : ${backup}\nBackup age      : ${age} hours\nFinal status    : ${status}\nAction          : ${action}`;
+    }
+    function swapHealthLab(){ healthIndex = (healthIndex + 1) % healthExamples.length; const e = healthExamples[healthIndex]; $('healthServer').value=e[0]; $('healthEnv').value=e[1]; $('healthReachable').value=pyBoolText(e[2]); $('healthDisk').value=e[3]; $('healthBackup').value=e[4]; $('healthAge').value=e[5]; updateHealthLab(); }
+
+    ['andEnv','andDisk'].forEach(id => $(id).addEventListener('input', updateAndLab));
+    ['backupStatus','backupDuration'].forEach(id => $(id).addEventListener('input', updateOrLab));
+    ['serverReachable','nestedDisk'].forEach(id => $(id).addEventListener('input', updateNestedLab));
+    ['serverName','validEnv','validDisk','validBackup'].forEach(id => $(id).addEventListener('input', updateValidationLab));
+    ['healthServer','healthEnv','healthReachable','healthDisk','healthBackup','healthAge'].forEach(id => $(id).addEventListener('input', updateHealthLab));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updateAndLab(); updateOrLab(); updateNestedLab(); updateValidationLab(); updateHealthLab();
+  </script>
+</body>
+</html>
