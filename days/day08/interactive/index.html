@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 8 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 8 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day07/interactive/">⬅ Day 7</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 9 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Repeat work with for loops</span>
+        <h1>Day 8: Automate repetition with for loops, range(), strings, and lists.</h1>
+        <p class="lead">Today you will learn how Python repeats tasks for you. This is where automation starts feeling real: checking many servers, printing many report rows, scanning many alerts, and processing many values without copy-paste.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code learns to repeat the same action across multiple numbers, characters, servers, services, alerts, and report rows.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Loop concepts</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Disk review project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Day 7 helped us decide what to do. Day 8 helps us repeat those decisions across many items.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">iterate</span><h3>What is iteration?</h3><p>Iteration means going through items one by one and performing a repeated action.</p></article>
+        <article class="card"><span class="pill">range()</span><h3>Controlled repetition</h3><p>Use <code>range()</code> when you want a loop to run a fixed number of times.</p></article>
+        <article class="card"><span class="pill">variable</span><h3>Loop variables</h3><p>The loop variable temporarily holds the current item being processed.</p></article>
+        <article class="card"><span class="pill">strings</span><h3>Iterate through strings</h3><p>Go through characters in IDs, codes, filenames, and small text values.</p></article>
+        <article class="card"><span class="pill">lists</span><h3>Iterate through lists</h3><p>Process many servers, services, alerts, checks, files, or rows one by one.</p></article>
+        <article class="card"><span class="pill">project</span><h3>Multi Server Disk Review</h3><p>Build a small loop-based review that prints status and summary counts.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive practice lab</h2>
+          <p class="hint">Pick a topic, change the values, and watch the output update. Every displayed output line comes directly from the visible code shown in the lab.</p>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 8 labs">
+          <button class="tab active" data-panel="rangelab">1. range()<small>Numbered checks</small></button>
+          <button class="tab" data-panel="listlab">2. Lists<small>Server loop</small></button>
+          <button class="tab" data-panel="stringlab">3. Strings<small>Ticket character scan</small></button>
+          <button class="tab" data-panel="statuslab">4. Loop + Conditions<small>Disk status review</small></button>
+          <button class="tab" data-panel="projectlab">5. Mini Project<small>Multi server review</small></button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel active" id="rangelab">
+            <div class="workspace-head"><h3>Generate Numbered Checks with range()</h3><button class="secondary" onclick="swapRangeLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Start check number</label><input id="rangeStart" type="number" value="1" /></div>
+                  <div><label>Stop after check number</label><input id="rangeStop" type="number" value="5" /></div>
+                </div>
+                <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Python code</div><pre id="rangeCode"></pre></div>
+                <div class="explain">Use <b>range(start, stop + 1)</b> when you want a numbered checklist.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="rangeOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="listlab">
+            <div class="workspace-head"><h3>Loop Through a Server List</h3><button class="secondary" onclick="swapListLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Server 1</label><input id="server1" value="app01" /></div>
+                  <div><label>Server 2</label><input id="server2" value="db01" /></div>
+                  <div><label>Server 3</label><input id="server3" value="web01" /></div>
+                  <div><label>Environment</label><input id="serverEnv" value="PROD" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="listCode"></pre></div>
+                <div class="explain">A list lets you store many values. A for loop processes each value one by one.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="listOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="stringlab">
+            <div class="workspace-head"><h3>Iterate Through a Ticket ID</h3><button class="secondary" onclick="swapStringLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Ticket ID</label><input id="ticketId" value="INC123" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="stringCode"></pre></div>
+                <div class="explain">A string is a sequence, so Python can loop through it character by character.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="stringOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="statuslab">
+            <div class="workspace-head"><h3>Disk Status Review with Loop + Conditions</h3><button class="secondary" onclick="swapStatusLab()">Swap values</button></div>
+            <div class="workspace-body split">
+              <div>
+                <div class="formgrid">
+                  <div><label>Usage 1</label><input id="usage1" type="number" value="65" /></div>
+                  <div><label>Usage 2</label><input id="usage2" type="number" value="82" /></div>
+                  <div><label>Usage 3</label><input id="usage3" type="number" value="91" /></div>
+                  <div><label>Usage 4</label><input id="usage4" type="number" value="76" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="statusCode"></pre></div>
+                <div class="explain">Loops become powerful when you combine them with the conditions learned earlier.</div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="statusOutput"></div></div>
+            </div>
+          </article>
+
+          <article class="panel" id="projectlab">
+            <div class="workspace-head"><h3>Multi Server Disk Review</h3><button class="secondary" onclick="swapProjectLab()">Swap scenario</button></div>
+            <div class="workspace-body split">
+              <div>
+                <p class="hint">This is the Day 8 mini project idea in a small interactive form.</p>
+                <div class="formgrid">
+                  <div><label>Server 1</label><input id="projServer1" value="app01" /></div>
+                  <div><label>Usage 1</label><input id="projUsage1" type="number" value="72" /></div>
+                  <div><label>Server 2</label><input id="projServer2" value="db01" /></div>
+                  <div><label>Usage 2</label><input id="projUsage2" type="number" value="86" /></div>
+                  <div><label>Server 3</label><input id="projServer3" value="backup01" /></div>
+                  <div><label>Usage 3</label><input id="projUsage3" type="number" value="94" /></div>
+                </div>
+                <div class="codebox"><div class="bar">Python code</div><pre id="projectCode"></pre></div>
+              </div>
+              <div class="output"><div class="bar">Output</div><div class="outcontent" id="projectOutput"></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)">Mini Challenge</span>
+          <h2 style="margin-top:12px">Build a Multi-Item Health Summary</h2>
+          <p>Create a script that stores multiple resource names and usage percentages in lists. Loop through them, decide the status for each item, count OK/WARNING/CRITICAL results, and print a final summary.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> I created a list of resource names.</label>
+            <label class="check"><input type="checkbox" /> I created a list of matching usage percentages.</label>
+            <label class="check"><input type="checkbox" /> I used a for loop to process each item.</label>
+            <label class="check"><input type="checkbox" /> I printed final OK, WARNING, and CRITICAL counts.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar">Starter idea</div><textarea spellcheck="false">resources = ["CPU", "Memory", "Disk"]
+usages = [72, 86, 94]
+
+ok_count = 0
+warning_count = 0
+critical_count = 0
+
+for index in range(3):
+    resource = resources[index]
+    usage = usages[index]
+
+    print("Resource:", resource)
+    print("Usage   :", usage, "%")
+
+    if usage >= 90:
+        print("Status  : CRITICAL")
+        critical_count += 1
+    elif usage >= 80:
+        print("Status  : WARNING")
+        warning_count += 1
+    else:
+        print("Status  : OK")
+        ok_count += 1
+
+print("OK Count      :", ok_count)
+print("WARNING Count :", warning_count)
+print("CRITICAL Count:", critical_count)</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topBtn" onclick="location.hash='top'">↑</button>
+
+  <footer class="shell">
+    Made for Python for Mammals • Day 8: for loops, range(), strings, lists, and automation through repetition
+  </footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.panel).classList.add('active');
+      });
+    });
+
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function safeNum(id, fallback){ const v = parseFloat($(id).value); return Number.isFinite(v) ? v : fallback; }
+
+    const rangeExamples = [[1,5],[3,7],[10,12]];
+    let rangeIndex = 0;
+    function updateRangeLab(){
+      const start = Math.trunc(safeNum('rangeStart', 1));
+      const stop = Math.trunc(safeNum('rangeStop', 5));
+      $('rangeCode').textContent = `start_check = ${start}\nstop_check = ${stop}\n\nfor check_number in range(start_check, stop_check + 1):\n    print("Health check number:", check_number)`;
+      let lines = [];
+      if(stop >= start){
+        for(let n = start; n <= stop; n++){ lines.push(`Health check number: ${n}`); }
+      }
+      $('rangeOutput').textContent = lines.join('\n');
+    }
+    function swapRangeLab(){ rangeIndex = (rangeIndex + 1) % rangeExamples.length; const e = rangeExamples[rangeIndex]; $('rangeStart').value=e[0]; $('rangeStop').value=e[1]; updateRangeLab(); }
+
+    const listExamples = [['app01','db01','web01','PROD'],['linux01','win01','cloud01','DEV'],['backup01','monitor01','report01','TEST']];
+    let listIndex = 0;
+    function updateListLab(){
+      const servers = [$('server1').value.trim(), $('server2').value.trim(), $('server3').value.trim()];
+      const env = $('serverEnv').value.trim().toUpperCase();
+      $('listCode').textContent = `servers = ["${q(servers[0])}", "${q(servers[1])}", "${q(servers[2])}"]\nenvironment = "${q(env)}"\n\nfor server in servers:\n    print("Server      :", server)\n    print("Environment :", environment)\n    print("Status      : Pending")`;
+      let lines = [];
+      servers.forEach(server => {
+        lines.push(`Server      : ${server}`);
+        lines.push(`Environment : ${env}`);
+        lines.push(`Status      : Pending`);
+      });
+      $('listOutput').textContent = lines.join('\n');
+    }
+    function swapListLab(){ listIndex = (listIndex + 1) % listExamples.length; const e = listExamples[listIndex]; $('server1').value=e[0]; $('server2').value=e[1]; $('server3').value=e[2]; $('serverEnv').value=e[3]; updateListLab(); }
+
+    const stringExamples = ['INC123','SR789','JOB42'];
+    let stringIndex = 0;
+    function updateStringLab(){
+      const ticket = $('ticketId').value.trim();
+      $('stringCode').textContent = `ticket_id = "${q(ticket)}"\n\nfor character in ticket_id:\n    print("Character:", character)`;
+      let lines = [];
+      for(const ch of ticket){ lines.push(`Character: ${ch}`); }
+      $('stringOutput').textContent = lines.join('\n');
+    }
+    function swapStringLab(){ stringIndex = (stringIndex + 1) % stringExamples.length; $('ticketId').value = stringExamples[stringIndex]; updateStringLab(); }
+
+    const statusExamples = [[65,82,91,76],[55,71,79,63],[81,88,90,96]];
+    let statusIndex = 0;
+    function statusText(usage){
+      if(usage >= 90){ return 'CRITICAL'; }
+      if(usage >= 80){ return 'WARNING'; }
+      return 'OK';
+    }
+    function updateStatusLab(){
+      const usages = [safeNum('usage1',0), safeNum('usage2',0), safeNum('usage3',0), safeNum('usage4',0)];
+      $('statusCode').textContent = `disk_usages = [${usages.join(', ')}]\n\nfor usage in disk_usages:\n    print("Disk usage:", usage, "%")\n\n    if usage >= 90:\n        print("Status    : CRITICAL")\n    elif usage >= 80:\n        print("Status    : WARNING")\n    else:\n        print("Status    : OK")`;
+      let lines = [];
+      usages.forEach(usage => {
+        lines.push(`Disk usage: ${usage} %`);
+        lines.push(`Status    : ${statusText(usage)}`);
+      });
+      $('statusOutput').textContent = lines.join('\n');
+    }
+    function swapStatusLab(){ statusIndex = (statusIndex + 1) % statusExamples.length; const e = statusExamples[statusIndex]; $('usage1').value=e[0]; $('usage2').value=e[1]; $('usage3').value=e[2]; $('usage4').value=e[3]; updateStatusLab(); }
+
+    const projectExamples = [
+      ['app01',72,'db01',86,'backup01',94],
+      ['web01',61,'api01',78,'cache01',84],
+      ['prod-db01',91,'prod-app01',93,'prod-bkp01',88]
+    ];
+    let projectIndex = 0;
+    function updateProjectLab(){
+      const servers = [$('projServer1').value.trim(), $('projServer2').value.trim(), $('projServer3').value.trim()];
+      const usages = [safeNum('projUsage1',0), safeNum('projUsage2',0), safeNum('projUsage3',0)];
+      let ok = 0, warning = 0, critical = 0;
+      $('projectCode').textContent = `servers = ["${q(servers[0])}", "${q(servers[1])}", "${q(servers[2])}"]\ndisk_usages = [${usages.join(', ')}]\n\nok_count = 0\nwarning_count = 0\ncritical_count = 0\n\nfor index in range(3):\n    server = servers[index]\n    usage = disk_usages[index]\n\n    print("Server:", server)\n    print("Usage :", usage, "%")\n\n    if usage >= 90:\n        print("Status: CRITICAL")\n        critical_count += 1\n    elif usage >= 80:\n        print("Status: WARNING")\n        warning_count += 1\n    else:\n        print("Status: OK")\n        ok_count += 1\n\nprint("OK count      :", ok_count)\nprint("WARNING count :", warning_count)\nprint("CRITICAL count:", critical_count)`;
+      let lines = [];
+      for(let i = 0; i < 3; i++){
+        const status = statusText(usages[i]);
+        if(status === 'CRITICAL'){ critical += 1; }
+        else if(status === 'WARNING'){ warning += 1; }
+        else { ok += 1; }
+        lines.push(`Server: ${servers[i]}`);
+        lines.push(`Usage : ${usages[i]} %`);
+        lines.push(`Status: ${status}`);
+      }
+      lines.push(`OK count      : ${ok}`);
+      lines.push(`WARNING count : ${warning}`);
+      lines.push(`CRITICAL count: ${critical}`);
+      $('projectOutput').textContent = lines.join('\n');
+    }
+    function swapProjectLab(){ projectIndex = (projectIndex + 1) % projectExamples.length; const e = projectExamples[projectIndex]; $('projServer1').value=e[0]; $('projUsage1').value=e[1]; $('projServer2').value=e[2]; $('projUsage2').value=e[3]; $('projServer3').value=e[4]; $('projUsage3').value=e[5]; updateProjectLab(); }
+
+    ['rangeStart','rangeStop'].forEach(id => $(id).addEventListener('input', updateRangeLab));
+    ['server1','server2','server3','serverEnv'].forEach(id => $(id).addEventListener('input', updateListLab));
+    ['ticketId'].forEach(id => $(id).addEventListener('input', updateStringLab));
+    ['usage1','usage2','usage3','usage4'].forEach(id => $(id).addEventListener('input', updateStatusLab));
+    ['projServer1','projUsage1','projServer2','projUsage2','projServer3','projUsage3'].forEach(id => $(id).addEventListener('input', updateProjectLab));
+
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+
+    updateRangeLab(); updateListLab(); updateStringLab(); updateStatusLab(); updateProjectLab();
+  </script>
+</body>
+</html>
