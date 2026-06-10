@@ -61,7 +61,7 @@ Build a strong foundation before writing automation.
 | 6   | Operators & Calculations                          |   ✅    |
 | 7   | Conditions Deep Dive                              |   ✅    |
 | 8   | For Loops                                         |   ✅    |
-| 9   | While Loops, break & continue                     |   ⬜    |
+| 9   | While Loops, break & continue                     |   ✅    |
 | 10  | Mini Project #1 – Server Health Message Generator |   ⬜    |
 
 ---
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 8 / 45
+Day 9 / 45
 ```
 
 Completion:
 
 ```text
-█████████████░░░░░░░░░░░░░░░ 17.7%
+█████████████░░░░░░░░░░░░░░░ 20%
 ```
 
 ---

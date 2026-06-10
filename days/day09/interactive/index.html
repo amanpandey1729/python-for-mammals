@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 9 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 9 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day08/interactive/">⬅ Day 8</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 10 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Control repetition with while loops</span>
+        <h1>Day 9: Repeat safely with while loops, break, continue, and validation.</h1>
+        <p class="lead">Today you will learn how Python repeats a task while a condition remains true. This helps you build safer scripts for retries, menus, input validation, monitoring checks, and controlled automation workflows.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Today your code learns to repeat only while needed, stop safely, skip unwanted cycles, and keep asking until valid input is received.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Loop concepts</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Focused practice</span></div>
+          <div class="mini"><b>1</b><span>Validation project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Day 8 helped us repeat across known items. Day 9 helps us repeat until a condition changes.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">while</span><h3>Repeat while true</h3><p>Use <code>while</code> when the script should continue as long as a condition remains true.</p></article>
+        <article class="card"><span class="pill">safety</span><h3>Infinite loop awareness</h3><p>Understand why a loop can run forever and how to update values inside the loop to avoid that.</p></article>
+        <article class="card"><span class="pill">break</span><h3>Stop early</h3><p>Use <code>break</code> when the required result is found and the remaining attempts are no longer needed.</p></article>
+        <article class="card"><span class="pill">continue</span><h3>Skip one cycle</h3><p>Use <code>continue</code> when one item or one cycle should be skipped but the loop should continue.</p></article>
+        <article class="card"><span class="pill">validate</span><h3>Validation loops</h3><p>Keep asking until the user enters a safe value such as DEV, TEST, PROD, or a valid percentage.</p></article>
+        <article class="card"><span class="pill">project</span><h3>Controlled retry workflow</h3><p>Build a small retry-style health check that stops on success and reports the final status.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive Practice Lab</h2>
+          <p class="hint">Change the values and check how the displayed Python code produces the displayed output.</p>
+        </div>
+      </div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 9 labs">
+          <button class="tab active" data-panel="counterlab">1. while<small>Counter loop</small></button>
+          <button class="tab" data-panel="breaklab">2. break<small>Stop on success</small></button>
+          <button class="tab" data-panel="continuelab">3. continue<small>Skip one item</small></button>
+          <button class="tab" data-panel="validationlab">4. Validation<small>Environment input</small></button>
+          <button class="tab" data-panel="projectlab">5. Mini Project<small>Retry workflow</small></button>
+        </div>
+
+        <div class="workspace">
+          <div id="counterlab" class="panel active">
+            <div class="workspace-head"><h3>Generate Attempts with while</h3><button class="secondary" onclick="swapCounterLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Maximum attempts</label><input id="maxAttempts" type="number" value="3" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="counterCode"></pre></div><div class="output"><div class="bar">Output</div><div id="counterOutput" class="outcontent"></div></div></div>
+              <div class="explain">The loop runs while attempt is less than or equal to max_attempts. The attempt value increases inside the loop.</div>
+            </div>
+          </div>
+
+          <div id="breaklab" class="panel">
+            <div class="workspace-head"><h3>Stop a Retry Loop with break</h3><button class="secondary" onclick="swapBreakLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Max attempts</label><input id="breakMax" type="number" value="5" /></div><div><label>Success on attempt</label><input id="successAttempt" type="number" value="3" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="breakCode"></pre></div><div class="output"><div class="bar">Output</div><div id="breakOutput" class="outcontent"></div></div></div>
+              <div class="explain">break immediately exits the loop when success is found.</div>
+            </div>
+          </div>
+
+          <div id="continuelab" class="panel">
+            <div class="workspace-head"><h3>Skip a Maintenance Window with continue</h3><button class="secondary" onclick="swapContinueLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Total windows</label><input id="totalWindows" type="number" value="5" /></div><div><label>Skip window</label><input id="skipWindow" type="number" value="3" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="continueCode"></pre></div><div class="output"><div class="bar">Output</div><div id="continueOutput" class="outcontent"></div></div></div>
+              <div class="explain">continue skips the remaining lines for the current cycle and moves to the next cycle.</div>
+            </div>
+          </div>
+
+          <div id="validationlab" class="panel">
+            <div class="workspace-head"><h3>Validate Environment Input</h3><button class="secondary" onclick="swapValidationLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>First input</label><input id="envOne" value="stage" /></div><div><label>Second input</label><input id="envTwo" value="prod" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="validationCode"></pre></div><div class="output"><div class="bar">Output</div><div id="validationOutput" class="outcontent"></div></div></div>
+              <div class="explain">This simulates user input. The loop continues until the cleaned environment is DEV, TEST, or PROD.</div>
+            </div>
+          </div>
+
+          <div id="projectlab" class="panel">
+            <div class="workspace-head"><h3>Controlled Health Retry</h3><button class="secondary" onclick="swapProjectLab()">Swap scenario</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Server</label><input id="serverName" value="app01" /></div><div><label>Max retries</label><input id="projectMax" type="number" value="5" /></div><div><label>Success on attempt</label><input id="projectSuccess" type="number" value="3" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="projectCode"></pre></div><div class="output"><div class="bar">Output</div><div id="projectOutput" class="outcontent"></div></div></div>
+              <div class="explain">This is the shape of a real retry workflow: collect values, retry safely, stop on success, and print the final status.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div><h2>Mini Challenge</h2><p>Create a validated Disk Usage Reporter. Ask for server name, environment, total disk size, and used disk size. Keep asking until each value is valid, calculate usage percentage, decide OK/WARNING/CRITICAL, and print a final report.</p>
+          <div class="checklist"><label class="check"><input type="checkbox">Use a while loop for non-blank server name</label><label class="check"><input type="checkbox">Use a validation loop for DEV / TEST / PROD</label><label class="check"><input type="checkbox">Validate disk values before calculating usage</label><label class="check"><input type="checkbox">Print a clean final report</label></div>
+        </div>
+        <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Idea</div><pre>server_name = input("Enter server name: ").strip()
+
+while server_name == "":
+    print("Server name cannot be blank.")
+    server_name = input("Enter server name: ").strip()
+
+print("Accepted server:", server_name)</pre></div>
+      </div>
+    </section>
+  </main>
+
+  <button id="topBtn" class="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <footer class="shell">Made for Python for Mammals • Day 9: while loops, infinite loop safety, break, continue, and validation loops</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    document.querySelectorAll('.tab').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(b => b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function safeInt(id, fallback){ const v = parseInt($(id).value, 10); return Number.isFinite(v) ? v : fallback; }
+    const counterExamples = [3,5,2]; let counterIndex = 0;
+    function updateCounterLab(){ const max = Math.max(0, safeInt('maxAttempts',3)); $('counterCode').textContent = `attempt = 1\nmax_attempts = ${max}\n\nwhile attempt <= max_attempts:\n    print("Health check attempt:", attempt)\n    attempt += 1`; let lines=[]; for(let a=1;a<=max;a++){ lines.push(`Health check attempt: ${a}`); } $('counterOutput').textContent = lines.join('\n'); }
+    function swapCounterLab(){ counterIndex=(counterIndex+1)%counterExamples.length; $('maxAttempts').value=counterExamples[counterIndex]; updateCounterLab(); }
+    const breakExamples = [[5,3],[4,2],[3,5]]; let breakIndex = 0;
+    function updateBreakLab(){ const max=Math.max(0,safeInt('breakMax',5)); const success=safeInt('successAttempt',3); $('breakCode').textContent = `attempt = 1\nmax_attempts = ${max}\nsuccess_on_attempt = ${success}\n\nwhile attempt <= max_attempts:\n    print("Checking service. Attempt:", attempt)\n\n    if attempt == success_on_attempt:\n        print("Service is available.")\n        break\n\n    attempt += 1`; let lines=[]; for(let a=1;a<=max;a++){ lines.push(`Checking service. Attempt: ${a}`); if(a===success){ lines.push('Service is available.'); break; } } $('breakOutput').textContent = lines.join('\n'); }
+    function swapBreakLab(){ breakIndex=(breakIndex+1)%breakExamples.length; const e=breakExamples[breakIndex]; $('breakMax').value=e[0]; $('successAttempt').value=e[1]; updateBreakLab(); }
+    const continueExamples = [[5,3],[4,2],[6,5]]; let continueIndex = 0;
+    function updateContinueLab(){ const total=Math.max(0,safeInt('totalWindows',5)); const skip=safeInt('skipWindow',3); $('continueCode').textContent = `window = 0\ntotal_windows = ${total}\nskip_window = ${skip}\n\nwhile window < total_windows:\n    window += 1\n\n    if window == skip_window:\n        print("Skipping window:", window)\n        continue\n\n    print("Processing window:", window)`; let lines=[]; for(let w=1;w<=total;w++){ if(w===skip){ lines.push(`Skipping window: ${w}`); continue; } lines.push(`Processing window: ${w}`); } $('continueOutput').textContent = lines.join('\n'); }
+    function swapContinueLab(){ continueIndex=(continueIndex+1)%continueExamples.length; const e=continueExamples[continueIndex]; $('totalWindows').value=e[0]; $('skipWindow').value=e[1]; updateContinueLab(); }
+    const validationExamples = [['stage','prod'],['','test'],['qa','DEV']]; let validationIndex = 0;
+    function cleanEnv(v){ return String(v).trim().toUpperCase(); }
+    function updateValidationLab(){ const one=$('envOne').value; const two=$('envTwo').value; const first=cleanEnv(one); const second=cleanEnv(two); $('validationCode').textContent = `environment = "${q(first)}"\n\nwhile environment not in ["DEV", "TEST", "PROD"]:\n    print("Invalid environment. Please try again.")\n    environment = "${q(second)}"\n\nprint("Accepted environment:", environment)`; let lines=[]; let env=first; while(!['DEV','TEST','PROD'].includes(env)){ lines.push('Invalid environment. Please try again.'); env=second; if(!['DEV','TEST','PROD'].includes(env)){ break; } } if(['DEV','TEST','PROD'].includes(env)){ lines.push(`Accepted environment: ${env}`); } $('validationOutput').textContent = lines.join('\n'); }
+    function swapValidationLab(){ validationIndex=(validationIndex+1)%validationExamples.length; const e=validationExamples[validationIndex]; $('envOne').value=e[0]; $('envTwo').value=e[1]; updateValidationLab(); }
+    const projectExamples = [['app01',5,3],['db01',4,2],['backup01',3,5]]; let projectIndex = 0;
+    function updateProjectLab(){ const server=$('serverName').value.trim(); const max=Math.max(0,safeInt('projectMax',5)); const success=safeInt('projectSuccess',3); $('projectCode').textContent = `server_name = "${q(server)}"\nmax_retries = ${max}\nsuccess_on_attempt = ${success}\nattempt = 1\nfinal_status = "FAILED"\n\nprint("Server:", server_name)\n\nwhile attempt <= max_retries:\n    print("Attempt:", attempt)\n\n    if attempt == success_on_attempt:\n        final_status = "SUCCESS"\n        print("Result : Health check passed")\n        break\n\n    print("Result : Health check failed")\n    attempt += 1\n\nprint("Final status:", final_status)`; let lines=[`Server: ${server}`]; let final='FAILED'; for(let a=1;a<=max;a++){ lines.push(`Attempt: ${a}`); if(a===success){ final='SUCCESS'; lines.push('Result : Health check passed'); break; } lines.push('Result : Health check failed'); } lines.push(`Final status: ${final}`); $('projectOutput').textContent = lines.join('\n'); }
+    function swapProjectLab(){ projectIndex=(projectIndex+1)%projectExamples.length; const e=projectExamples[projectIndex]; $('serverName').value=e[0]; $('projectMax').value=e[1]; $('projectSuccess').value=e[2]; updateProjectLab(); }
+    ['maxAttempts'].forEach(id => $(id).addEventListener('input', updateCounterLab));
+    ['breakMax','successAttempt'].forEach(id => $(id).addEventListener('input', updateBreakLab));
+    ['totalWindows','skipWindow'].forEach(id => $(id).addEventListener('input', updateContinueLab));
+    ['envOne','envTwo'].forEach(id => $(id).addEventListener('input', updateValidationLab));
+    ['serverName','projectMax','projectSuccess'].forEach(id => $(id).addEventListener('input', updateProjectLab));
+    window.addEventListener('scroll', () => $('topBtn').classList.toggle('show', window.scrollY > 600));
+    updateCounterLab(); updateBreakLab(); updateContinueLab(); updateValidationLab(); updateProjectLab();
+  </script>
+</body>
+</html>
