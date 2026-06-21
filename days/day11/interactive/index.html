@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 11 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day10/interactive/">⬅ Day 10</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 12 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Working with Data</span>
+        <h1>Day 11: Store multiple values with Lists.</h1>
+        <p class="lead">Today you will learn how to create lists, access values using indexes, and update values. Lists are the first step toward handling multiple servers, files, alerts, checks, and report items in automation scripts.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">One variable stores one value. A list stores many related values. That is why lists are a major step toward real automation.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>4</b><span>Core topics</span></div>
+          <div class="mini"><b>5</b><span>Interactive labs</span></div>
+          <div class="mini"><b>30m</b><span>Practice time</span></div>
+          <div class="mini"><b>1</b><span>List summary project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Lists let you keep related operational values together instead of creating too many separate variables.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">create</span><h3>Create lists</h3><p>Store multiple values like servers, checks, alerts, environments, file names, or statuses in one variable.</p></article>
+        <article class="card"><span class="pill">index</span><h3>Use indexes</h3><p>Access items using positions. Python starts counting list positions from 0, not 1.</p></article>
+        <article class="card"><span class="pill">access</span><h3>Read values</h3><p>Pick the first server, second check, latest alert, or any specific value from a list.</p></article>
+        <article class="card"><span class="pill">update</span><h3>Update values</h3><p>Change an item inside a list when a status changes from RUNNING to FAILED or PENDING to DONE.</p></article>
+        <article class="card"><span class="pill">count</span><h3>Count items</h3><p>Use len() to count total servers, files, alerts, jobs, or checks for a small report.</p></article>
+        <article class="card"><span class="pill">automation</span><h3>Think in groups</h3><p>Most automation begins when you stop handling one item and start handling a group of related items.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive Practice Lab</h2>
+          <p class="hint">Change the values and verify that every output line comes directly from the displayed Python code.</p>
+        </div>
+      </div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 11 labs">
+          <button class="tab active" data-panel="createlab">1. Create<small>Build a list</small></button>
+          <button class="tab" data-panel="indexlab">2. Index<small>Access values</small></button>
+          <button class="tab" data-panel="lastlab">3. Last Item<small>Negative index</small></button>
+          <button class="tab" data-panel="updatelab">4. Update<small>Change status</small></button>
+          <button class="tab" data-panel="projectlab">5. Mini Project<small>Handover summary</small></button>
+        </div>
+
+        <div class="workspace">
+          <div id="createlab" class="panel active">
+            <div class="workspace-head"><h3>Create a Server List</h3><button class="secondary" onclick="swapCreateLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Server 1</label><input id="serverOne" value="app01" /></div><div><label>Server 2</label><input id="serverTwo" value="db01" /></div><div><label>Server 3</label><input id="serverThree" value="web01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="createCode"></pre></div><div class="output"><div class="bar">Output</div><div id="createOutput" class="outcontent"></div></div></div>
+              <div class="explain">A list is created with square brackets. Each item is separated by a comma.</div>
+            </div>
+          </div>
+
+          <div id="indexlab" class="panel">
+            <div class="workspace-head"><h3>Access Values Using Indexes</h3><button class="secondary" onclick="swapIndexLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Check 1</label><input id="checkOne" value="CPU" /></div><div><label>Check 2</label><input id="checkTwo" value="Memory" /></div><div><label>Check 3</label><input id="checkThree" value="Disk" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="indexCode"></pre></div><div class="output"><div class="bar">Output</div><div id="indexOutput" class="outcontent"></div></div></div>
+              <div class="explain">Python starts list indexing from 0. The first item is checks[0], the second item is checks[1], and the third item is checks[2].</div>
+            </div>
+          </div>
+
+          <div id="lastlab" class="panel">
+            <div class="workspace-head"><h3>Access the Latest Alert</h3><button class="secondary" onclick="swapLastLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Alert 1</label><input id="alertOne" value="CPU high" /></div><div><label>Alert 2</label><input id="alertTwo" value="Disk warning" /></div><div><label>Alert 3</label><input id="alertThree" value="Backup failed" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="lastCode"></pre></div><div class="output"><div class="bar">Output</div><div id="lastOutput" class="outcontent"></div></div></div>
+              <div class="explain">alerts[-1] means the last item. This is useful when you want the latest alert, latest file, or last processed item.</div>
+            </div>
+          </div>
+
+          <div id="updatelab" class="panel">
+            <div class="workspace-head"><h3>Update a Status List</h3><button class="secondary" onclick="swapUpdateLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Status 1</label><input id="statusOne" value="OK" /></div><div><label>Status 2 before update</label><input id="statusTwo" value="RUNNING" /></div><div><label>Status 3</label><input id="statusThree" value="OK" /></div><div><label>New status for item 2</label><input id="newStatus" value="FAILED" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="updateCode"></pre></div><div class="output"><div class="bar">Output</div><div id="updateOutput" class="outcontent"></div></div></div>
+              <div class="explain">Lists are changeable. Use the index to replace one value without rebuilding the entire list.</div>
+            </div>
+          </div>
+
+          <div id="projectlab" class="panel">
+            <div class="workspace-head"><h3>Generate Shift Handover Summary</h3><button class="secondary" onclick="swapProjectLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Server 1</label><input id="projectServerOne" value="app01" /></div><div><label>Server 2</label><input id="projectServerTwo" value="db01" /></div><div><label>Server 3</label><input id="projectServerThree" value="web01" /></div><div><label>Check 1</label><input id="projectCheckOne" value="CPU" /></div><div><label>Check 2</label><input id="projectCheckTwo" value="Memory" /></div><div><label>Check 3</label><input id="projectCheckThree" value="Disk" /></div><div><label>Status 1</label><input id="projectStatusOne" value="OK" /></div><div><label>Status 2</label><input id="projectStatusTwo" value="WARNING" /></div><div><label>Status 3</label><input id="projectStatusThree" value="OK" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="projectCode"></pre></div><div class="output"><div class="bar">Output</div><div id="projectOutput" class="outcontent"></div></div></div>
+              <div class="explain">This mini workflow stores servers, checks, and statuses in lists, updates one status, and prints a clean handover report.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge</h2>
+          <p>Build the Shift Handover List Summary in <strong>Day11_Exercise.py</strong>. Collect values once, store them in lists, access key items, update one status, and print a clean report.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Three server names are stored in a list</label>
+            <label class="check"><input type="checkbox" /> Three check names are stored in a list</label>
+            <label class="check"><input type="checkbox" /> Three statuses are stored in a list</label>
+            <label class="check"><input type="checkbox" /> First and last values are accessed correctly</label>
+            <label class="check"><input type="checkbox" /> One status is updated and final report is readable</label>
+          </div>
+        </div>
+        <div class="codebox">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Project Outline</div>
+          <pre>Collect server values once
+Collect check values once
+Collect status values once
+
+Create servers list
+Create checks list
+Create statuses list
+
+Access first and last values
+Update one status
+Print handover summary</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+  <footer>Day 11 complete • Python for Mammals • Lists: Creating, Indexing, Accessing, Updating</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function pyList(items){ return '[' + items.map(x => '"' + q(x) + '"').join(', ') + ']'; }
+
+    let createIndex=0, indexIndex=0, lastIndex=0, updateIndex=0, projectIndex=0;
+    const createExamples=[['app01','db01','web01'],['linux01','linux02','batch01'],['pg01','sql01','ora01']];
+    const indexExamples=[['CPU','Memory','Disk'],['Listener','Backup','Tablespace'],['Ping','Login','Service']];
+    const lastExamples=[['CPU high','Disk warning','Backup failed'],['Login failed','Service down','Patch pending'],['Job delayed','File missing','Alert cleared']];
+    const updateExamples=[['OK','RUNNING','OK','FAILED'],['PENDING','PENDING','PENDING','DONE'],['OK','WARNING','OK','CRITICAL']];
+    const projectExamples=[['app01','db01','web01','CPU','Memory','Disk','OK','WARNING','OK'],['linux01','batch01','dbprod01','Ping','Service','Backup','OK','FAILED','OK'],['pg01','sql01','ora01','Storage','Login','Listener','OK','OK','WARNING']];
+
+    function updateCreateLab(){
+      const servers=[$('serverOne').value, $('serverTwo').value, $('serverThree').value];
+      $('createCode').textContent = `servers = ${pyList(servers)}\n\nprint("Servers:", servers)\nprint("Total servers:", len(servers))`;
+      $('createOutput').textContent = `Servers: ${pyList(servers).replaceAll('"', "'")}\nTotal servers: ${servers.length}`;
+    }
+    function swapCreateLab(){ createIndex=(createIndex+1)%createExamples.length; const e=createExamples[createIndex]; $('serverOne').value=e[0]; $('serverTwo').value=e[1]; $('serverThree').value=e[2]; updateCreateLab(); }
+
+    function updateIndexLab(){
+      const checks=[$('checkOne').value, $('checkTwo').value, $('checkThree').value];
+      $('indexCode').textContent = `checks = ${pyList(checks)}\n\nprint("First check:", checks[0])\nprint("Second check:", checks[1])\nprint("Third check:", checks[2])`;
+      $('indexOutput').textContent = `First check: ${checks[0]}\nSecond check: ${checks[1]}\nThird check: ${checks[2]}`;
+    }
+    function swapIndexLab(){ indexIndex=(indexIndex+1)%indexExamples.length; const e=indexExamples[indexIndex]; $('checkOne').value=e[0]; $('checkTwo').value=e[1]; $('checkThree').value=e[2]; updateIndexLab(); }
+
+    function updateLastLab(){
+      const alerts=[$('alertOne').value, $('alertTwo').value, $('alertThree').value];
+      $('lastCode').textContent = `alerts = ${pyList(alerts)}\n\nprint("First alert:", alerts[0])\nprint("Latest alert:", alerts[-1])`;
+      $('lastOutput').textContent = `First alert: ${alerts[0]}\nLatest alert: ${alerts[2]}`;
+    }
+    function swapLastLab(){ lastIndex=(lastIndex+1)%lastExamples.length; const e=lastExamples[lastIndex]; $('alertOne').value=e[0]; $('alertTwo').value=e[1]; $('alertThree').value=e[2]; updateLastLab(); }
+
+    function updateUpdateLab(){
+      const before=[$('statusOne').value, $('statusTwo').value, $('statusThree').value];
+      const newStatus=$('newStatus').value;
+      const after=[before[0], newStatus, before[2]];
+      $('updateCode').textContent = `statuses = ${pyList(before)}\n\nprint("Before update:", statuses)\n\nstatuses[1] = "${q(newStatus)}"\n\nprint("After update :", statuses)`;
+      $('updateOutput').textContent = `Before update: ${pyList(before).replaceAll('"', "'")}\nAfter update : ${pyList(after).replaceAll('"', "'")}`;
+    }
+    function swapUpdateLab(){ updateIndex=(updateIndex+1)%updateExamples.length; const e=updateExamples[updateIndex]; $('statusOne').value=e[0]; $('statusTwo').value=e[1]; $('statusThree').value=e[2]; $('newStatus').value=e[3]; updateUpdateLab(); }
+
+    function updateProjectLab(){
+      const servers=[$('projectServerOne').value, $('projectServerTwo').value, $('projectServerThree').value];
+      const checks=[$('projectCheckOne').value, $('projectCheckTwo').value, $('projectCheckThree').value];
+      const statuses=[$('projectStatusOne').value, $('projectStatusTwo').value, $('projectStatusThree').value];
+      const updated=[statuses[0], 'REVIEW_REQUIRED', statuses[2]];
+      $('projectCode').textContent = `servers = ${pyList(servers)}\nchecks = ${pyList(checks)}\nstatuses = ${pyList(statuses)}\n\nprint("Shift Handover List Summary")\nprint("-" * 40)\nprint("Servers Checked :", len(servers))\nprint("First Server    :", servers[0])\nprint("Latest Server   :", servers[-1])\nprint("Primary Check   :", checks[0])\nprint("Latest Check    :", checks[-1])\n\nstatuses[1] = "REVIEW_REQUIRED"\n\nprint("Updated Statuses:", statuses)\nprint("Important Item  :", servers[1], "needs", checks[1], "review. Status:", statuses[1])\nprint("-" * 40)`;
+      $('projectOutput').textContent = `Shift Handover List Summary\n----------------------------------------\nServers Checked : 3\nFirst Server    : ${servers[0]}\nLatest Server   : ${servers[2]}\nPrimary Check   : ${checks[0]}\nLatest Check    : ${checks[2]}\nUpdated Statuses: ${pyList(updated).replaceAll('"', "'")}\nImportant Item  : ${servers[1]} needs ${checks[1]} review. Status: REVIEW_REQUIRED\n----------------------------------------`;
+    }
+    function swapProjectLab(){ projectIndex=(projectIndex+1)%projectExamples.length; const e=projectExamples[projectIndex]; $('projectServerOne').value=e[0]; $('projectServerTwo').value=e[1]; $('projectServerThree').value=e[2]; $('projectCheckOne').value=e[3]; $('projectCheckTwo').value=e[4]; $('projectCheckThree').value=e[5]; $('projectStatusOne').value=e[6]; $('projectStatusTwo').value=e[7]; $('projectStatusThree').value=e[8]; updateProjectLab(); }
+
+    document.querySelectorAll('.tab').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    ['serverOne','serverTwo','serverThree'].forEach(id=>$(id).addEventListener('input',updateCreateLab));
+    ['checkOne','checkTwo','checkThree'].forEach(id=>$(id).addEventListener('input',updateIndexLab));
+    ['alertOne','alertTwo','alertThree'].forEach(id=>$(id).addEventListener('input',updateLastLab));
+    ['statusOne','statusTwo','statusThree','newStatus'].forEach(id=>$(id).addEventListener('input',updateUpdateLab));
+    ['projectServerOne','projectServerTwo','projectServerThree','projectCheckOne','projectCheckTwo','projectCheckThree','projectStatusOne','projectStatusTwo','projectStatusThree'].forEach(id=>$(id).addEventListener('input',updateProjectLab));
+    window.addEventListener('scroll',()=>{ $('topbtn').classList.toggle('show', window.scrollY > 500); });
+    updateCreateLab(); updateIndexLab(); updateLastLab(); updateUpdateLab(); updateProjectLab();
+  </script>
+</body>
+</html>
