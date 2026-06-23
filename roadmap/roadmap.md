@@ -74,7 +74,7 @@ Learn how Python stores and manipulates information.
 | --- | ----------------------------------- |---------|
 | 11  | Lists                               |   ✅    |
 | 12  | List Operations                     |   ✅    |
-| 13  | Tuples & Sets                       |   ⬜    |
+| 13  | Tuples & Sets                       |   ✅    |
 | 14  | Dictionaries                        |   ⬜    |
 | 15  | Nested Data Structures              |   ⬜    |
 | 16  | Functions                           |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 12 / 45
+Day 13 / 45
 ```
 
 Completion:
 
 ```text
-██████████████░░░░░░░░░░░░░░░ 26.6%
+██████████████░░░░░░░░░░░░░░░ 28.8%
 ```
 
 ---

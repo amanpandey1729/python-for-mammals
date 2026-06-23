@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 13 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 13 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#lab">Practice</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day12/interactive/">⬅ Day 12</a>
+    <a href="../../../index.html">🏠 Home</a>
+    <span>Day 14 Coming Soon ➡</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">🐾 Beginner friendly • Working with Data</span>
+        <h1>Day 13: Use tuples and sets for cleaner data.</h1>
+        <p class="lead">Today you will learn how tuples store fixed records and how sets help remove duplicates and compare groups of values. This is useful for inventories, alerts, users, monitoring exports, and daily validation scripts.</p>
+        <div class="cta">
+          <a class="button primary" href="#lab">Start Interactive Practice</a>
+          <a class="button secondary" href="#challenge">Jump to Mini Challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p style="text-align:center;margin:0;color:#475569">Tuples protect fixed records. Sets remove duplicates and compare inventories like a real operations script.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Core topics</span></div>
+          <div class="mini"><b>7</b><span>Interactive labs</span></div>
+          <div class="mini"><b>35m</b><span>Practice time</span></div>
+          <div class="mini"><b>1</b><span>Inventory project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title">
+        <div>
+          <h2>What you are learning today</h2>
+          <p class="hint">Tuples are useful for fixed records. Sets are useful when uniqueness and comparison matter more than order.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><span class="pill">tuple</span><h3>Fixed records</h3><p>Use tuples when values belong together and should not accidentally change during the script.</p></article>
+        <article class="card"><span class="pill">unpack</span><h3>Readable variables</h3><p>Tuple unpacking converts a fixed record into clear variable names like host, port, and service.</p></article>
+        <article class="card"><span class="pill">set</span><h3>Unique values</h3><p>Use sets when duplicate server names, users, tickets, or alerts should be collapsed into unique values.</p></article>
+        <article class="card"><span class="pill">union</span><h3>Combine sources</h3><p>Union combines two groups into one unique group, useful for merging inventories.</p></article>
+        <article class="card"><span class="pill">intersection</span><h3>Find common values</h3><p>Intersection shows what exists in both sources, such as servers found by two monitoring tools.</p></article>
+        <article class="card"><span class="pill">difference</span><h3>Find missing values</h3><p>Difference shows what exists in one group but not another, perfect for validation scripts.</p></article>
+      </div>
+    </section>
+
+    <section id="lab">
+      <div class="section-title">
+        <div>
+          <h2>Interactive Practice Lab</h2>
+          <p class="hint">Change the values and verify that every output line comes directly from the displayed Python code.</p>
+        </div>
+      </div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 13 labs">
+          <button class="tab active" data-panel="tuplelab">1. Tuple<small>Fixed record</small></button>
+          <button class="tab" data-panel="unpacklab">2. Unpack<small>Named values</small></button>
+          <button class="tab" data-panel="deduplab">3. set()<small>Remove duplicates</small></button>
+          <button class="tab" data-panel="unionlab">4. union()<small>Combine groups</small></button>
+          <button class="tab" data-panel="commonlab">5. intersection()<small>Common values</small></button>
+          <button class="tab" data-panel="missinglab">6. difference()<small>Missing values</small></button>
+          <button class="tab" data-panel="mismatchlab">7. symmetric_difference()<small>Mismatches</small></button>
+        </div>
+
+        <div class="workspace">
+          <div id="tuplelab" class="panel active">
+            <div class="workspace-head"><h3>Create a Fixed Server Tuple</h3><button class="secondary" onclick="swapTupleLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Server</label><input id="tupleServer" value="app01" /></div><div><label>Environment</label><input id="tupleEnv" value="production" /></div><div><label>OS Type</label><input id="tupleOs" value="linux" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="tupleCode"></pre></div><div class="output"><div class="bar">Output</div><div id="tupleOutput" class="outcontent"></div></div></div>
+              <div class="explain">A tuple is a good choice when the values represent one fixed record.</div>
+            </div>
+          </div>
+
+          <div id="unpacklab" class="panel">
+            <div class="workspace-head"><h3>Unpack Connection Details</h3><button class="secondary" onclick="swapUnpackLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Host</label><input id="unpackHost" value="dbprod01" /></div><div><label>Port</label><input id="unpackPort" value="1521" /></div><div><label>Service</label><input id="unpackService" value="PRODDB" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="unpackCode"></pre></div><div class="output"><div class="bar">Output</div><div id="unpackOutput" class="outcontent"></div></div></div>
+              <div class="explain">Unpacking gives meaningful names to tuple positions.</div>
+            </div>
+          </div>
+
+          <div id="deduplab" class="panel">
+            <div class="workspace-head"><h3>Remove Duplicate Server Names</h3><button class="secondary" onclick="swapDedupLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Item 1</label><input id="dedupOne" value="app01" /></div><div><label>Item 2</label><input id="dedupTwo" value="db01" /></div><div><label>Item 3</label><input id="dedupThree" value="app01" /></div><div><label>Item 4</label><input id="dedupFour" value="web01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="dedupCode"></pre></div><div class="output"><div class="bar">Output</div><div id="dedupOutput" class="outcontent"></div></div></div>
+              <div class="explain">set() removes duplicates. sorted() is used here only to display stable output.</div>
+            </div>
+          </div>
+
+          <div id="unionlab" class="panel">
+            <div class="workspace-head"><h3>Combine Two Inventories</h3><button class="secondary" onclick="swapUnionLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Linux 1</label><input id="unionA1" value="app01" /></div><div><label>Linux 2</label><input id="unionA2" value="batch01" /></div><div><label>DB 1</label><input id="unionB1" value="db01" /></div><div><label>DB 2</label><input id="unionB2" value="batch01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="unionCode"></pre></div><div class="output"><div class="bar">Output</div><div id="unionOutput" class="outcontent"></div></div></div>
+              <div class="explain">union() combines both sets and keeps each value only once.</div>
+            </div>
+          </div>
+
+          <div id="commonlab" class="panel">
+            <div class="workspace-head"><h3>Find Common Monitoring Values</h3><button class="secondary" onclick="swapCommonLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Tool A 1</label><input id="commonA1" value="app01" /></div><div><label>Tool A 2</label><input id="commonA2" value="db01" /></div><div><label>Tool B 1</label><input id="commonB1" value="db01" /></div><div><label>Tool B 2</label><input id="commonB2" value="web01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="commonCode"></pre></div><div class="output"><div class="bar">Output</div><div id="commonOutput" class="outcontent"></div></div></div>
+              <div class="explain">intersection() returns values present in both sets.</div>
+            </div>
+          </div>
+
+          <div id="missinglab" class="panel">
+            <div class="workspace-head"><h3>Find Missing Servers</h3><button class="secondary" onclick="swapMissingLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>Expected 1</label><input id="missingE1" value="app01" /></div><div><label>Expected 2</label><input id="missingE2" value="batch01" /></div><div><label>Discovered 1</label><input id="missingD1" value="app01" /></div><div><label>Discovered 2</label><input id="missingD2" value="db01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="missingCode"></pre></div><div class="output"><div class="bar">Output</div><div id="missingOutput" class="outcontent"></div></div></div>
+              <div class="explain">difference() helps identify expected values that were not discovered.</div>
+            </div>
+          </div>
+
+          <div id="mismatchlab" class="panel">
+            <div class="workspace-head"><h3>Find Inventory Mismatch</h3><button class="secondary" onclick="swapMismatchLab()">Swap values</button></div>
+            <div class="workspace-body">
+              <div class="formgrid"><div><label>CMDB 1</label><input id="mismatchA1" value="app01" /></div><div><label>CMDB 2</label><input id="mismatchA2" value="web01" /></div><div><label>Scan 1</label><input id="mismatchB1" value="app01" /></div><div><label>Scan 2</label><input id="mismatchB2" value="batch01" /></div></div>
+              <div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Python Code</div><pre id="mismatchCode"></pre></div><div class="output"><div class="bar">Output</div><div id="mismatchOutput" class="outcontent"></div></div></div>
+              <div class="explain">symmetric_difference() shows values that do not match between two sets.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge</h2>
+          <p>Build the Inventory Cleanup and Comparison project in <strong>Day13_Exercise.py</strong>. Collect values once, create a reference tuple, remove duplicate discovered servers, compare expected and discovered inventories, and print a clean final report.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Reference server tuple is created and unpacked</label>
+            <label class="check"><input type="checkbox" /> Duplicate discovered servers are removed using set()</label>
+            <label class="check"><input type="checkbox" /> intersection(), difference(), and symmetric_difference() are used</label>
+            <label class="check"><input type="checkbox" /> Raw count and unique count are printed</label>
+            <label class="check"><input type="checkbox" /> Final inventory report is readable</label>
+          </div>
+        </div>
+        <div class="codebox">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Project Outline</div>
+          <pre>Collect values once
+Create reference_server tuple
+Unpack tuple values
+Create raw discovered list
+Convert list to set
+Create expected server set
+Find common servers
+Find missing servers
+Find extra servers
+Print final report</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+  <footer>Day 13 complete • Python for Mammals • Tuples & Sets: fixed records, unique values, duplicates, set operations</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function pyList(items){ return '[' + items.map(x => '"' + q(x) + '"').join(', ') + ']'; }
+    function pyTuple(items){ return '(' + items.map(x => '"' + q(x) + '"').join(', ') + ')'; }
+    function pySet(items){ return '{' + items.map(x => '"' + q(x) + '"').join(', ') + '}'; }
+    function pyShowList(items){ return pyList(items).replaceAll('"', "'"); }
+    function pyShowTuple(items){ return pyTuple(items).replaceAll('"', "'"); }
+    function pyShowSorted(items){ return pyShowList([...new Set(items)].sort()); }
+
+    let tupleIndex=0, unpackIndex=0, dedupIndex=0, unionIndex=0, commonIndex=0, missingIndex=0, mismatchIndex=0;
+    const tupleExamples=[["app01","production","linux"],["web01","uat","windows"],["db01","production","oracle"]];
+    const unpackExamples=[["dbprod01","1521","PRODDB"],["pgprod01","5432","APPDB"],["sqlprod01","1433","FINDB"]];
+    const dedupExamples=[["app01","db01","app01","web01"],["INC001","INC002","INC001","INC003"],["ORA-01555","ORA-00060","ORA-01555","ORA-1652"]];
+    const unionExamples=[["app01","batch01","db01","batch01"],["linux01","linux02","db01","linux01"],["userA","userB","userC","userA"]];
+    const commonExamples=[["app01","db01","db01","web01"],["CPU","Disk","Disk","Backup"],["INC001","INC002","INC002","INC003"]];
+    const missingExamples=[["app01","batch01","app01","db01"],["CPU","Backup","CPU","Disk"],["userA","userB","userA","userC"]];
+    const mismatchExamples=[["app01","web01","app01","batch01"],["CPU","Backup","CPU","Memory"],["INC001","INC002","INC001","INC003"]];
+
+    function updateTupleLab(){
+      const record=[$('tupleServer').value,$('tupleEnv').value,$('tupleOs').value];
+      $('tupleCode').textContent = `server_record = ${pyTuple(record)}\n\nprint("Server record:", server_record)\nprint("Server name  :", server_record[0])\nprint("Environment  :", server_record[1])\nprint("OS type      :", server_record[2])`;
+      $('tupleOutput').textContent = `Server record: ${pyShowTuple(record)}\nServer name  : ${record[0]}\nEnvironment  : ${record[1]}\nOS type      : ${record[2]}`;
+    }
+    function swapTupleLab(){ tupleIndex=(tupleIndex+1)%tupleExamples.length; const e=tupleExamples[tupleIndex]; $('tupleServer').value=e[0]; $('tupleEnv').value=e[1]; $('tupleOs').value=e[2]; updateTupleLab(); }
+
+    function updateUnpackLab(){
+      const values=[$('unpackHost').value,$('unpackPort').value,$('unpackService').value];
+      $('unpackCode').textContent = `connection_info = ${pyTuple(values)}\n\nhost, port, service_name = connection_info\n\nprint("Host        :", host)\nprint("Port        :", port)\nprint("Service Name:", service_name)`;
+      $('unpackOutput').textContent = `Host        : ${values[0]}\nPort        : ${values[1]}\nService Name: ${values[2]}`;
+    }
+    function swapUnpackLab(){ unpackIndex=(unpackIndex+1)%unpackExamples.length; const e=unpackExamples[unpackIndex]; $('unpackHost').value=e[0]; $('unpackPort').value=e[1]; $('unpackService').value=e[2]; updateUnpackLab(); }
+
+    function updateDedupLab(){
+      const raw=[$('dedupOne').value,$('dedupTwo').value,$('dedupThree').value,$('dedupFour').value];
+      const clean=[...new Set(raw)].sort();
+      $('dedupCode').textContent = `server_list = ${pyList(raw)}\n\nunique_servers = set(server_list)\n\nprint("Original list :", server_list)\nprint("Unique servers:", sorted(unique_servers))\nprint("Unique count  :", len(unique_servers))`;
+      $('dedupOutput').textContent = `Original list : ${pyShowList(raw)}\nUnique servers: ${pyShowList(clean)}\nUnique count  : ${clean.length}`;
+    }
+    function swapDedupLab(){ dedupIndex=(dedupIndex+1)%dedupExamples.length; const e=dedupExamples[dedupIndex]; $('dedupOne').value=e[0]; $('dedupTwo').value=e[1]; $('dedupThree').value=e[2]; $('dedupFour').value=e[3]; updateDedupLab(); }
+
+    function updateUnionLab(){
+      const a=[$('unionA1').value,$('unionA2').value]; const b=[$('unionB1').value,$('unionB2').value];
+      const result=[...new Set([...a,...b])].sort();
+      $('unionCode').textContent = `linux_inventory = ${pySet(a)}\ndatabase_inventory = ${pySet(b)}\n\nall_servers = linux_inventory.union(database_inventory)\n\nprint("All servers:", sorted(all_servers))`;
+      $('unionOutput').textContent = `All servers: ${pyShowList(result)}`;
+    }
+    function swapUnionLab(){ unionIndex=(unionIndex+1)%unionExamples.length; const e=unionExamples[unionIndex]; $('unionA1').value=e[0]; $('unionA2').value=e[1]; $('unionB1').value=e[2]; $('unionB2').value=e[3]; updateUnionLab(); }
+
+    function updateCommonLab(){
+      const a=[$('commonA1').value,$('commonA2').value]; const b=[$('commonB1').value,$('commonB2').value];
+      const bs=new Set(b); const result=[...new Set(a.filter(x=>bs.has(x)))].sort();
+      $('commonCode').textContent = `monitoring_a = ${pySet(a)}\nmonitoring_b = ${pySet(b)}\n\ncommon_servers = monitoring_a.intersection(monitoring_b)\n\nprint("Common servers:", sorted(common_servers))`;
+      $('commonOutput').textContent = `Common servers: ${pyShowList(result)}`;
+    }
+    function swapCommonLab(){ commonIndex=(commonIndex+1)%commonExamples.length; const e=commonExamples[commonIndex]; $('commonA1').value=e[0]; $('commonA2').value=e[1]; $('commonB1').value=e[2]; $('commonB2').value=e[3]; updateCommonLab(); }
+
+    function updateMissingLab(){
+      const expected=[$('missingE1').value,$('missingE2').value]; const discovered=[$('missingD1').value,$('missingD2').value];
+      const ds=new Set(discovered); const result=[...new Set(expected.filter(x=>!ds.has(x)))].sort();
+      $('missingCode').textContent = `expected_servers = ${pySet(expected)}\ndiscovered_servers = ${pySet(discovered)}\n\nmissing_servers = expected_servers.difference(discovered_servers)\n\nprint("Missing servers:", sorted(missing_servers))`;
+      $('missingOutput').textContent = `Missing servers: ${pyShowList(result)}`;
+    }
+    function swapMissingLab(){ missingIndex=(missingIndex+1)%missingExamples.length; const e=missingExamples[missingIndex]; $('missingE1').value=e[0]; $('missingE2').value=e[1]; $('missingD1').value=e[2]; $('missingD2').value=e[3]; updateMissingLab(); }
+
+    function updateMismatchLab(){
+      const a=[$('mismatchA1').value,$('mismatchA2').value]; const b=[$('mismatchB1').value,$('mismatchB2').value];
+      const as=new Set(a), bs=new Set(b); const result=[...[...as].filter(x=>!bs.has(x)), ...[...bs].filter(x=>!as.has(x))].sort();
+      $('mismatchCode').textContent = `cmdb_servers = ${pySet(a)}\nscan_servers = ${pySet(b)}\n\nmismatch_servers = cmdb_servers.symmetric_difference(scan_servers)\n\nprint("Mismatch servers:", sorted(mismatch_servers))`;
+      $('mismatchOutput').textContent = `Mismatch servers: ${pyShowList(result)}`;
+    }
+    function swapMismatchLab(){ mismatchIndex=(mismatchIndex+1)%mismatchExamples.length; const e=mismatchExamples[mismatchIndex]; $('mismatchA1').value=e[0]; $('mismatchA2').value=e[1]; $('mismatchB1').value=e[2]; $('mismatchB2').value=e[3]; updateMismatchLab(); }
+
+    document.querySelectorAll('.tab').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    ['tupleServer','tupleEnv','tupleOs'].forEach(id=>$(id).addEventListener('input',updateTupleLab));
+    ['unpackHost','unpackPort','unpackService'].forEach(id=>$(id).addEventListener('input',updateUnpackLab));
+    ['dedupOne','dedupTwo','dedupThree','dedupFour'].forEach(id=>$(id).addEventListener('input',updateDedupLab));
+    ['unionA1','unionA2','unionB1','unionB2'].forEach(id=>$(id).addEventListener('input',updateUnionLab));
+    ['commonA1','commonA2','commonB1','commonB2'].forEach(id=>$(id).addEventListener('input',updateCommonLab));
+    ['missingE1','missingE2','missingD1','missingD2'].forEach(id=>$(id).addEventListener('input',updateMissingLab));
+    ['mismatchA1','mismatchA2','mismatchB1','mismatchB2'].forEach(id=>$(id).addEventListener('input',updateMismatchLab));
+    window.addEventListener('scroll',()=>{ $('topbtn').classList.toggle('show', window.scrollY > 500); });
+    updateTupleLab(); updateUnpackLab(); updateDedupLab(); updateUnionLab(); updateCommonLab(); updateMissingLab(); updateMismatchLab();
+  </script>
+</body>
+</html>
