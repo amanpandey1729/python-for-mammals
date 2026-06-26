@@ -77,7 +77,7 @@ Learn how Python stores and manipulates information.
 | 13  | Tuples & Sets                       |   ✅    |
 | 14  | Dictionaries                        |   ✅    |
 | 15  | Nested Data Structures              |   ✅    |
-| 16  | Functions                           |   ⬜    |
+| 16  | Functions                           |   ✅    |
 | 17  | Return Values & Scope               |   ⬜    |
 | 18  | Mini Project #2 – Inventory Tracker |   ⬜    |
 
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 15 / 45
+Day 16 / 45
 ```
 
 Completion:
 
 ```text
-██████████████░░░░░░░░░░░░░░░ 33.3%
+██████████████░░░░░░░░░░░░░░░ 35.56%
 ```
 
 ---
