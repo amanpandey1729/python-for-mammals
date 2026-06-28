@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 17 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 17 Interactive Lab</span></div>
+      </div>
+      <nav aria-label="Page navigation">
+        <a href="#concepts">Concepts</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day16/interactive/">← Day 16</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <span>Day 18 Coming Soon →</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">Day 17 • Return Values & Scope</span>
+        <h1>Day 17: Make functions return useful results.</h1>
+        <p class="lead">Today you will learn how to use return, local variables, global variables, and reusable functions so your scripts can calculate first and report later.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start interactive lab</a>
+          <a class="button secondary" href="#challenge">View mini challenge</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Return values turn functions into reusable automation tools. Scope keeps variables predictable and prevents confusion in bigger scripts.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>7</b><span>Interactive labs</span></div>
+          <div class="mini"><b>14</b><span>Practice exercises</span></div>
+          <div class="mini"><b>35-50</b><span>Minutes</span></div>
+          <div class="mini"><b>1</b><span>Mini project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Today builds directly on Day 16 functions. The big shift is this: functions should not always print. Often, they should return values that the main script can reuse.</p></div></div>
+      <div class="cards">
+        <article class="card"><span class="pill">return</span><h3>Send value back</h3><p>A function can calculate disk usage, ticket age, or health status and return the result to the main script.</p></article>
+        <article class="card"><span class="pill">Local Variables</span><h3>Temporary function data</h3><p>Variables created inside a function are local. They keep internal calculations safe and separate.</p></article>
+        <article class="card"><span class="pill">Global Variables</span><h3>Outside function data</h3><p>Global variables are created outside functions. Functions can read them, but parameters are usually cleaner.</p></article>
+        <article class="card"><span class="pill">Reusable Functions</span><h3>Calculate, decide, report</h3><p>Build small functions that calculate values, return statuses, and support clean report generation.</p></article>
+        <article class="card"><span class="pill">Automation Pattern</span><h3>Input once, reuse often</h3><p>Collect values once, pass them into functions, store returned values, and generate a final workflow report.</p></article>
+        <article class="card"><span class="pill">Cleaner Scripts</span><h3>Less repeated logic</h3><p>When calculation logic lives in functions, your scripts become easier to test, change, and reuse.</p></article>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values and watch how the displayed Python code and output update together.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 17 labs">
+          <button class="tab active" data-panel="returnlab">1. return<small>Send value back</small></button>
+          <button class="tab" data-panel="storelab">2. Store return<small>Use variable</small></button>
+          <button class="tab" data-panel="statuslab">3. Return status<small>Decision function</small></button>
+          <button class="tab" data-panel="multilab">4. Multiple returns<small>Storage summary</small></button>
+          <button class="tab" data-panel="locallab">5. Local scope<small>Inside function</small></button>
+          <button class="tab" data-panel="globallab">6. Global scope<small>Outside function</small></button>
+          <button class="tab" data-panel="reuselab">7. Reusable flow<small>Calculate + status</small></button>
+        </div>
+
+        <div>
+          <div class="panel active" id="returnlab">
+            <div class="workspace-head"><h3>Return a Message</h3><button class="secondary" onclick="swapReturnLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Message</label><input id="returnMsg" value="Daily automation script started" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="returnCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="returnOutput"></div></div></div><div class="explain">return sends a value back. The value can then be stored, printed, checked, or passed to another function.</div></div>
+          </div>
+
+          <div class="panel" id="storelab">
+            <div class="workspace-head"><h3>Store a Returned Calculation</h3><button class="secondary" onclick="swapStoreLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Total GB</label><input id="storeTotal" value="500" /></div><div><label>Used GB</label><input id="storeUsed" value="375" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="storeCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="storeOutput"></div></div></div><div class="explain">A returned number can be saved in a variable and reused later in the automation workflow.</div></div>
+          </div>
+
+          <div class="panel" id="statuslab">
+            <div class="workspace-head"><h3>Return a Health Status</h3><button class="secondary" onclick="swapStatusLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Usage %</label><input id="statusUsage" value="84" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="statusCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="statusOutput"></div></div></div><div class="explain">Status functions are perfect for CPU, memory, disk, backup, and monitoring checks.</div></div>
+          </div>
+
+          <div class="panel" id="multilab">
+            <div class="workspace-head"><h3>Return Multiple Values</h3><button class="secondary" onclick="swapMultiLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Total GB</label><input id="multiTotal" value="1000" /></div><div><label>Used GB</label><input id="multiUsed" value="790" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="multiCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="multiOutput"></div></div></div><div class="explain">A function can return more than one value, such as free space and usage percentage.</div></div>
+          </div>
+
+          <div class="panel" id="locallab">
+            <div class="workspace-head"><h3>Local Variable Scope</h3><button class="secondary" onclick="swapLocalLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Open Day</label><input id="localOpen" value="10" /></div><div><label>Current Day</label><input id="localCurrent" value="17" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="localCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="localOutput"></div></div></div><div class="explain">ticket_age is created inside the function, so it is local to that function.</div></div>
+          </div>
+
+          <div class="panel" id="globallab">
+            <div class="workspace-head"><h3>Global Variable Read</h3><button class="secondary" onclick="swapGlobalLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Team Name</label><input id="globalTeam" value="Infra Team" /></div><div><label>Report Name</label><input id="globalReport" value="Daily Operations Report" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="globalCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="globalOutput"></div></div></div><div class="explain">A function can read a global variable, but passing values as parameters is usually safer for automation scripts.</div></div>
+          </div>
+
+          <div class="panel" id="reuselab">
+            <div class="workspace-head"><h3>Reusable Function Flow</h3><button class="secondary" onclick="swapReuseLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="reuseServer" value="app01" /></div><div><label>Total GB</label><input id="reuseTotal" value="500" /></div><div><label>Used GB</label><input id="reuseUsed" value="455" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="reuseCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="reuseOutput"></div></div></div><div class="explain">One function calculates, one function returns status, and one function builds the final summary.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge</h2>
+          <p>Build the Return-Based Server Health Reporter in <strong>Day17_Exercise.py</strong>. Collect values once, return calculated values from functions, store the returned values, and print one clean operational report.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> All required inputs are collected once at the beginning</label>
+            <label class="check"><input type="checkbox" /> calculate_usage_percent() returns usage percentages</label>
+            <label class="check"><input type="checkbox" /> get_usage_status() returns CRITICAL, WARNING, or OK</label>
+            <label class="check"><input type="checkbox" /> Backup and ticket functions return reusable health values</label>
+            <label class="check"><input type="checkbox" /> Final report uses returned values instead of repeated calculation code</label>
+          </div>
+        </div>
+        <div class="codebox">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Project Outline</div>
+          <pre>Collect all inputs once
+Define calculation functions
+Define status functions
+Store returned values
+Build report lines
+Print final health report
+Avoid unnecessary globals</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+  <footer>Day 17 complete • Python for Mammals • Return values, scope, and reusable automation functions</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function pyStr(s){ return '"' + q(s) + '"'; }
+    function num(v){ const n=parseFloat(v); return Number.isFinite(n) ? n : 0; }
+    function pyRound(n){ return Math.round(n * 100) / 100; }
+    function pyRoundText(n){ const r=pyRound(n); return Number.isInteger(r) ? r.toFixed(1) : String(r); }
+    function statusFor(u){ if(u>=90){return 'CRITICAL'} if(u>=80){return 'WARNING'} return 'OK'; }
+    let returnIndex=0, storeIndex=0, statusIndex=0, multiIndex=0, localIndex=0, globalIndex=0, reuseIndex=0;
+    const returnExamples=["Daily automation script started","Report generator is ready","Health check function completed"];
+    const storeExamples=[["500","375"],["100","72"],["200","166"]];
+    const statusExamples=["84","91","72"];
+    const multiExamples=[["1000","790"],["500","455"],["200","120"]];
+    const localExamples=[["10","17"],["4","9"],["1","14"]];
+    const globalExamples=[["Infra Team","Daily Operations Report"],["DB Team","Backup Validation Report"],["Support Team","Ticket Aging Report"]];
+    const reuseExamples=[["app01","500","455"],["db01","1000","790"],["web01","200","120"]];
+
+    function updateReturnLab(){
+      const msg=$('returnMsg').value;
+      $('returnCode').textContent = `def get_message():\n    return ${pyStr(msg)}\n\nmessage = get_message()\nprint(message)`;
+      $('returnOutput').textContent = msg;
+    }
+    function swapReturnLab(){ returnIndex=(returnIndex+1)%returnExamples.length; $('returnMsg').value=returnExamples[returnIndex]; updateReturnLab(); }
+
+    function updateStoreLab(){
+      const total=num($('storeTotal').value), used=num($('storeUsed').value); const usage=total===0?0:pyRound((used/total)*100);
+      $('storeCode').textContent = `def calculate_disk_usage(total_gb, used_gb):\n    if total_gb == 0:\n        usage_percent = 0\n    else:\n        usage_percent = (used_gb / total_gb) * 100\n    return usage_percent\n\ndisk_usage = calculate_disk_usage(${total}, ${used})\nprint("Disk usage:", round(disk_usage, 2), "%")`;
+      $('storeOutput').textContent = `Disk usage: ${pyRoundText(usage)} %`;
+    }
+    function swapStoreLab(){ storeIndex=(storeIndex+1)%storeExamples.length; const e=storeExamples[storeIndex]; $('storeTotal').value=e[0]; $('storeUsed').value=e[1]; updateStoreLab(); }
+
+    function updateStatusLab(){
+      const usage=num($('statusUsage').value), status=statusFor(usage);
+      $('statusCode').textContent = `def get_usage_status(usage_percent):\n    if usage_percent >= 90:\n        return "CRITICAL"\n    elif usage_percent >= 80:\n        return "WARNING"\n    else:\n        return "OK"\n\nstatus = get_usage_status(${usage})\nprint("Status:", status)`;
+      $('statusOutput').textContent = `Status: ${status}`;
+    }
+    function swapStatusLab(){ statusIndex=(statusIndex+1)%statusExamples.length; $('statusUsage').value=statusExamples[statusIndex]; updateStatusLab(); }
+
+    function updateMultiLab(){
+      const total=num($('multiTotal').value), used=num($('multiUsed').value); const free=total-used; const usage=total===0?0:pyRound((used/total)*100);
+      $('multiCode').textContent = `def calculate_storage_summary(total_gb, used_gb):\n    free_gb = total_gb - used_gb\n    if total_gb == 0:\n        usage_percent = 0\n    else:\n        usage_percent = (used_gb / total_gb) * 100\n    return free_gb, usage_percent\n\nfree_space, usage = calculate_storage_summary(${total}, ${used})\nprint("Free space:", free_space, "GB")\nprint("Usage:", round(usage, 2), "%")`;
+      $('multiOutput').textContent = `Free space: ${free} GB\nUsage: ${pyRoundText(usage)} %`;
+    }
+    function swapMultiLab(){ multiIndex=(multiIndex+1)%multiExamples.length; const e=multiExamples[multiIndex]; $('multiTotal').value=e[0]; $('multiUsed').value=e[1]; updateMultiLab(); }
+
+    function updateLocalLab(){
+      const open=num($('localOpen').value), current=num($('localCurrent').value); const age=current-open;
+      $('localCode').textContent = `def calculate_ticket_age(opened_day, current_day):\n    ticket_age = current_day - opened_day\n    return ticket_age\n\nage = calculate_ticket_age(${open}, ${current})\nprint("Ticket age:", age, "days")`;
+      $('localOutput').textContent = `Ticket age: ${age} days`;
+    }
+    function swapLocalLab(){ localIndex=(localIndex+1)%localExamples.length; const e=localExamples[localIndex]; $('localOpen').value=e[0]; $('localCurrent').value=e[1]; updateLocalLab(); }
+
+    function updateGlobalLab(){
+      const team=$('globalTeam').value, report=$('globalReport').value;
+      $('globalCode').textContent = `team_name = ${pyStr(team)}\n\ndef build_report_title(report_name):\n    return team_name + " - " + report_name\n\ntitle = build_report_title(${pyStr(report)})\nprint(title)`;
+      $('globalOutput').textContent = `${team} - ${report}`;
+    }
+    function swapGlobalLab(){ globalIndex=(globalIndex+1)%globalExamples.length; const e=globalExamples[globalIndex]; $('globalTeam').value=e[0]; $('globalReport').value=e[1]; updateGlobalLab(); }
+
+    function updateReuseLab(){
+      const server=$('reuseServer').value, total=num($('reuseTotal').value), used=num($('reuseUsed').value); const usage=total===0?0:pyRound((used/total)*100); const status=statusFor(usage);
+      $('reuseCode').textContent = `def calculate_usage(total_gb, used_gb):\n    if total_gb == 0:\n        return 0\n    return (used_gb / total_gb) * 100\n\ndef get_usage_status(usage_percent):\n    if usage_percent >= 90:\n        return "CRITICAL"\n    elif usage_percent >= 80:\n        return "WARNING"\n    else:\n        return "OK"\n\ndef build_disk_summary(server_name, total_gb, used_gb):\n    usage_percent = calculate_usage(total_gb, used_gb)\n    status_text = get_usage_status(usage_percent)\n    return server_name + " disk usage is " + str(round(usage_percent, 2)) + "% - " + status_text\n\nsummary = build_disk_summary(${pyStr(server)}, ${total}, ${used})\nprint(summary)`;
+      $('reuseOutput').textContent = `${server} disk usage is ${pyRoundText(usage)}% - ${status}`;
+    }
+    function swapReuseLab(){ reuseIndex=(reuseIndex+1)%reuseExamples.length; const e=reuseExamples[reuseIndex]; $('reuseServer').value=e[0]; $('reuseTotal').value=e[1]; $('reuseUsed').value=e[2]; updateReuseLab(); }
+
+    document.querySelectorAll('.tab').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    ['returnMsg'].forEach(id=>$(id).addEventListener('input',updateReturnLab));
+    ['storeTotal','storeUsed'].forEach(id=>$(id).addEventListener('input',updateStoreLab));
+    ['statusUsage'].forEach(id=>$(id).addEventListener('input',updateStatusLab));
+    ['multiTotal','multiUsed'].forEach(id=>$(id).addEventListener('input',updateMultiLab));
+    ['localOpen','localCurrent'].forEach(id=>$(id).addEventListener('input',updateLocalLab));
+    ['globalTeam','globalReport'].forEach(id=>$(id).addEventListener('input',updateGlobalLab));
+    ['reuseServer','reuseTotal','reuseUsed'].forEach(id=>$(id).addEventListener('input',updateReuseLab));
+    window.addEventListener('scroll',()=>{ $('topbtn').classList.toggle('show', window.scrollY > 500); });
+    updateReturnLab(); updateStoreLab(); updateStatusLab(); updateMultiLab(); updateLocalLab(); updateGlobalLab(); updateReuseLab();
+  </script>
+</body>
+</html>
