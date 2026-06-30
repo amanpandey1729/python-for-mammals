@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 19 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 19 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day18/interactive/">← Day 18</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <span>Day 20 Coming Soon →</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">Day 19 • File Handling</span>
+        <h1>Day 19: Read Files Like an Automation Engineer.</h1>
+        <p class="lead">Today you will learn open(), read(), readline(), readlines(), and the with statement using practical examples around logs, status files, and simple operational reports.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start Interactive Labs</a>
+          <a class="button secondary" href="#challenge">View Mini Challenge</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Files are where real automation begins. Logs, reports, exports, and command outputs are usually text files first. Python helps you read them, scan them, and summarize them.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Core file reading tools</span></div>
+          <div class="mini"><b>6</b><span>Interactive practice labs</span></div>
+          <div class="mini"><b>1</b><span>Log reader mini project</span></div>
+          <div class="mini"><b>∞</b><span>Real automation use cases</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 19 starts the file-handling phase. You will read text files safely and process their lines like real log and report data.</p></div></div>
+      <div class="cards">
+        <div class="card"><span class="pill">Concept 1</span><h3>open()</h3><p>Connect Python to a file in read mode so your script can access its content.</p></div>
+        <div class="card"><span class="pill">Concept 2</span><h3>read()</h3><p>Read the complete file as one string when the file is small and simple.</p></div>
+        <div class="card"><span class="pill">Concept 3</span><h3>readline()</h3><p>Read one line at a time when you need controlled step-by-step reading.</p></div>
+        <div class="card"><span class="pill">Concept 4</span><h3>readlines()</h3><p>Read all lines into a list so you can count, index, loop, and filter them.</p></div>
+        <div class="card"><span class="pill">Concept 5</span><h3>with statement</h3><p>Open files safely so Python automatically closes them after the block ends.</p></div>
+        <div class="card"><span class="pill">Concept 6</span><h3>Line scanning</h3><p>Search logs for ERROR, WARNING, FAILED, timeout, ORA-, or any keyword that matters.</p></div>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the inputs and watch the code and output update. Every output line comes directly from a visible print() statement.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 19 labs">
+          <button class="tab active" data-panel="readlab">1. read()<small>Complete file</small></button>
+          <button class="tab" data-panel="readlinelab">2. readline()<small>One line</small></button>
+          <button class="tab" data-panel="readlineslab">3. readlines()<small>List of lines</small></button>
+          <button class="tab" data-panel="looplab">4. Loop file<small>Line by line</small></button>
+          <button class="tab" data-panel="searchlab">5. Search logs<small>Find keyword</small></button>
+          <button class="tab" data-panel="countlab">6. Count alerts<small>Summary</small></button>
+        </div>
+
+        <div>
+          <div class="panel active" id="readlab">
+            <div class="workspace-head"><h3>Read the Complete File</h3><button class="secondary" onclick="swapReadLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Line 1</label><input id="readOne" value="app01 production running" /></div><div><label>Line 2</label><input id="readTwo" value="db01 production running" /></div><div><label>Line 3</label><input id="readThree" value="web01 uat maintenance" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="readCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="readOutput"></div></div></div><div class="explain">read() reads the full file content as one string. This is useful for small reports and short logs.</div></div>
+          </div>
+
+          <div class="panel" id="readlinelab">
+            <div class="workspace-head"><h3>Read One Line at a Time</h3><button class="secondary" onclick="swapReadlineLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>First Line</label><input id="rlOne" value="INFO application started" /></div><div><label>Second Line</label><input id="rlTwo" value="ERROR backup failed" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="readlineCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="readlineOutput"></div></div></div><div class="explain">readline() reads one line per call. strip() removes the newline from the display.</div></div>
+          </div>
+
+          <div class="panel" id="readlineslab">
+            <div class="workspace-head"><h3>Read All Lines as a List</h3><button class="secondary" onclick="swapReadlinesLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Service 1</label><input id="rla" value="listener" /></div><div><label>Service 2</label><input id="rlb" value="database" /></div><div><label>Service 3</label><input id="rlc" value="monitoring" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="readlinesCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="readlinesOutput"></div></div></div><div class="explain">readlines() returns a list. Each file line becomes one list item.</div></div>
+          </div>
+
+          <div class="panel" id="looplab">
+            <div class="workspace-head"><h3>Loop Through File Lines</h3><button class="secondary" onclick="swapLoopLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server 1</label><input id="loopOne" value="app01" /></div><div><label>Server 2</label><input id="loopTwo" value="db01" /></div><div><label>Server 3</label><input id="loopThree" value="web01" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="loopCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="loopOutput"></div></div></div><div class="explain">Looping directly through a file is one of the most common log-reading patterns.</div></div>
+          </div>
+
+          <div class="panel" id="searchlab">
+            <div class="workspace-head"><h3>Search for a Keyword in Logs</h3><button class="secondary" onclick="swapSearchLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Keyword</label><input id="searchKeyword" value="ERROR" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="searchCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="searchOutput"></div></div></div><div class="explain">Keyword scanning is the first step toward log analysis and alert validation.</div></div>
+          </div>
+
+          <div class="panel" id="countlab">
+            <div class="workspace-head"><h3>Count WARNING and ERROR Lines</h3><button class="secondary" onclick="swapCountLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Line 1 Level</label><select id="countOne"><option>INFO</option><option selected>WARNING</option><option>ERROR</option></select></div><div><label>Line 2 Level</label><select id="countTwo"><option>INFO</option><option>WARNING</option><option selected>ERROR</option></select></div><div><label>Line 3 Level</label><select id="countThree"><option selected>INFO</option><option>WARNING</option><option>ERROR</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="countCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="countOutput"></div></div></div><div class="explain">Counting log levels helps you build simple daily operational summaries.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge</h2>
+          <p>Build the <strong>Log Reader Summary</strong> in <strong>Day19_Exercise.py</strong>. Read a log file, count INFO, WARNING, and ERROR lines, store error lines, and print one final report.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Log file name, application, and environment are collected once</label>
+            <label class="check"><input type="checkbox" /> File is opened safely using with open()</label>
+            <label class="check"><input type="checkbox" /> Script scans the file line by line</label>
+            <label class="check"><input type="checkbox" /> INFO, WARNING, and ERROR counts are calculated</label>
+            <label class="check"><input type="checkbox" /> Final health status is printed clearly</label>
+          </div>
+        </div>
+        <div class="codebox">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Project Outline</div>
+          <pre>Collect log details once
+Open the log file safely
+Read each line
+Count INFO, WARNING, ERROR
+Store ERROR lines in a list
+Print final summary report</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+  <footer>Day 19 complete • Python for Mammals • Reading Files</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function pyStr(s){ return '"' + q(s) + '"'; }
+    let readIndex=0, readlineIndex=0, readlinesIndex=0, loopIndex=0, searchIndex=0, countIndex=0;
+    const readExamples=[["app01 production running","db01 production running","web01 uat maintenance"],["backup01 SUCCESS","backup02 FAILED","backup03 SUCCESS"],["cpu OK","memory OK","disk WARNING"]];
+    const readlineExamples=[["INFO application started","ERROR backup failed"],["WARNING disk high","INFO cleanup completed"],["ERROR login failed","INFO retry started"]];
+    const readlinesExamples=[["listener","database","monitoring"],["oracle","postgres","sqlserver"],["cpu","memory","disk"]];
+    const loopExamples=[["app01","db01","web01"],["api01","batch01","mon01"],["linux01","win01","cloud01"]];
+    const searchExamples=["ERROR","WARNING","INFO"];
+    const countExamples=[["WARNING","ERROR","INFO"],["INFO","INFO","WARNING"],["ERROR","ERROR","WARNING"]];
+
+    function updateReadLab(){
+      const a=$('readOne').value, b=$('readTwo').value, c=$('readThree').value;
+      $('readCode').textContent = `with open("status.txt", "w") as file_object:\n    file_object.write(${pyStr(a + "\\n")})\n    file_object.write(${pyStr(b + "\\n")})\n    file_object.write(${pyStr(c + "\\n")})\n\nwith open("status.txt", "r") as file_object:\n    content = file_object.read()\n\nprint(content)`;
+      $('readOutput').textContent = `${a}\n${b}\n${c}\n`;
+    }
+    function swapReadLab(){ readIndex=(readIndex+1)%readExamples.length; const e=readExamples[readIndex]; $('readOne').value=e[0]; $('readTwo').value=e[1]; $('readThree').value=e[2]; updateReadLab(); }
+
+    function updateReadlineLab(){
+      const a=$('rlOne').value, b=$('rlTwo').value;
+      $('readlineCode').textContent = `with open("app.log", "w") as file_object:\n    file_object.write(${pyStr(a + "\\n")})\n    file_object.write(${pyStr(b + "\\n")})\n\nwith open("app.log", "r") as file_object:\n    first_line = file_object.readline()\n    second_line = file_object.readline()\n\nprint("First line:", first_line.strip())\nprint("Second line:", second_line.strip())`;
+      $('readlineOutput').textContent = `First line: ${a}\nSecond line: ${b}`;
+    }
+    function swapReadlineLab(){ readlineIndex=(readlineIndex+1)%readlineExamples.length; const e=readlineExamples[readlineIndex]; $('rlOne').value=e[0]; $('rlTwo').value=e[1]; updateReadlineLab(); }
+
+    function updateReadlinesLab(){
+      const a=$('rla').value, b=$('rlb').value, c=$('rlc').value;
+      $('readlinesCode').textContent = `with open("services.txt", "w") as file_object:\n    file_object.write(${pyStr(a + "\\n")})\n    file_object.write(${pyStr(b + "\\n")})\n    file_object.write(${pyStr(c + "\\n")})\n\nwith open("services.txt", "r") as file_object:\n    lines = file_object.readlines()\n\nprint("Total lines:", len(lines))\nprint("First service:", lines[0].strip())`;
+      $('readlinesOutput').textContent = `Total lines: 3\nFirst service: ${a}`;
+    }
+    function swapReadlinesLab(){ readlinesIndex=(readlinesIndex+1)%readlinesExamples.length; const e=readlinesExamples[readlinesIndex]; $('rla').value=e[0]; $('rlb').value=e[1]; $('rlc').value=e[2]; updateReadlinesLab(); }
+
+    function updateLoopLab(){
+      const a=$('loopOne').value, b=$('loopTwo').value, c=$('loopThree').value;
+      $('loopCode').textContent = `with open("servers.txt", "w") as file_object:\n    file_object.write(${pyStr(a + "\\n")})\n    file_object.write(${pyStr(b + "\\n")})\n    file_object.write(${pyStr(c + "\\n")})\n\nwith open("servers.txt", "r") as file_object:\n    for line in file_object:\n        print("Server:", line.strip())`;
+      $('loopOutput').textContent = `Server: ${a}\nServer: ${b}\nServer: ${c}`;
+    }
+    function swapLoopLab(){ loopIndex=(loopIndex+1)%loopExamples.length; const e=loopExamples[loopIndex]; $('loopOne').value=e[0]; $('loopTwo').value=e[1]; $('loopThree').value=e[2]; updateLoopLab(); }
+
+    function updateSearchLab(){
+      const keyword=$('searchKeyword').value;
+      const lines=["INFO application started","WARNING disk usage high","ERROR backup failed","INFO monitoring completed"];
+      const matched=lines.filter(line=>line.includes(keyword));
+      $('searchCode').textContent = `with open("app.log", "w") as file_object:\n    file_object.write("INFO application started\\n")\n    file_object.write("WARNING disk usage high\\n")\n    file_object.write("ERROR backup failed\\n")\n    file_object.write("INFO monitoring completed\\n")\n\nwith open("app.log", "r") as file_object:\n    for line in file_object:\n        if ${pyStr(keyword)} in line:\n            print("Matched:", line.strip())`;
+      $('searchOutput').textContent = matched.map(line=>`Matched: ${line}`).join('\n');
+    }
+    function swapSearchLab(){ searchIndex=(searchIndex+1)%searchExamples.length; $('searchKeyword').value=searchExamples[searchIndex]; updateSearchLab(); }
+
+    function updateCountLab(){
+      const a=$('countOne').value, b=$('countTwo').value, c=$('countThree').value;
+      const levels=[a,b,c];
+      const warnings=levels.filter(x=>x==='WARNING').length;
+      const errors=levels.filter(x=>x==='ERROR').length;
+      $('countCode').textContent = `with open("app.log", "w") as file_object:\n    file_object.write("${a} first event\\n")\n    file_object.write("${b} second event\\n")\n    file_object.write("${c} third event\\n")\n\nwarning_count = 0\nerror_count = 0\n\nwith open("app.log", "r") as file_object:\n    for line in file_object:\n        if "WARNING" in line:\n            warning_count = warning_count + 1\n        if "ERROR" in line:\n            error_count = error_count + 1\n\nprint("Warnings:", warning_count)\nprint("Errors:", error_count)`;
+      $('countOutput').textContent = `Warnings: ${warnings}\nErrors: ${errors}`;
+    }
+    function swapCountLab(){ countIndex=(countIndex+1)%countExamples.length; const e=countExamples[countIndex]; $('countOne').value=e[0]; $('countTwo').value=e[1]; $('countThree').value=e[2]; updateCountLab(); }
+
+    document.querySelectorAll('.tab').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    ['readOne','readTwo','readThree'].forEach(id=>$(id).addEventListener('input',updateReadLab));
+    ['rlOne','rlTwo'].forEach(id=>$(id).addEventListener('input',updateReadlineLab));
+    ['rla','rlb','rlc'].forEach(id=>$(id).addEventListener('input',updateReadlinesLab));
+    ['loopOne','loopTwo','loopThree'].forEach(id=>$(id).addEventListener('input',updateLoopLab));
+    ['searchKeyword'].forEach(id=>$(id).addEventListener('input',updateSearchLab));
+    ['countOne','countTwo','countThree'].forEach(id=>$(id).addEventListener('change',updateCountLab));
+    window.addEventListener('scroll',()=>{ $('topbtn').classList.toggle('show', window.scrollY > 500); });
+    updateReadLab(); updateReadlineLab(); updateReadlinesLab(); updateLoopLab(); updateSearchLab(); updateCountLab();
+  </script>
+</body>
+</html>

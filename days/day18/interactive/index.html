@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 18 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 18 Interactive Lab</span></div>
+      </div>
+      <nav aria-label="Page navigation">
+        <a href="#concepts">Concepts</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day17/interactive/">← Day 17</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <a href="../../day19/interactive/">Day 19 ➡</a>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">Day 18 • Mini Project #2</span>
+        <h1>Day 18: Build a Server Inventory Tracker.</h1>
+        <p class="lead">Today you will combine lists, dictionaries, and functions to build a practical inventory workflow for servers, environments, owners, status, and capacity reporting.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start interactive lab</a>
+          <a class="button secondary" href="#challenge">View mini project</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Community card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Inventory automation is a real operations skill. One dictionary describes one server, one list stores many servers, and functions process the inventory cleanly.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>6</b><span>Interactive labs</span></div>
+          <div class="mini"><b>14</b><span>Practice exercises</span></div>
+          <div class="mini"><b>45-60</b><span>Minutes</span></div>
+          <div class="mini"><b>1</b><span>Mini project</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title"><div><h2>What you will build</h2><p class="hint">Day 18 is a project day. You will not learn a random new syntax item. You will combine the previous building blocks into one useful automation-style script.</p></div></div>
+      <div class="cards">
+        <article class="card"><span class="pill">Lists</span><h3>Many servers</h3><p>A list stores multiple server records so your script can loop through inventory data.</p></article>
+        <article class="card"><span class="pill">Dictionaries</span><h3>One server record</h3><p>A dictionary stores structured details like name, environment, OS, owner, status, CPU, memory, and disk.</p></article>
+        <article class="card"><span class="pill">Functions</span><h3>Reusable actions</h3><p>Functions create records, print lines, search inventory, filter records, and build summaries.</p></article>
+        <article class="card"><span class="pill">Search</span><h3>Find a server</h3><p>Search by server name and return either the matching dictionary or None when not found.</p></article>
+        <article class="card"><span class="pill">Filter</span><h3>Group records</h3><p>Filter production, UAT, active, inactive, or maintenance servers for quick operational reporting.</p></article>
+        <article class="card"><span class="pill">Capacity</span><h3>Summarize totals</h3><p>Add CPU, memory, and disk values across all inventory records to produce capacity summaries.</p></article>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change values and see how the displayed Python code and output update together. Every output line comes from a visible print() statement in the displayed code.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 18 labs">
+          <button class="tab active" data-panel="recordlab">1. Server record<small>Dictionary</small></button>
+          <button class="tab" data-panel="listlab">2. Inventory list<small>List of dictionaries</small></button>
+          <button class="tab" data-panel="createlab">3. Create record<small>Function returns dict</small></button>
+          <button class="tab" data-panel="countlab">4. Count environment<small>Function returns count</small></button>
+          <button class="tab" data-panel="searchlab">5. Search server<small>Find by name</small></button>
+          <button class="tab" data-panel="capacitylab">6. Capacity summary<small>Total resources</small></button>
+        </div>
+
+        <div>
+          <div class="panel active" id="recordlab">
+            <div class="workspace-head"><h3>One Server as a Dictionary</h3><button class="secondary" onclick="swapRecordLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="recordName" value="app01" /></div><div><label>Environment</label><input id="recordEnv" value="production" /></div><div><label>OS</label><input id="recordOs" value="Linux" /></div><div><label>Status</label><input id="recordStatus" value="active" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="recordCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="recordOutput"></div></div></div><div class="explain">A dictionary gives names to values. This makes a server record readable and automation-friendly.</div></div>
+          </div>
+
+          <div class="panel" id="listlab">
+            <div class="workspace-head"><h3>Inventory as a List of Dictionaries</h3><button class="secondary" onclick="swapListLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server 1</label><input id="listOne" value="app01" /></div><div><label>Server 2</label><input id="listTwo" value="db01" /></div><div><label>Server 3</label><input id="listThree" value="web01" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="listCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="listOutput"></div></div></div><div class="explain">A list lets your script process many server dictionaries with one loop.</div></div>
+          </div>
+
+          <div class="panel" id="createlab">
+            <div class="workspace-head"><h3>Create a Server Record with a Function</h3><button class="secondary" onclick="swapCreateLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="createName" value="batch01" /></div><div><label>Environment</label><input id="createEnv" value="production" /></div><div><label>Owner</label><input id="createOwner" value="batch-team" /></div><div><label>Status</label><input id="createStatus" value="active" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="createCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="createOutput"></div></div></div><div class="explain">A function can return one clean dictionary. Later, you can append that dictionary to inventory.</div></div>
+          </div>
+
+          <div class="panel" id="countlab">
+            <div class="workspace-head"><h3>Count Servers by Environment</h3><button class="secondary" onclick="swapCountLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Target Environment</label><input id="countTarget" value="production" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="countCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="countOutput"></div></div></div><div class="explain">Counting records is useful for quick summaries such as production server count or UAT server count.</div></div>
+          </div>
+
+          <div class="panel" id="searchlab">
+            <div class="workspace-head"><h3>Search Inventory by Server Name</h3><button class="secondary" onclick="swapSearchLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Search Name</label><input id="searchName" value="db01" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="searchCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="searchOutput"></div></div></div><div class="explain">Returning None is a clean way to say that no matching server was found.</div></div>
+          </div>
+
+          <div class="panel" id="capacitylab">
+            <div class="workspace-head"><h3>Calculate Capacity Summary</h3><button class="secondary" onclick="swapCapacityLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>App Disk GB</label><input id="capApp" value="200" /></div><div><label>DB Disk GB</label><input id="capDb" value="1000" /></div><div><label>Web Disk GB</label><input id="capWeb" value="100" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="capacityCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="capacityOutput"></div></div></div><div class="explain">Inventory becomes more valuable when you summarize capacity across all records.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Project #2</h2>
+          <p>Build the <strong>Server Inventory Tracker</strong> in <strong>Day18_Exercise.py</strong>. Collect server details once, store each server as a dictionary, append records to a list, and use functions to generate the final inventory summary.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Server details are stored as dictionaries</label>
+            <label class="check"><input type="checkbox" /> All server dictionaries are stored in one inventory list</label>
+            <label class="check"><input type="checkbox" /> Functions create, print, count, and summarize records</label>
+            <label class="check"><input type="checkbox" /> Final report shows all server lines and useful totals</label>
+            <label class="check"><input type="checkbox" /> Inputs are collected once and reused cleanly</label>
+          </div>
+        </div>
+        <div class="codebox">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Project Outline</div>
+          <pre>Create empty inventory list
+Collect server count once
+Loop and collect server details
+Create one dictionary per server
+Append each dictionary to inventory
+Use functions for summary counts
+Print final inventory report</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+  <footer>Day 18 complete • Python for Mammals • Mini Project #2: Server Inventory Tracker</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function q(s){ return String(s).replaceAll('\\','\\\\').replaceAll('"','\\"'); }
+    function pyStr(s){ return '"' + q(s) + '"'; }
+    function num(v){ const n=parseFloat(v); return Number.isFinite(n) ? n : 0; }
+    let recordIndex=0, listIndex=0, createIndex=0, countIndex=0, searchIndex=0, capacityIndex=0;
+    const recordExamples=[["app01","production","Linux","active"],["db01","production","Linux","active"],["web01","uat","Windows","maintenance"]];
+    const listExamples=[["app01","db01","web01"],["api01","batch01","mon01"],["pg01","sql01","ora01"]];
+    const createExamples=[["batch01","production","batch-team","active"],["mon01","production","monitoring-team","active"],["test01","test","qa-team","inactive"]];
+    const countExamples=["production","uat","test"];
+    const searchExamples=["db01","web01","missing01"];
+    const capacityExamples=[["200","1000","100"],["500","750","250"],["120","300","80"]];
+
+    function updateRecordLab(){
+      const name=$('recordName').value, env=$('recordEnv').value, os=$('recordOs').value, status=$('recordStatus').value;
+      $('recordCode').textContent = `server = {\n    "name": ${pyStr(name)},\n    "environment": ${pyStr(env)},\n    "os": ${pyStr(os)},\n    "status": ${pyStr(status)}\n}\n\nprint("Server:", server["name"])\nprint("Environment:", server["environment"])\nprint("OS:", server["os"])\nprint("Status:", server["status"])`;
+      $('recordOutput').textContent = `Server: ${name}\nEnvironment: ${env}\nOS: ${os}\nStatus: ${status}`;
+    }
+    function swapRecordLab(){ recordIndex=(recordIndex+1)%recordExamples.length; const e=recordExamples[recordIndex]; $('recordName').value=e[0]; $('recordEnv').value=e[1]; $('recordOs').value=e[2]; $('recordStatus').value=e[3]; updateRecordLab(); }
+
+    function updateListLab(){
+      const a=$('listOne').value, b=$('listTwo').value, c=$('listThree').value;
+      $('listCode').textContent = `inventory = [\n    {"name": ${pyStr(a)}, "environment": "production"},\n    {"name": ${pyStr(b)}, "environment": "production"},\n    {"name": ${pyStr(c)}, "environment": "uat"}\n]\n\nprint("Total servers:", len(inventory))\n\nfor server in inventory:\n    print(server["name"], "|", server["environment"])`;
+      $('listOutput').textContent = `Total servers: 3\n${a} | production\n${b} | production\n${c} | uat`;
+    }
+    function swapListLab(){ listIndex=(listIndex+1)%listExamples.length; const e=listExamples[listIndex]; $('listOne').value=e[0]; $('listTwo').value=e[1]; $('listThree').value=e[2]; updateListLab(); }
+
+    function updateCreateLab(){
+      const name=$('createName').value, env=$('createEnv').value, owner=$('createOwner').value, status=$('createStatus').value;
+      $('createCode').textContent = `def create_server_record(name, environment, owner, status):\n    return {\n        "name": name,\n        "environment": environment,\n        "owner": owner,\n        "status": status\n    }\n\nserver = create_server_record(${pyStr(name)}, ${pyStr(env)}, ${pyStr(owner)}, ${pyStr(status)})\nprint("Created server:", server["name"])\nprint("Owner:", server["owner"])\nprint("Status:", server["status"])`;
+      $('createOutput').textContent = `Created server: ${name}\nOwner: ${owner}\nStatus: ${status}`;
+    }
+    function swapCreateLab(){ createIndex=(createIndex+1)%createExamples.length; const e=createExamples[createIndex]; $('createName').value=e[0]; $('createEnv').value=e[1]; $('createOwner').value=e[2]; $('createStatus').value=e[3]; updateCreateLab(); }
+
+    function countFor(target){ const envs=['production','production','uat','test']; return envs.filter(e=>e===target).length; }
+    function updateCountLab(){
+      const target=$('countTarget').value; const count=countFor(target);
+      $('countCode').textContent = `inventory = [\n    {"name": "app01", "environment": "production"},\n    {"name": "db01", "environment": "production"},\n    {"name": "web01", "environment": "uat"},\n    {"name": "test01", "environment": "test"}\n]\n\ndef count_servers_by_environment(server_list, target_environment):\n    count = 0\n    for server in server_list:\n        if server["environment"] == target_environment:\n            count = count + 1\n    return count\n\nserver_count = count_servers_by_environment(inventory, ${pyStr(target)})\nprint("${target} servers:", server_count)`;
+      $('countOutput').textContent = `${target} servers: ${count}`;
+    }
+    function swapCountLab(){ countIndex=(countIndex+1)%countExamples.length; $('countTarget').value=countExamples[countIndex]; updateCountLab(); }
+
+    function updateSearchLab(){
+      const search=$('searchName').value; const data={app01:'production',db01:'production',web01:'uat'}; const found=Object.prototype.hasOwnProperty.call(data, search);
+      $('searchCode').textContent = `inventory = [\n    {"name": "app01", "environment": "production"},\n    {"name": "db01", "environment": "production"},\n    {"name": "web01", "environment": "uat"}\n]\n\ndef find_server_by_name(server_list, search_name):\n    for server in server_list:\n        if server["name"] == search_name:\n            return server\n    return None\n\nresult = find_server_by_name(inventory, ${pyStr(search)})\n\nif result is not None:\n    print("Found:", result["name"], "|", result["environment"])\nelse:\n    print("Server not found")`;
+      $('searchOutput').textContent = found ? `Found: ${search} | ${data[search]}` : 'Server not found';
+    }
+    function swapSearchLab(){ searchIndex=(searchIndex+1)%searchExamples.length; $('searchName').value=searchExamples[searchIndex]; updateSearchLab(); }
+
+    function updateCapacityLab(){
+      const app=num($('capApp').value), db=num($('capDb').value), web=num($('capWeb').value); const total=app+db+web;
+      $('capacityCode').textContent = `inventory = [\n    {"name": "app01", "disk_gb": ${app}},\n    {"name": "db01", "disk_gb": ${db}},\n    {"name": "web01", "disk_gb": ${web}}\n]\n\ndef calculate_total_disk(server_list):\n    total_disk = 0\n    for server in server_list:\n        total_disk = total_disk + server["disk_gb"]\n    return total_disk\n\ntotal_disk = calculate_total_disk(inventory)\nprint("Total disk:", total_disk, "GB")`;
+      $('capacityOutput').textContent = `Total disk: ${total} GB`;
+    }
+    function swapCapacityLab(){ capacityIndex=(capacityIndex+1)%capacityExamples.length; const e=capacityExamples[capacityIndex]; $('capApp').value=e[0]; $('capDb').value=e[1]; $('capWeb').value=e[2]; updateCapacityLab(); }
+
+    document.querySelectorAll('.tab').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); $(btn.dataset.panel).classList.add('active'); }); });
+    ['recordName','recordEnv','recordOs','recordStatus'].forEach(id=>$(id).addEventListener('input',updateRecordLab));
+    ['listOne','listTwo','listThree'].forEach(id=>$(id).addEventListener('input',updateListLab));
+    ['createName','createEnv','createOwner','createStatus'].forEach(id=>$(id).addEventListener('input',updateCreateLab));
+    ['countTarget'].forEach(id=>$(id).addEventListener('input',updateCountLab));
+    ['searchName'].forEach(id=>$(id).addEventListener('input',updateSearchLab));
+    ['capApp','capDb','capWeb'].forEach(id=>$(id).addEventListener('input',updateCapacityLab));
+    window.addEventListener('scroll',()=>{ $('topbtn').classList.toggle('show', window.scrollY > 500); });
+    updateRecordLab(); updateListLab(); updateCreateLab(); updateCountLab(); updateSearchLab(); updateCapacityLab();
+  </script>
+</body>
+</html>

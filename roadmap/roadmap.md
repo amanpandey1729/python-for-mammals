@@ -79,7 +79,7 @@ Learn how Python stores and manipulates information.
 | 15  | Nested Data Structures              |   ✅    |
 | 16  | Functions                           |   ✅    |
 | 17  | Return Values & Scope               |   ✅    |
-| 18  | Mini Project #2 – Inventory Tracker |   ⬜    |
+| 18  | Mini Project #2 – Inventory Tracker |   ✅    |
 
 ---
 
@@ -89,7 +89,7 @@ Start doing useful work with Python.
 
 | Day | Topic                               | Status  |
 | --- | ----------------------------------- |---------|
-| 19  | Reading Text Files                  |   ⬜    |
+| 19  | Reading Text Files                  |   ✅    |
 | 20  | Writing Text Files                  |   ⬜    |
 | 21  | Exception Handling                  |   ⬜    |
 | 22  | CSV Files                           |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 17 / 45
+Day 19 / 45
 ```
 
 Completion:
 
 ```text
-██████████████░░░░░░░░░░░░░░░ 37.78%
+███████████████░░░░░░░░░░░░░░░ 42.22%
 ```
 
 ---
