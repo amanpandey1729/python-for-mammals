@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 20 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 20 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day19/interactive/">← Day 19</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <span>Day 21 Coming Soon →</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">Day 20 • File Handling</span>
+        <h1>Day 20: Write Files and Generate Reports.</h1>
+        <p class="lead">Today you will learn write(), append mode, and simple report creation using practical examples around status reports, activity logs, and disk usage summaries.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start Interactive Labs</a>
+          <a class="button secondary" href="#challenge">View Mini Challenge</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Reading files helps Python consume data. Writing files helps Python produce useful output: reports, logs, summaries, checklists, and reusable evidence for daily operations.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>3</b><span>Core writing skills</span></div>
+          <div class="mini"><b>6</b><span>Interactive practice labs</span></div>
+          <div class="mini"><b>1</b><span>Report generator mini project</span></div>
+          <div class="mini"><b>∞</b><span>Real automation use cases</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 20 completes the basic file-handling loop: read input, process it, and write useful output that someone can review later.</p></div></div>
+      <div class="cards">
+        <div class="card"><span class="pill">Concept 1</span><h3>write()</h3><p>Save text into a file so your script can produce reusable output instead of only printing on screen.</p></div>
+        <div class="card"><span class="pill">Concept 2</span><h3>Write mode</h3><p>Create a new file or replace an existing file when generating a fresh report.</p></div>
+        <div class="card"><span class="pill">Concept 3</span><h3>Append mode</h3><p>Add new lines at the end of an existing file without deleting previous content.</p></div>
+        <div class="card"><span class="pill">Concept 4</span><h3>New lines</h3><p>Use \n correctly so each report entry appears on its own readable line.</p></div>
+        <div class="card"><span class="pill">Concept 5</span><h3>Variables in reports</h3><p>Write values from variables, calculations, conditions, and lists into text files.</p></div>
+        <div class="card"><span class="pill">Concept 6</span><h3>Report creation</h3><p>Build clean operational summaries for health checks, disk usage, inventory, and daily activity.</p></div>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the inputs and watch the code and output update. Every visible output line comes directly from visible print() statements.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 20 labs">
+          <button class="tab active" data-panel="writelab">1. write()<small>Create file</small></button>
+          <button class="tab" data-panel="newlinelab">2. New lines<small>Readable report</small></button>
+          <button class="tab" data-panel="appendlab">3. Append mode<small>Add entries</small></button>
+          <button class="tab" data-panel="variableslab">4. Variables<small>Status report</small></button>
+          <button class="tab" data-panel="listlab">5. List to file<small>Loop records</small></button>
+          <button class="tab" data-panel="reportlab">6. Disk report<small>Final summary</small></button>
+        </div>
+
+        <div>
+          <div class="panel active" id="writelab">
+            <div class="workspace-head"><h3>Create a File with write()</h3><button class="secondary" onclick="swapWriteLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Line 1</label><input id="writeOne" value="Python can create files" /></div><div><label>Line 2</label><input id="writeTwo" value="Reports can be saved" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="writeCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="writeOutput"></div></div></div><div class="explain">write() saves text into a file. In real automation, this could be a report, checklist, or generated note.</div></div>
+          </div>
+
+          <div class="panel" id="newlinelab">
+            <div class="workspace-head"><h3>Use \n for Clean Lines</h3><button class="secondary" onclick="swapNewlineLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Header</label><input id="nlHeader" value="Health Check Report" /></div><div><label>Line A</label><input id="nlA" value="CPU OK" /></div><div><label>Line B</label><input id="nlB" value="DISK WARNING" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="newlineCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="newlineOutput"></div></div></div><div class="explain">\n means new line. It makes generated files readable for humans.</div></div>
+          </div>
+
+          <div class="panel" id="appendlab">
+            <div class="workspace-head"><h3>Append Activity Entries</h3><button class="secondary" onclick="swapAppendLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>First Entry</label><input id="appA" value="INFO script started" /></div><div><label>Appended Entry</label><input id="appB" value="INFO report generated" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="appendCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="appendOutput"></div></div></div><div class="explain">Append mode adds content at the end of a file without deleting the old content.</div></div>
+          </div>
+
+          <div class="panel" id="variableslab">
+            <div class="workspace-head"><h3>Write Variables into a Report</h3><button class="secondary" onclick="swapVariablesLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="varServer" value="db01" /></div><div><label>Environment</label><input id="varEnv" value="production" /></div><div><label>Status</label><input id="varStatus" value="running" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="variablesCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="variablesOutput"></div></div></div><div class="explain">Reports usually come from variables created earlier in the script.</div></div>
+          </div>
+
+          <div class="panel" id="listlab">
+            <div class="workspace-head"><h3>Write List Items into a File</h3><button class="secondary" onclick="swapListLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Item 1</label><input id="listA" value="listener" /></div><div><label>Item 2</label><input id="listB" value="database" /></div><div><label>Item 3</label><input id="listC" value="monitoring" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="listCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="listOutput"></div></div></div><div class="explain">Looping through a list and writing each item is useful for inventory and checklist generation.</div></div>
+          </div>
+
+          <div class="panel" id="reportlab">
+            <div class="workspace-head"><h3>Create a Disk Usage Report</h3><button class="secondary" onclick="swapReportLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="repServer" value="db01" /></div><div><label>Total GB</label><input id="repTotal" type="number" value="500" /></div><div><label>Used GB</label><input id="repUsed" type="number" value="390" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="reportCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="reportOutput"></div></div></div><div class="explain">This combines calculation, condition, write mode, and report generation.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge: Disk Usage Report Generator</h2>
+          <p>Create a script that collects server details once, calculates disk usage, writes a clean report file, appends one activity log entry, then reads the report back for confirmation.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Collect server, environment, disk total, disk used, report file, and log file once.</label>
+            <label class="check"><input type="checkbox" /> Calculate used percentage and free GB.</label>
+            <label class="check"><input type="checkbox" /> Mark status as HEALTHY, WARNING, or CRITICAL.</label>
+            <label class="check"><input type="checkbox" /> Write a clean text report using write().</label>
+            <label class="check"><input type="checkbox" /> Append one activity entry using append mode.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Thinking</div><pre>Collect inputs once
+Calculate usage percentage
+Decide status
+Write report file
+Append activity log
+Read report back
+Print final report</pre></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <footer>Day 20 complete • Python for Mammals • Writing Files</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const pyStr = value => JSON.stringify(String(value));
+    let writeIndex=0, newlineIndex=0, appendIndex=0, variablesIndex=0, listIndex=0, reportIndex=0;
+    const writeExamples=[["Python can create files","Reports can be saved"],["Automation writes evidence","Output should be reusable"],["Daily checks completed","Summary saved to file"]];
+    const newlineExamples=[["Health Check Report","CPU OK","DISK WARNING"],["Backup Summary","backup01 SUCCESS","backup02 FAILED"],["Service Status","listener running","monitoring running"]];
+    const appendExamples=[["INFO script started","INFO report generated"],["INFO backup check started","WARNING backup delayed"],["INFO cleanup started","INFO cleanup completed"]];
+    const variableExamples=[["db01","production","running"],["app01","uat","maintenance"],["web01","test","stopped"]];
+    const listExamples=[["listener","database","monitoring"],["app01","db01","web01"],["CPU OK","MEMORY OK","DISK WARNING"]];
+    const reportExamples=[["db01",500,390],["app01",200,170],["web01",100,92]];
+
+    function updateWriteLab(){
+      const a=$('writeOne').value, b=$('writeTwo').value;
+      $('writeCode').textContent = `with open("notes.txt", "w") as file_object:\n    file_object.write(${pyStr(a + "\\n")})\n    file_object.write(${pyStr(b + "\\n")})\n\nprint("notes.txt created")`;
+      $('writeOutput').textContent = `notes.txt created`;
+    }
+    function swapWriteLab(){ writeIndex=(writeIndex+1)%writeExamples.length; const e=writeExamples[writeIndex]; $('writeOne').value=e[0]; $('writeTwo').value=e[1]; updateWriteLab(); }
+
+    function updateNewlineLab(){
+      const h=$('nlHeader').value, a=$('nlA').value, b=$('nlB').value;
+      $('newlineCode').textContent = `with open("health_report.txt", "w") as report_file:\n    report_file.write(${pyStr(h + "\\n")})\n    report_file.write(${pyStr("-".repeat(h.length) + "\\n")})\n    report_file.write(${pyStr(a + "\\n")})\n    report_file.write(${pyStr(b + "\\n")})\n\nwith open("health_report.txt", "r") as report_file:\n    content = report_file.read()\n\nprint(content)`;
+      $('newlineOutput').textContent = `${h}\n${"-".repeat(h.length)}\n${a}\n${b}\n`;
+    }
+    function swapNewlineLab(){ newlineIndex=(newlineIndex+1)%newlineExamples.length; const e=newlineExamples[newlineIndex]; $('nlHeader').value=e[0]; $('nlA').value=e[1]; $('nlB').value=e[2]; updateNewlineLab(); }
+
+    function updateAppendLab(){
+      const a=$('appA').value, b=$('appB').value;
+      $('appendCode').textContent = `with open("activity.log", "w") as log_file:\n    log_file.write(${pyStr(a + "\\n")})\n\nwith open("activity.log", "a") as log_file:\n    log_file.write(${pyStr(b + "\\n")})\n\nwith open("activity.log", "r") as log_file:\n    content = log_file.read()\n\nprint(content)`;
+      $('appendOutput').textContent = `${a}\n${b}\n`;
+    }
+    function swapAppendLab(){ appendIndex=(appendIndex+1)%appendExamples.length; const e=appendExamples[appendIndex]; $('appA').value=e[0]; $('appB').value=e[1]; updateAppendLab(); }
+
+    function updateVariablesLab(){
+      const s=$('varServer').value, e=$('varEnv').value, st=$('varStatus').value;
+      $('variablesCode').textContent = `server_name = ${pyStr(s)}\nenvironment = ${pyStr(e)}\nstatus = ${pyStr(st)}\n\nwith open("server_report.txt", "w") as report_file:\n    report_file.write("Server Name: " + server_name + "\\n")\n    report_file.write("Environment: " + environment + "\\n")\n    report_file.write("Status: " + status + "\\n")\n\nprint("Server Name: " + server_name)\nprint("Environment: " + environment)\nprint("Status: " + status)`;
+      $('variablesOutput').textContent = `Server Name: ${s}\nEnvironment: ${e}\nStatus: ${st}`;
+    }
+    function swapVariablesLab(){ variablesIndex=(variablesIndex+1)%variableExamples.length; const e=variableExamples[variablesIndex]; $('varServer').value=e[0]; $('varEnv').value=e[1]; $('varStatus').value=e[2]; updateVariablesLab(); }
+
+    function updateListLab(){
+      const a=$('listA').value, b=$('listB').value, c=$('listC').value;
+      $('listCode').textContent = `items = [${pyStr(a)}, ${pyStr(b)}, ${pyStr(c)}]\n\nwith open("checklist.txt", "w") as file_object:\n    for item in items:\n        file_object.write(item + "\\n")\n\nfor item in items:\n    print("Written:", item)`;
+      $('listOutput').textContent = `Written: ${a}\nWritten: ${b}\nWritten: ${c}`;
+    }
+    function swapListLab(){ listIndex=(listIndex+1)%listExamples.length; const e=listExamples[listIndex]; $('listA').value=e[0]; $('listB').value=e[1]; $('listC').value=e[2]; updateListLab(); }
+
+    function updateReportLab(){
+      const s=$('repServer').value; const total=Number($('repTotal').value)||0; const used=Number($('repUsed').value)||0; const pct= total ? (used/total)*100 : 0; const pctText=pct.toFixed(2); const status=pct>=90?'CRITICAL':pct>=80?'WARNING':'HEALTHY';
+      $('reportCode').textContent = `server_name = ${pyStr(s)}\ndisk_total_gb = ${total}\ndisk_used_gb = ${used}\nusage_percent = (disk_used_gb / disk_total_gb) * 100\n\nif usage_percent >= 90:\n    status = "CRITICAL"\nelif usage_percent >= 80:\n    status = "WARNING"\nelse:\n    status = "HEALTHY"\n\nwith open("disk_report.txt", "w") as report_file:\n    report_file.write("Disk Usage Report\\n")\n    report_file.write("Server: " + server_name + "\\n")\n    report_file.write("Usage %: " + str(round(usage_percent, 2)) + "\\n")\n    report_file.write("Status: " + status + "\\n")\n\nprint("Disk Usage Report")\nprint("Server: " + server_name)\nprint("Usage %: " + str(round(usage_percent, 2)))\nprint("Status: " + status)`;
+      $('reportOutput').textContent = `Disk Usage Report\nServer: ${s}\nUsage %: ${Number(pctText)}\nStatus: ${status}`;
+    }
+    function swapReportLab(){ reportIndex=(reportIndex+1)%reportExamples.length; const e=reportExamples[reportIndex]; $('repServer').value=e[0]; $('repTotal').value=e[1]; $('repUsed').value=e[2]; updateReportLab(); }
+
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');$(tab.dataset.panel).classList.add('active');}));
+    ['writeOne','writeTwo'].forEach(id=>$(id).addEventListener('input',updateWriteLab));
+    ['nlHeader','nlA','nlB'].forEach(id=>$(id).addEventListener('input',updateNewlineLab));
+    ['appA','appB'].forEach(id=>$(id).addEventListener('input',updateAppendLab));
+    ['varServer','varEnv','varStatus'].forEach(id=>$(id).addEventListener('input',updateVariablesLab));
+    ['listA','listB','listC'].forEach(id=>$(id).addEventListener('input',updateListLab));
+    ['repServer','repTotal','repUsed'].forEach(id=>$(id).addEventListener('input',updateReportLab));
+    window.addEventListener('scroll',()=>{$('topbtn').classList.toggle('show',window.scrollY>500)});
+    updateWriteLab(); updateNewlineLab(); updateAppendLab(); updateVariablesLab(); updateListLab(); updateReportLab();
+  </script>
+</body>
+</html>

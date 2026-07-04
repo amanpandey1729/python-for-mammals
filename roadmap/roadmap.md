@@ -90,7 +90,7 @@ Start doing useful work with Python.
 | Day | Topic                               | Status  |
 | --- | ----------------------------------- |---------|
 | 19  | Reading Text Files                  |   ✅    |
-| 20  | Writing Text Files                  |   ⬜    |
+| 20  | Writing Text Files                  |   ✅    |
 | 21  | Exception Handling                  |   ⬜    |
 | 22  | CSV Files                           |   ⬜    |
 | 23  | JSON Files                          |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 19 / 45
+Day 20 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 42.22%
+███████████████░░░░░░░░░░░░░░░ 44.44%
 ```
 
 ---
