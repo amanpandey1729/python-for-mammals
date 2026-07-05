@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 21 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+
+
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 21 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#concepts">Concepts</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day20/interactive/">← Day 20</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <span>Day 22 Coming Soon →</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero" id="top">
+      <div>
+        <span class="badge">Day 21 • Safer Automation</span>
+        <h1>Day 21: Handle Errors Gracefully.</h1>
+        <p class="lead">Today you will learn try, except, else, finally, and common errors using practical examples around input validation, file reading, calculations, and safe reports.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start Interactive Labs</a>
+          <a class="button secondary" href="#challenge">View Mini Challenge</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Real automation does not run in perfect conditions. Exception handling helps your scripts survive bad input, missing files, zero values, and incomplete data with clear messages.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>5</b><span>Error handling blocks</span></div>
+          <div class="mini"><b>6</b><span>Interactive practice labs</span></div>
+          <div class="mini"><b>1</b><span>Safe reporter mini project</span></div>
+          <div class="mini"><b>∞</b><span>Ways to prevent crashes</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 21 makes your scripts safer by teaching them what to do when input, files, calculations, or dictionary keys are not perfect.</p></div></div>
+      <div class="cards">
+        <div class="card"><span class="pill">Concept 1</span><h3>try</h3><p>Place risky code inside try so Python can watch for problems without immediately stopping the script.</p></div>
+        <div class="card"><span class="pill">Concept 2</span><h3>except</h3><p>Respond to a specific error with a clear message or alternate action.</p></div>
+        <div class="card"><span class="pill">Concept 3</span><h3>else</h3><p>Run success logic only when the try block completes without an exception.</p></div>
+        <div class="card"><span class="pill">Concept 4</span><h3>finally</h3><p>Run cleanup or final messages whether the try block succeeds or fails.</p></div>
+        <div class="card"><span class="pill">Concept 5</span><h3>Common errors</h3><p>Recognize ValueError, ZeroDivisionError, FileNotFoundError, KeyError, and IndexError.</p></div>
+        <div class="card"><span class="pill">Concept 6</span><h3>Safe workflows</h3><p>Protect input conversion, file reading, calculations, dictionary access, and report generation.</p></div>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the inputs and watch the code and output update. Every visible output line comes directly from visible print() statements.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 21 labs">
+          <button class="tab active" data-panel="trylab">1. try/except<small>Safe conversion</small></button>
+          <button class="tab" data-panel="zerolab">2. ZeroDivision<small>Safe percentage</small></button>
+          <button class="tab" data-panel="elselab">3. else<small>Success path</small></button>
+          <button class="tab" data-panel="finallylab">4. finally<small>Completion message</small></button>
+          <button class="tab" data-panel="filelab">5. Missing file<small>FileNotFoundError</small></button>
+          <button class="tab" data-panel="keylab">6. Missing key<small>KeyError</small></button>
+        </div>
+
+        <div>
+          <div class="panel active" id="trylab">
+            <div class="workspace-head"><h3>Handle Bad Number Input</h3><button class="secondary" onclick="swapTryLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Raw Disk Usage</label><input id="tryValue" value="85" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="tryCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="tryOutput"></div></div></div><div class="explain">ValueError is common when text is converted to a number. This pattern keeps user input from crashing the script.</div></div>
+          </div>
+
+          <div class="panel" id="zerolab">
+            <div class="workspace-head"><h3>Handle Division by Zero</h3><button class="secondary" onclick="swapZeroLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Total GB</label><input id="zeroTotal" type="number" value="500" /></div><div><label>Used GB</label><input id="zeroUsed" type="number" value="390" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="zeroCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="zeroOutput"></div></div></div><div class="explain">ZeroDivisionError can happen in percentage calculations when total value is accidentally 0.</div></div>
+          </div>
+
+          <div class="panel" id="elselab">
+            <div class="workspace-head"><h3>Use else for Success Logic</h3><button class="secondary" onclick="swapElseLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Memory Usage</label><input id="elseValue" value="72" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="elseCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="elseOutput"></div></div></div><div class="explain">else runs only when the risky code succeeds. Keep success actions there.</div></div>
+          </div>
+
+          <div class="panel" id="finallylab">
+            <div class="workspace-head"><h3>Use finally for Completion</h3><button class="secondary" onclick="swapFinallyLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Check Name</label><input id="finallyCheck" value="backup validation" /></div><div><label>Should Fail?</label><select id="finallyFail"><option value="no">no</option><option value="yes">yes</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="finallyCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="finallyOutput"></div></div></div><div class="explain">finally always runs. It is useful for final workflow messages and cleanup thinking.</div></div>
+          </div>
+
+          <div class="panel" id="filelab">
+            <div class="workspace-head"><h3>Handle Missing Files</h3><button class="secondary" onclick="swapFileLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>File Name</label><input id="fileName" value="missing_report.txt" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="fileCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="fileOutput"></div></div></div><div class="explain">FileNotFoundError is one of the most common errors in file-based automation.</div></div>
+          </div>
+
+          <div class="panel" id="keylab">
+            <div class="workspace-head"><h3>Handle Missing Dictionary Keys</h3><button class="secondary" onclick="swapKeyLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Requested Key</label><input id="keyName" value="owner" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="keyCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="keyOutput"></div></div></div><div class="explain">KeyError appears when expected dictionary data is missing from inventory, config, or API-style records.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge: Safe Disk Usage Reporter</h2>
+          <p>Create a script that collects server details once, safely converts disk values, handles bad input and zero total size, then writes a report only when calculation succeeds.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Collect server, environment, disk name, total GB, used GB, and report file once.</label>
+            <label class="check"><input type="checkbox" /> Use try to convert total and used values into numbers.</label>
+            <label class="check"><input type="checkbox" /> Handle ValueError and ZeroDivisionError clearly.</label>
+            <label class="check"><input type="checkbox" /> Use else to calculate status and write the report only after success.</label>
+            <label class="check"><input type="checkbox" /> Use finally to print a workflow completion message.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Thinking</div><pre>Collect inputs once
+try:
+    convert numbers
+    calculate usage
+except ValueError:
+    show invalid number message
+except ZeroDivisionError:
+    show zero total message
+else:
+    decide status
+    write report
+finally:
+    print completion message</pre></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <footer>Day 21 complete • Python for Mammals • Exception Handling</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const pyStr = value => JSON.stringify(String(value));
+    let tryIndex=0, zeroIndex=0, elseIndex=0, finallyIndex=0, fileIndex=0, keyIndex=0;
+    const tryExamples=["85","eighty","92.5"];
+    const zeroExamples=[[500,390],[0,50],[200,170]];
+    const elseExamples=["72","high","88"];
+    const finallyExamples=[["backup validation","no"],["cleanup validation","yes"],["service check","no"]];
+    const fileExamples=["missing_report.txt","health_report.txt","daily_summary.txt"];
+    const keyExamples=["owner","status","port"];
+
+    function updateTryLab(){
+      const raw=$('tryValue').value; const num=Number(raw); const valid=raw.trim()!=='' && !Number.isNaN(num);
+      $('tryCode').textContent = `raw_usage = ${pyStr(raw)}\n\ntry:\n    disk_usage = float(raw_usage)\n    print("Disk usage accepted:", disk_usage)\nexcept ValueError:\n    print("Disk usage must be a number. Received:", raw_usage)`;
+      $('tryOutput').textContent = valid ? `Disk usage accepted: ${num}` : `Disk usage must be a number. Received: ${raw}`;
+    }
+    function swapTryLab(){ tryIndex=(tryIndex+1)%tryExamples.length; $('tryValue').value=tryExamples[tryIndex]; updateTryLab(); }
+
+    function updateZeroLab(){
+      const total=Number($('zeroTotal').value)||0; const used=Number($('zeroUsed').value)||0;
+      $('zeroCode').textContent = `disk_total_gb = ${total}\ndisk_used_gb = ${used}\n\ntry:\n    usage_percent = (disk_used_gb / disk_total_gb) * 100\n    print("Usage %:", round(usage_percent, 2))\nexcept ZeroDivisionError:\n    print("Disk total cannot be zero")`;
+      $('zeroOutput').textContent = total === 0 ? `Disk total cannot be zero` : `Usage %: ${Number(((used/total)*100).toFixed(2))}`;
+    }
+    function swapZeroLab(){ zeroIndex=(zeroIndex+1)%zeroExamples.length; const e=zeroExamples[zeroIndex]; $('zeroTotal').value=e[0]; $('zeroUsed').value=e[1]; updateZeroLab(); }
+
+    function updateElseLab(){
+      const raw=$('elseValue').value; const num=Number(raw); const valid=raw.trim()!=='' && !Number.isNaN(num);
+      $('elseCode').textContent = `raw_memory = ${pyStr(raw)}\n\ntry:\n    memory_usage = float(raw_memory)\nexcept ValueError:\n    print("Memory usage must be numeric")\nelse:\n    print("Memory usage accepted:", memory_usage)`;
+      $('elseOutput').textContent = valid ? `Memory usage accepted: ${num}` : `Memory usage must be numeric`;
+    }
+    function swapElseLab(){ elseIndex=(elseIndex+1)%elseExamples.length; $('elseValue').value=elseExamples[elseIndex]; updateElseLab(); }
+
+    function updateFinallyLab(){
+      const check=$('finallyCheck').value; const fail=$('finallyFail').value;
+      $('finallyCode').textContent = `check_name = ${pyStr(check)}\nshould_fail = ${pyStr(fail)}\n\ntry:\n    print("Running check:", check_name)\n    if should_fail == "yes":\n        raise Exception("simulated failure")\n    print("Check completed successfully")\nexcept Exception:\n    print("Check failed")\nfinally:\n    print("Check attempt finished")`;
+      $('finallyOutput').textContent = fail === 'yes' ? `Running check: ${check}\nCheck failed\nCheck attempt finished` : `Running check: ${check}\nCheck completed successfully\nCheck attempt finished`;
+    }
+    function swapFinallyLab(){ finallyIndex=(finallyIndex+1)%finallyExamples.length; const e=finallyExamples[finallyIndex]; $('finallyCheck').value=e[0]; $('finallyFail').value=e[1]; updateFinallyLab(); }
+
+    function updateFileLab(){
+      const name=$('fileName').value;
+      $('fileCode').textContent = `file_name = ${pyStr(name)}\n\ntry:\n    with open(file_name, "r") as file_object:\n        content = file_object.read()\n    print(content)\nexcept FileNotFoundError:\n    print("File not found:", file_name)`;
+      $('fileOutput').textContent = `File not found: ${name}`;
+    }
+    function swapFileLab(){ fileIndex=(fileIndex+1)%fileExamples.length; $('fileName').value=fileExamples[fileIndex]; updateFileLab(); }
+
+    function updateKeyLab(){
+      const key=$('keyName').value; const data={name:'db01',environment:'production',status:'running'}; const exists=Object.prototype.hasOwnProperty.call(data,key);
+      $('keyCode').textContent = `server = {"name": "db01", "environment": "production", "status": "running"}\nrequested_key = ${pyStr(key)}\n\ntry:\n    print("Value:", server[requested_key])\nexcept KeyError:\n    print("Missing key:", requested_key)`;
+      $('keyOutput').textContent = exists ? `Value: ${data[key]}` : `Missing key: ${key}`;
+    }
+    function swapKeyLab(){ keyIndex=(keyIndex+1)%keyExamples.length; $('keyName').value=keyExamples[keyIndex]; updateKeyLab(); }
+
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');$(tab.dataset.panel).classList.add('active');}));
+    ['tryValue'].forEach(id=>$(id).addEventListener('input',updateTryLab));
+    ['zeroTotal','zeroUsed'].forEach(id=>$(id).addEventListener('input',updateZeroLab));
+    ['elseValue'].forEach(id=>$(id).addEventListener('input',updateElseLab));
+    ['finallyCheck','finallyFail'].forEach(id=>$(id).addEventListener('input',updateFinallyLab));
+    ['fileName'].forEach(id=>$(id).addEventListener('input',updateFileLab));
+    ['keyName'].forEach(id=>$(id).addEventListener('input',updateKeyLab));
+    window.addEventListener('scroll',()=>{$('topbtn').classList.toggle('show',window.scrollY>500)});
+    updateTryLab(); updateZeroLab(); updateElseLab(); updateFinallyLab(); updateFileLab(); updateKeyLab();
+  </script>
+</body>
+</html>
