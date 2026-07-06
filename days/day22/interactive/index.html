@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 22 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 22 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#learn">Learn</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="course-nav">
+    <a href="../../day21/interactive/">← Day 21</a>
+    <span>•</span>
+    <a href="../../../">Home</a>
+    <span>•</span>
+    <span>Day 23 Coming Soon →</span>
+  </div>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <span class="badge">Day 22 • CSV Reports</span>
+        <h1>Day 22: Work with CSV Files.</h1>
+        <p class="lead">CSV files are one of the most useful formats for operational automation. They can store inventory, health checks, backup reports, alert exports, and capacity data in a spreadsheet-friendly format.</p>
+        <div class="cta">
+          <a class="button primary" href="#labs">Start Interactive Labs</a>
+          <a class="button secondary" href="#challenge">View Mini Challenge</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <p class="hint">Today you will use Python's built-in csv module to write reports, read rows, work with headers, and filter operational data.</p>
+        <div class="quick-grid">
+          <div class="mini"><b>csv</b><span>Built-in module</span></div>
+          <div class="mini"><b>reader</b><span>Read rows</span></div>
+          <div class="mini"><b>writer</b><span>Write reports</span></div>
+          <div class="mini"><b>Dict</b><span>Use headers</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn">
+      <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 22 turns normal Python data into CSV reports that can be shared, opened in Excel, archived, or reused by another script.</p></div></div>
+      <div class="cards">
+        <div class="card"><span class="pill">Concept</span><h3>CSV Basics</h3><p>Understand rows, columns, headers, and why CSV is common in monitoring, inventory, and reporting workflows.</p></div>
+        <div class="card"><span class="pill">Skill</span><h3>Write CSV</h3><p>Create CSV reports using csv.writer, writerow(), writerows(), and append mode.</p></div>
+        <div class="card"><span class="pill">Skill</span><h3>Read CSV</h3><p>Read CSV files using csv.reader and csv.DictReader, then filter rows for useful operational output.</p></div>
+      </div>
+    </section>
+
+    <section id="labs">
+      <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. The displayed output is generated only from the visible code.</p></div></div>
+      <div class="lab">
+        <div class="tabs" role="tablist" aria-label="Day 22 labs">
+          <button class="tab active" data-panel="writelab">1. Write CSV<small>writerow()</small></button>
+          <button class="tab" data-panel="readlab">2. Read CSV<small>reader</small></button>
+          <button class="tab" data-panel="countlab">3. Count Rows<small>status summary</small></button>
+          <button class="tab" data-panel="dictwritelab">4. DictWriter<small>header columns</small></button>
+          <button class="tab" data-panel="dictreadlab">5. DictReader<small>named access</small></button>
+          <button class="tab" data-panel="filterlab">6. Filter CSV<small>critical rows</small></button>
+        </div>
+        <div class="workspace">
+          <div class="panel active" id="writelab">
+            <div class="workspace-head"><h3>Write One CSV Report</h3><button class="secondary" onclick="swapWriteLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="writeServer" value="app01" /></div><div><label>Status</label><input id="writeStatus" value="running" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="writeCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="writeOutput"></div></div></div><div class="explain">writerow() writes one row at a time. This is perfect for small reports and beginner-friendly automation.</div></div>
+          </div>
+          <div class="panel" id="readlab">
+            <div class="workspace-head"><h3>Read CSV Rows</h3><button class="secondary" onclick="swapReadLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Second Server</label><input id="readServer" value="db01" /></div><div><label>Second Status</label><input id="readStatus" value="running" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="readCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="readOutput"></div></div></div><div class="explain">csv.reader reads each row as a list. Headers are also rows unless you skip them.</div></div>
+          </div>
+          <div class="panel" id="countlab">
+            <div class="workspace-head"><h3>Count Backup Status</h3><button class="secondary" onclick="swapCountLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>DB1 Status</label><select id="countOne"><option value="success">success</option><option value="failed">failed</option></select></div><div><label>DB2 Status</label><select id="countTwo"><option value="failed">failed</option><option value="success">success</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="countCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="countOutput"></div></div></div><div class="explain">This pattern is used in daily backup, alert, and health-check summaries.</div></div>
+          </div>
+          <div class="panel" id="dictwritelab">
+            <div class="workspace-head"><h3>Write Dictionaries to CSV</h3><button class="secondary" onclick="swapDictWriteLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>CPU Percent</label><input id="dictCpu" value="72" /></div><div><label>Environment</label><input id="dictEnv" value="production" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="dictWriteCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="dictWriteOutput"></div></div></div><div class="explain">DictWriter is cleaner when your data already has names like server, environment, and cpu_percent.</div></div>
+          </div>
+          <div class="panel" id="dictreadlab">
+            <div class="workspace-head"><h3>Read CSV by Column Name</h3><button class="secondary" onclick="swapDictReadLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="dictReadServer" value="db01" /></div><div><label>CPU Percent</label><input id="dictReadCpu" value="86" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="dictReadCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="dictReadOutput"></div></div></div><div class="explain">DictReader lets you use row["server"] instead of row[0], which makes scripts easier to read.</div></div>
+          </div>
+          <div class="panel" id="filterlab">
+            <div class="workspace-head"><h3>Filter Critical Disk Rows</h3><button class="secondary" onclick="swapFilterLab()">Swap values</button></div>
+            <div class="workspace-body"><div class="formgrid"><div><label>Usage Percent</label><input id="filterUsage" value="93.75" /></div><div><label>Mount</label><input id="filterMount" value="/var" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="filterCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="filterOutput"></div></div></div><div class="explain">Filtering CSV rows is how small automation scripts turn raw exports into actionable findings.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <div class="challenge">
+        <div>
+          <h2>Mini Challenge: Disk Usage CSV Reporter</h2>
+          <p>Create a script that collects disk details once, calculates usage, decides health status, writes one CSV report, then reads the report back for validation.</p>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" /> Collect server, environment, mount, total GB, used GB, and CSV file name once.</label>
+            <label class="check"><input type="checkbox" /> Calculate free GB and usage percentage.</label>
+            <label class="check"><input type="checkbox" /> Decide HEALTHY, WARNING, or CRITICAL status.</label>
+            <label class="check"><input type="checkbox" /> Write a clean CSV report with headers.</label>
+            <label class="check"><input type="checkbox" /> Read the CSV report back and print a clean summary.</label>
+          </div>
+        </div>
+        <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Thinking</div><pre>Collect inputs once
+Convert total and used GB
+Calculate free GB
+Calculate usage percentage
+Decide status
+Open CSV in write mode
+Write header row
+Write data row
+Open CSV in read mode
+Print final report</pre></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <footer>Day 22 complete • Python for Mammals • CSV Files</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const pyStr = value => JSON.stringify(String(value));
+    let writeIndex=0, readIndex=0, countIndex=0, dictWriteIndex=0, dictReadIndex=0, filterIndex=0;
+    const writeExamples=[["app01","running"],["web01","stopped"],["batch01","running"]];
+    const readExamples=[["db01","running"],["cache01","stopped"],["api01","running"]];
+    const countExamples=[["success","failed"],["success","success"],["failed","failed"]];
+    const dictWriteExamples=[["72","production"],["35","uat"],["91","production"]];
+    const dictReadExamples=[["db01","86"],["web01","45"],["batch01","92"]];
+    const filterExamples=[["93.75","/var"],["82","/u01"],["65","/"]];
+
+    function updateWriteLab(){
+      const server=$('writeServer').value; const status=$('writeStatus').value;
+      $('writeCode').textContent = `import csv\n\nwith open("server_status.csv", "w", newline="") as file_object:\n    writer = csv.writer(file_object)\n    writer.writerow(["server", "status"])\n    writer.writerow([${pyStr(server)}, ${pyStr(status)}])\n\nprint("Created server_status.csv")`;
+      $('writeOutput').textContent = `Created server_status.csv`;
+    }
+    function swapWriteLab(){ writeIndex=(writeIndex+1)%writeExamples.length; const e=writeExamples[writeIndex]; $('writeServer').value=e[0]; $('writeStatus').value=e[1]; updateWriteLab(); }
+
+    function updateReadLab(){
+      const server=$('readServer').value; const status=$('readStatus').value;
+      $('readCode').textContent = `import csv\n\nrows = [\n    ["server", "status"],\n    ["app01", "running"],\n    [${pyStr(server)}, ${pyStr(status)}]\n]\n\nfor row in rows:\n    print(row)`;
+      $('readOutput').textContent = `[\'server\', \'status\']\n[\'app01\', \'running\']\n[\'${server}\', \'${status}\']`;
+    }
+    function swapReadLab(){ readIndex=(readIndex+1)%readExamples.length; const e=readExamples[readIndex]; $('readServer').value=e[0]; $('readStatus').value=e[1]; updateReadLab(); }
+
+    function updateCountLab(){
+      const one=$('countOne').value; const two=$('countTwo').value; const statuses=[one,two,"success"]; const success=statuses.filter(s=>s==='success').length; const failed=statuses.filter(s=>s==='failed').length;
+      $('countCode').textContent = `backup_rows = [\n    ["salesdb", ${pyStr(one)}],\n    ["hrdb", ${pyStr(two)}],\n    ["testdb", "success"]\n]\n\nsuccess_count = 0\nfailed_count = 0\n\nfor row in backup_rows:\n    status = row[1]\n    if status == "success":\n        success_count += 1\n    elif status == "failed":\n        failed_count += 1\n\nprint("Successful backups:", success_count)\nprint("Failed backups:", failed_count)`;
+      $('countOutput').textContent = `Successful backups: ${success}\nFailed backups: ${failed}`;
+    }
+    function swapCountLab(){ countIndex=(countIndex+1)%countExamples.length; const e=countExamples[countIndex]; $('countOne').value=e[0]; $('countTwo').value=e[1]; updateCountLab(); }
+
+    function updateDictWriteLab(){
+      const cpu=$('dictCpu').value; const env=$('dictEnv').value;
+      $('dictWriteCode').textContent = `import csv\n\nrow = {"server": "db01", "environment": ${pyStr(env)}, "cpu_percent": ${pyStr(cpu)}}\nfieldnames = ["server", "environment", "cpu_percent"]\n\nwith open("inventory.csv", "w", newline="") as file_object:\n    writer = csv.DictWriter(file_object, fieldnames=fieldnames)\n    writer.writeheader()\n    writer.writerow(row)\n\nprint("Created inventory.csv")`;
+      $('dictWriteOutput').textContent = `Created inventory.csv`;
+    }
+    function swapDictWriteLab(){ dictWriteIndex=(dictWriteIndex+1)%dictWriteExamples.length; const e=dictWriteExamples[dictWriteIndex]; $('dictCpu').value=e[0]; $('dictEnv').value=e[1]; updateDictWriteLab(); }
+
+    function updateDictReadLab(){
+      const server=$('dictReadServer').value; const cpu=$('dictReadCpu').value;
+      $('dictReadCode').textContent = `row = {"server": ${pyStr(server)}, "environment": "production", "cpu_percent": ${pyStr(cpu)}}\n\nprint(row["server"], "|", row["environment"], "| CPU:", row["cpu_percent"] + "%")`;
+      $('dictReadOutput').textContent = `${server} | production | CPU: ${cpu}%`;
+    }
+    function swapDictReadLab(){ dictReadIndex=(dictReadIndex+1)%dictReadExamples.length; const e=dictReadExamples[dictReadIndex]; $('dictReadServer').value=e[0]; $('dictReadCpu').value=e[1]; updateDictReadLab(); }
+
+    function updateFilterLab(){
+      const usage=Number($('filterUsage').value)||0; const mount=$('filterMount').value; const status=usage>=90?'CRITICAL':usage>=80?'WARNING':'HEALTHY';
+      $('filterCode').textContent = `row = {"server": "web01", "mount": ${pyStr(mount)}, "usage_percent": ${pyStr(usage)}, "status": ${pyStr(status)}}\n\nif row["status"] == "CRITICAL":\n    print("Critical disk found:", row["server"], row["mount"], row["usage_percent"] + "%")\nelse:\n    print("No critical disk found")`;
+      $('filterOutput').textContent = status==='CRITICAL' ? `Critical disk found: web01 ${mount} ${usage}%` : `No critical disk found`;
+    }
+    function swapFilterLab(){ filterIndex=(filterIndex+1)%filterExamples.length; const e=filterExamples[filterIndex]; $('filterUsage').value=e[0]; $('filterMount').value=e[1]; updateFilterLab(); }
+
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');$(tab.dataset.panel).classList.add('active');}));
+    ['writeServer','writeStatus'].forEach(id=>$(id).addEventListener('input',updateWriteLab));
+    ['readServer','readStatus'].forEach(id=>$(id).addEventListener('input',updateReadLab));
+    ['countOne','countTwo'].forEach(id=>$(id).addEventListener('input',updateCountLab));
+    ['dictCpu','dictEnv'].forEach(id=>$(id).addEventListener('input',updateDictWriteLab));
+    ['dictReadServer','dictReadCpu'].forEach(id=>$(id).addEventListener('input',updateDictReadLab));
+    ['filterUsage','filterMount'].forEach(id=>$(id).addEventListener('input',updateFilterLab));
+    window.addEventListener('scroll',()=>{$('topbtn').classList.toggle('show',window.scrollY>500)});
+    updateWriteLab(); updateReadLab(); updateCountLab(); updateDictWriteLab(); updateDictReadLab(); updateFilterLab();
+  </script>
+</body>
+</html>
