@@ -93,7 +93,7 @@ Start doing useful work with Python.
 | 20  | Writing Text Files                  |   ✅    |
 | 21  | Exception Handling                  |   ✅    |
 | 22  | CSV Files                           |   ✅    |
-| 23  | JSON Files                          |   ⬜    |
+| 23  | JSON Files                          |   ✅    |
 | 24  | Datetime Module                     |   ⬜    |
 | 25  | Modules & Imports                   |   ⬜    |
 | 26  | Mini Project #3 – Log File Analyzer |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 22 / 45
+Day 23 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 48.9%
+███████████████░░░░░░░░░░░░░░░ 51.11%
 ```
 
 ---

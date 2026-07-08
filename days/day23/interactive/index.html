@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 23 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 23 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#learn">Learn</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="course-nav">
+      <a href="../../day22/interactive/">← Day 22</a>
+      <span>•</span>
+      <a href="../../../">Home</a>
+      <span>•</span>
+      <span>Day 24 Coming Soon →</span>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="badge">Day 23 • JSON Files</span>
+          <h1>Day 23: Work with JSON Files.</h1>
+          <p class="lead">JSON files are used for configuration, API responses, cloud exports, monitoring payloads, and structured automation reports. Today you learn how to save Python data as JSON and load it back safely.</p>
+          <div class="cta">
+            <a class="button primary" href="#labs">Start Interactive Labs</a>
+            <a class="button secondary" href="#challenge">View Mini Challenge</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+          <div class="quick-grid">
+            <div class="mini"><b>6</b><span>Interactive labs</span></div>
+            <div class="mini"><b>35 min</b><span>Estimated practice</span></div>
+            <div class="mini"><b>load()</b><span>Read JSON</span></div>
+            <div class="mini"><b>dump()</b><span>Write JSON</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="learn">
+        <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 23 turns dictionaries and lists into JSON files that can be reused as configs, reports, API-like payloads, and automation data stores.</p></div></div>
+        <div class="cards">
+          <div class="card"><span class="pill">Concept</span><h3>JSON Basics</h3><p>Understand JSON objects, keys, values, lists, and why JSON is common in modern operations and automation tools.</p></div>
+          <div class="card"><span class="pill">Skill</span><h3>Write JSON</h3><p>Create JSON files from Python dictionaries and lists using json.dump() with readable indentation.</p></div>
+          <div class="card"><span class="pill">Skill</span><h3>Read JSON</h3><p>Load JSON files using json.load(), access nested values, filter records, and use config thresholds in logic.</p></div>
+        </div>
+      </section>
+
+      <section id="labs">
+        <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. The displayed output is generated only from the visible code.</p></div></div>
+        <div class="lab">
+          <div class="tabs" role="tablist" aria-label="Day 23 labs">
+            <button class="tab active" data-panel="dumplab">1. Write JSON<small>dump()</small></button>
+            <button class="tab" data-panel="loadlab">2. Read JSON<small>load()</small></button>
+            <button class="tab" data-panel="nestedlab">3. Nested JSON<small>structured data</small></button>
+            <button class="tab" data-panel="countlab">4. Count Records<small>status summary</small></button>
+            <button class="tab" data-panel="configlab">5. Config Logic<small>thresholds</small></button>
+            <button class="tab" data-panel="updatelab">6. Update JSON<small>modify and save</small></button>
+          </div>
+          <div>
+            <div class="workspace panel active" id="dumplab">
+              <div class="workspace-head"><h3>Write One JSON File</h3><button class="secondary" onclick="swapDumpLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Server</label><input id="dumpServer" value="app01" /></div><div><label>Status</label><input id="dumpStatus" value="running" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="dumpCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="dumpOutput"></div></div></div><div class="explain">json.dump() writes Python data into a JSON file. indent=4 makes the file readable for humans.</div></div>
+            </div>
+            <div class="workspace panel" id="loadlab">
+              <div class="workspace-head"><h3>Read JSON Data</h3><button class="secondary" onclick="swapLoadLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Environment</label><input id="loadEnv" value="production" /></div><div><label>Status</label><input id="loadStatus" value="running" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="loadCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="loadOutput"></div></div></div><div class="explain">json.load() reads JSON from a file. After loading, you work with normal Python dictionaries and lists.</div></div>
+            </div>
+            <div class="workspace panel" id="nestedlab">
+              <div class="workspace-head"><h3>Access Nested JSON</h3><button class="secondary" onclick="swapNestedLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>CPU Count</label><input id="nestedCpu" value="8" /></div><div><label>Memory GB</label><input id="nestedMemory" value="64" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="nestedCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="nestedOutput"></div></div></div><div class="explain">Nested JSON is useful when one server or alert has many related details under it.</div></div>
+            </div>
+            <div class="workspace panel" id="countlab">
+              <div class="workspace-head"><h3>Count JSON Records</h3><button class="secondary" onclick="swapCountLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>DB1 Status</label><select id="countOne"><option value="success">success</option><option value="failed">failed</option></select></div><div><label>DB2 Status</label><select id="countTwo"><option value="failed">failed</option><option value="success">success</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="countCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="countOutput"></div></div></div><div class="explain">This pattern is used for backup summaries, alert summaries, and API response analysis.</div></div>
+            </div>
+            <div class="workspace panel" id="configlab">
+              <div class="workspace-head"><h3>Use JSON Config Thresholds</h3><button class="secondary" onclick="swapConfigLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Current Usage %</label><input id="configUsage" value="86" /></div><div><label>Warning Threshold</label><input id="configWarning" value="80" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="configCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="configOutput"></div></div></div><div class="explain">JSON config files let scripts use changeable thresholds without editing the Python program every time.</div></div>
+            </div>
+            <div class="workspace panel" id="updatelab">
+              <div class="workspace-head"><h3>Update JSON Data</h3><button class="secondary" onclick="swapUpdateLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Disk Used GB</label><input id="updateDisk" value="430" /></div><div><label>Review Status</label><input id="updateStatus" value="reviewed" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="updateCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="updateOutput"></div></div></div><div class="explain">A common workflow is load JSON, modify Python data, then dump the updated data back into a new JSON file.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="challenge">
+        <div class="challenge">
+          <div>
+            <h2>Mini Challenge: Server Health JSON Reporter</h2>
+            <p>Create a script that collects health values once, decides component statuses, writes one structured JSON report, then reads the report back for validation.</p>
+            <div class="checklist">
+              <label class="check"><input type="checkbox" /> Collect server, environment, CPU %, memory %, disk %, and JSON file name once.</label>
+              <label class="check"><input type="checkbox" /> Decide CPU, memory, and disk status using thresholds.</label>
+              <label class="check"><input type="checkbox" /> Decide overall server status from component statuses.</label>
+              <label class="check"><input type="checkbox" /> Write a nested JSON report with indent=4.</label>
+              <label class="check"><input type="checkbox" /> Read the JSON report back and print a clean summary.</label>
+            </div>
+          </div>
+          <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Thinking</div><pre>Collect inputs once
+Convert usage values
+Decide CPU status
+Decide memory status
+Decide disk status
+Decide overall status
+Create nested dictionary
+Open JSON in write mode
+Use json.dump()
+Open JSON in read mode
+Use json.load()
+Print final report</pre></div>
+        </div>
+      </section>
+    </main>
+
+    <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+    <footer>Day 23 complete • Python for Mammals • JSON Files</footer>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const pyStr = value => JSON.stringify(String(value));
+    let dumpIndex=0, loadIndex=0, nestedIndex=0, countIndex=0, configIndex=0, updateIndex=0;
+    const dumpExamples=[["app01","running"],["web01","stopped"],["batch01","running"]];
+    const loadExamples=[["production","running"],["uat","stopped"],["dev","running"]];
+    const nestedExamples=[["8","64"],["4","16"],["16","128"]];
+    const countExamples=[["success","failed"],["success","success"],["failed","failed"]];
+    const configExamples=[["86","80"],["94","80"],["62","80"]];
+    const updateExamples=[["430","reviewed"],["475","attention_required"],["310","verified"]];
+
+    function updateDumpLab(){
+      const server=$('dumpServer').value; const status=$('dumpStatus').value;
+      $('dumpCode').textContent = `import json\n\nserver_status = {\n    "server": ${pyStr(server)},\n    "environment": "production",\n    "status": ${pyStr(status)}\n}\n\nwith open("server_status.json", "w") as file_object:\n    json.dump(server_status, file_object, indent=4)\n\nprint("Created server_status.json")`;
+      $('dumpOutput').textContent = `Created server_status.json`;
+    }
+    function swapDumpLab(){ dumpIndex=(dumpIndex+1)%dumpExamples.length; const e=dumpExamples[dumpIndex]; $('dumpServer').value=e[0]; $('dumpStatus').value=e[1]; updateDumpLab(); }
+
+    function updateLoadLab(){
+      const env=$('loadEnv').value; const status=$('loadStatus').value;
+      $('loadCode').textContent = `loaded_status = {\n    "server": "app01",\n    "environment": ${pyStr(env)},\n    "status": ${pyStr(status)}\n}\n\nprint("Server:", loaded_status["server"])\nprint("Environment:", loaded_status["environment"])\nprint("Status:", loaded_status["status"])`;
+      $('loadOutput').textContent = `Server: app01\nEnvironment: ${env}\nStatus: ${status}`;
+    }
+    function swapLoadLab(){ loadIndex=(loadIndex+1)%loadExamples.length; const e=loadExamples[loadIndex]; $('loadEnv').value=e[0]; $('loadStatus').value=e[1]; updateLoadLab(); }
+
+    function updateNestedLab(){
+      const cpu=$('nestedCpu').value; const memory=$('nestedMemory').value;
+      $('nestedCode').textContent = `inventory = {\n    "server": "db01",\n    "resources": {\n        "cpu_count": ${pyStr(cpu)},\n        "memory_gb": ${pyStr(memory)}\n    }\n}\n\nprint("Server:", inventory["server"])\nprint("CPU Count:", inventory["resources"]["cpu_count"])\nprint("Memory GB:", inventory["resources"]["memory_gb"])`;
+      $('nestedOutput').textContent = `Server: db01\nCPU Count: ${cpu}\nMemory GB: ${memory}`;
+    }
+    function swapNestedLab(){ nestedIndex=(nestedIndex+1)%nestedExamples.length; const e=nestedExamples[nestedIndex]; $('nestedCpu').value=e[0]; $('nestedMemory').value=e[1]; updateNestedLab(); }
+
+    function updateCountLab(){
+      const one=$('countOne').value; const two=$('countTwo').value; const statuses=[one,two,"success"]; const success=statuses.filter(s=>s==='success').length; const failed=statuses.filter(s=>s==='failed').length;
+      $('countCode').textContent = `backup_report = [\n    {"database": "salesdb", "status": ${pyStr(one)}},\n    {"database": "hrdb", "status": ${pyStr(two)}},\n    {"database": "testdb", "status": "success"}\n]\n\nsuccess_count = 0\nfailed_count = 0\n\nfor backup in backup_report:\n    if backup["status"] == "success":\n        success_count += 1\n    elif backup["status"] == "failed":\n        failed_count += 1\n\nprint("Successful backups:", success_count)\nprint("Failed backups:", failed_count)`;
+      $('countOutput').textContent = `Successful backups: ${success}\nFailed backups: ${failed}`;
+    }
+    function swapCountLab(){ countIndex=(countIndex+1)%countExamples.length; const e=countExamples[countIndex]; $('countOne').value=e[0]; $('countTwo').value=e[1]; updateCountLab(); }
+
+    function updateConfigLab(){
+      const usage=Number($('configUsage').value)||0; const warning=Number($('configWarning').value)||0; const critical=90; const status=usage>=critical?'CRITICAL':usage>=warning?'WARNING':'HEALTHY';
+      $('configCode').textContent = `config = {\n    "warning_threshold": ${warning},\n    "critical_threshold": ${critical}\n}\n\ncurrent_usage = ${usage}\n\nif current_usage >= config["critical_threshold"]:\n    health_status = "CRITICAL"\nelif current_usage >= config["warning_threshold"]:\n    health_status = "WARNING"\nelse:\n    health_status = "HEALTHY"\n\nprint("Current usage:", str(current_usage) + "%")\nprint("Health status:", health_status)`;
+      $('configOutput').textContent = `Current usage: ${usage}%\nHealth status: ${status}`;
+    }
+    function swapConfigLab(){ configIndex=(configIndex+1)%configExamples.length; const e=configExamples[configIndex]; $('configUsage').value=e[0]; $('configWarning').value=e[1]; updateConfigLab(); }
+
+    function updateUpdateLab(){
+      const disk=$('updateDisk').value; const status=$('updateStatus').value;
+      $('updateCode').textContent = `inventory = {\n    "server": "db01",\n    "resources": {"disk_used_gb": 410}\n}\n\ninventory["status"] = ${pyStr(status)}\ninventory["resources"]["disk_used_gb"] = ${pyStr(disk)}\n\nprint("Updated status:", inventory["status"])\nprint("Updated disk used GB:", inventory["resources"]["disk_used_gb"])`;
+      $('updateOutput').textContent = `Updated status: ${status}\nUpdated disk used GB: ${disk}`;
+    }
+    function swapUpdateLab(){ updateIndex=(updateIndex+1)%updateExamples.length; const e=updateExamples[updateIndex]; $('updateDisk').value=e[0]; $('updateStatus').value=e[1]; updateUpdateLab(); }
+
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');$(tab.dataset.panel).classList.add('active');}));
+    ['dumpServer','dumpStatus'].forEach(id=>$(id).addEventListener('input',updateDumpLab));
+    ['loadEnv','loadStatus'].forEach(id=>$(id).addEventListener('input',updateLoadLab));
+    ['nestedCpu','nestedMemory'].forEach(id=>$(id).addEventListener('input',updateNestedLab));
+    ['countOne','countTwo'].forEach(id=>$(id).addEventListener('input',updateCountLab));
+    ['configUsage','configWarning'].forEach(id=>$(id).addEventListener('input',updateConfigLab));
+    ['updateDisk','updateStatus'].forEach(id=>$(id).addEventListener('input',updateUpdateLab));
+    window.addEventListener('scroll',()=>{$('topbtn').classList.toggle('show',window.scrollY>500)});
+    updateDumpLab(); updateLoadLab(); updateNestedLab(); updateCountLab(); updateConfigLab(); updateUpdateLab();
+  </script>
+</body>
+</html>
