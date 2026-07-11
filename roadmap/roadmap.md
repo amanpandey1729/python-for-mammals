@@ -94,8 +94,8 @@ Start doing useful work with Python.
 | 21  | Exception Handling                  |   ✅    |
 | 22  | CSV Files                           |   ✅    |
 | 23  | JSON Files                          |   ✅    |
-| 24  | Datetime Module                     |   ⬜    |
-| 25  | Modules & Imports                   |   ⬜    |
+| 24  | Datetime Module                     |   ✅    |
+| 25  | Modules & Imports                   |   ✅    |
 | 26  | Mini Project #3 – Log File Analyzer |   ⬜    |
 
 ---
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 23 / 45
+Day 25 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 51.11%
+███████████████░░░░░░░░░░░░░░░ 55.56%
 ```
 
 ---

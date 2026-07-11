@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 24 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+        <div><strong>Python for Mammals</strong><span>Day 24 Interactive Lab</span></div>
+      </div>
+      <nav>
+        <a href="#learn">Learn</a>
+        <a href="#labs">Labs</a>
+        <a href="#challenge">Challenge</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="course-nav">
+      <a href="../../day23/interactive/">← Day 23</a>
+      <span>•</span>
+      <a href="../../../">Home</a>
+      <span>•</span>
+      <a href="../../day25/interactive/">Day 25 ➡</a>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="badge">Day 24 • Datetime</span>
+          <h1>Day 24: Make Automation Time-Aware.</h1>
+          <p class="lead">Operational scripts need timestamps, durations, schedules, expiry checks, and retention calculations. Today you learn to get dates and times, format them, parse them, and calculate deadlines with Python.</p>
+          <div class="cta">
+            <a class="button primary" href="#labs">Start Interactive Labs</a>
+            <a class="button secondary" href="#challenge">View Mini Challenge</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" />
+          <div class="quick-grid">
+            <div class="mini"><b>6</b><span>Interactive labs</span></div>
+            <div class="mini"><b>40 min</b><span>Estimated practice</span></div>
+            <div class="mini"><b>strftime()</b><span>Format datetime</span></div>
+            <div class="mini"><b>timedelta</b><span>Calculate duration</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="learn">
+        <div class="section-title"><div><h2>What you will learn</h2><p class="hint">Day 24 adds time awareness to reports, maintenance reminders, expiry checks, backup duration analysis, cleanup logic, and scheduled operations.</p></div></div>
+        <div class="cards">
+          <div class="card"><span class="pill">Concept</span><h3>Current Date & Time</h3><p>Use date.today() and datetime.now() to capture the local date and timestamp for reports and checks.</p></div>
+          <div class="card"><span class="pill">Skill</span><h3>Format & Parse</h3><p>Use strftime() to create readable output and strptime() to convert date text into datetime objects.</p></div>
+          <div class="card"><span class="pill">Skill</span><h3>Date Calculations</h3><p>Add, subtract, compare, and measure dates using timedelta for deadlines, durations, expiry, and retention.</p></div>
+        </div>
+      </section>
+
+      <section id="labs">
+        <div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. Every displayed output line is produced by the visible Python code.</p></div></div>
+        <div class="lab">
+          <div class="tabs" role="tablist" aria-label="Day 24 labs">
+            <button class="tab active" data-panel="currentlab">1. Current Components<small>date and time</small></button>
+            <button class="tab" data-panel="formatlab">2. Format Datetime<small>strftime()</small></button>
+            <button class="tab" data-panel="parselab">3. Parse Date Text<small>strptime()</small></button>
+            <button class="tab" data-panel="addlab">4. Add Days<small>timedelta</small></button>
+            <button class="tab" data-panel="durationlab">5. Calculate Duration<small>subtract datetime</small></button>
+            <button class="tab" data-panel="expirylab">6. Expiry Status<small>deadline logic</small></button>
+          </div>
+          <div>
+            <div class="workspace panel active" id="currentlab">
+              <div class="workspace-head"><h3>Inspect Date and Time Components</h3><button class="secondary" onclick="swapCurrentLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Date (YYYY-MM-DD)</label><input id="currentDate" value="2026-07-11" /></div><div><label>Time (HH:MM)</label><input id="currentTime" value="18:45" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="currentCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="currentOutput"></div></div></div><div class="explain">A datetime object contains both calendar and clock values. Individual components are available through attributes such as year, month, hour, and minute.</div></div>
+            </div>
+            <div class="workspace panel" id="formatlab">
+              <div class="workspace-head"><h3>Format a Datetime</h3><button class="secondary" onclick="swapFormatLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Date (YYYY-MM-DD)</label><input id="formatDate" value="2026-08-15" /></div><div><label>Time (HH:MM)</label><input id="formatTime" value="22:30" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="formatCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="formatOutput"></div></div></div><div class="explain">strftime() converts a datetime object into formatted text for reports, log messages, and file names.</div></div>
+            </div>
+            <div class="workspace panel" id="parselab">
+              <div class="workspace-head"><h3>Parse Date Text</h3><button class="secondary" onclick="swapParseLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Day</label><input id="parseDay" value="20" /></div><div><label>Month</label><input id="parseMonth" value="07" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="parseCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="parseOutput"></div></div></div><div class="explain">strptime() converts text into a datetime object. The format string must match the text exactly.</div></div>
+            </div>
+            <div class="workspace panel" id="addlab">
+              <div class="workspace-head"><h3>Calculate a Review Date</h3><button class="secondary" onclick="swapAddLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Start Date</label><input id="addDate" value="2026-07-11" /></div><div><label>Days to Add</label><input id="addDays" value="30" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="addCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="addOutput"></div></div></div><div class="explain">timedelta stores a duration. Adding it to a date creates a future review, renewal, or maintenance date.</div></div>
+            </div>
+            <div class="workspace panel" id="durationlab">
+              <div class="workspace-head"><h3>Calculate Job Duration</h3><button class="secondary" onclick="swapDurationLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Start Hour</label><input id="durationStart" value="1" /></div><div><label>End Hour</label><input id="durationEnd" value="4" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="durationCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="durationOutput"></div></div></div><div class="explain">Subtracting datetime objects returns a timedelta. total_seconds() makes conversion to minutes or hours straightforward.</div></div>
+            </div>
+            <div class="workspace panel" id="expirylab">
+              <div class="workspace-head"><h3>Calculate Expiry Status</h3><button class="secondary" onclick="swapExpiryLab()">Swap values</button></div>
+              <div class="workspace-body"><div class="formgrid"><div><label>Reference Day</label><input id="expiryReference" value="11" /></div><div><label>Expiry Day</label><input id="expiryDay" value="25" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="expiryCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="expiryOutput"></div></div></div><div class="explain">Date subtraction supports certificate checks, password expiry, retention, contract deadlines, and maintenance reminders.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="challenge">
+        <div class="challenge">
+          <div>
+            <h2>Mini Challenge: Operational Task Deadline Tracker</h2>
+            <p>Create a script that collects schedule information once, parses dates, calculates progress against the deadline, decides a status, and writes a timestamped audit report.</p>
+            <div class="checklist">
+              <label class="check"><input type="checkbox" /> Collect task, owner, start date, due date, completion %, and report file name once.</label>
+              <label class="check"><input type="checkbox" /> Parse dates with strptime() and use today's date for calculations.</label>
+              <label class="check"><input type="checkbox" /> Calculate planned days, elapsed days, and remaining days.</label>
+              <label class="check"><input type="checkbox" /> Decide COMPLETED, OVERDUE, DUE TODAY, DUE SOON, or ON TRACK.</label>
+              <label class="check"><input type="checkbox" /> Write, read back, and display a report with a generated timestamp.</label>
+            </div>
+          </div>
+          <div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Starter Thinking</div><pre>Collect inputs once
+Convert completion percentage
+Parse start date
+Parse due date
+Get today's date
+Calculate planned duration
+Calculate elapsed days
+Calculate remaining days
+Decide task status
+Generate timestamp
+Write text report
+Read report back
+Print final report</pre></div>
+        </div>
+      </section>
+    </main>
+
+    <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+    <footer>Day 24 complete • Python for Mammals • Datetime</footer>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const pyStr = value => JSON.stringify(String(value));
+    let currentIndex=0, formatIndex=0, parseIndex=0, addIndex=0, durationIndex=0, expiryIndex=0;
+    const currentExamples=[["2026-07-11","18:45"],["2026-12-31","23:59"],["2027-01-01","00:05"]];
+    const formatExamples=[["2026-08-15","22:30"],["2026-12-01","09:05"],["2027-01-26","14:20"]];
+    const parseExamples=[["20","07"],["01","12"],["26","01"]];
+    const addExamples=[["2026-07-11","30"],["2026-12-20","20"],["2027-01-01","90"]];
+    const durationExamples=[["1","4"],["9","17"],["20","23"]];
+    const expiryExamples=[["11","25"],["20","15"],["10","10"]];
+
+    function dateParts(value){ const [y,m,d]=value.split('-').map(Number); return [y,m,d]; }
+    function pad(v){ return String(v).padStart(2,'0'); }
+    function monthName(m){ return ["January","February","March","April","May","June","July","August","September","October","November","December"][m-1]; }
+    function weekday(y,m,d){ return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date(Date.UTC(y,m-1,d)).getUTCDay()]; }
+
+    function updateCurrentLab(){
+      const ds=$('currentDate').value; const ts=$('currentTime').value; const [y,m,d]=dateParts(ds); const [h,min]=ts.split(':').map(Number);
+      $('currentCode').textContent = `from datetime import datetime
+
+check_time = datetime(${y}, ${m}, ${d}, ${h}, ${min})
+
+print("Date and time:", check_time)
+print("Year:", check_time.year)
+print("Month:", check_time.month)
+print("Day:", check_time.day)
+print("Hour:", check_time.hour)
+print("Minute:", check_time.minute)`;
+      $('currentOutput').textContent = `Date and time: ${ds} ${pad(h)}:${pad(min)}:00
+Year: ${y}
+Month: ${m}
+Day: ${d}
+Hour: ${h}
+Minute: ${min}`;
+    }
+    function swapCurrentLab(){ currentIndex=(currentIndex+1)%currentExamples.length; const e=currentExamples[currentIndex]; $('currentDate').value=e[0]; $('currentTime').value=e[1]; updateCurrentLab(); }
+
+    function updateFormatLab(){
+      const ds=$('formatDate').value; const ts=$('formatTime').value; const [y,m,d]=dateParts(ds); const [h,min]=ts.split(':').map(Number); const hour12=h%12||12; const ampm=h>=12?'PM':'AM';
+      $('formatCode').textContent = `from datetime import datetime
+
+maintenance = datetime(${y}, ${m}, ${d}, ${h}, ${min})
+
+print(maintenance.strftime("%Y-%m-%d %H:%M"))
+print(maintenance.strftime("%d %B %Y, %I:%M %p"))
+print(maintenance.strftime("%Y%m%d_%H%M"))
+print(maintenance.strftime("%A"))`;
+      $('formatOutput').textContent = `${ds} ${pad(h)}:${pad(min)}
+${pad(d)} ${monthName(m)} ${y}, ${pad(hour12)}:${pad(min)} ${ampm}
+${y}${pad(m)}${pad(d)}_${pad(h)}${pad(min)}
+${weekday(y,m,d)}`;
+    }
+    function swapFormatLab(){ formatIndex=(formatIndex+1)%formatExamples.length; const e=formatExamples[formatIndex]; $('formatDate').value=e[0]; $('formatTime').value=e[1]; updateFormatLab(); }
+
+    function updateParseLab(){
+      const day=Number($('parseDay').value)||1; const month=Number($('parseMonth').value)||1; const text=`${pad(day)}-${pad(month)}-2026 23:15`;
+      $('parseCode').textContent = `from datetime import datetime
+
+date_text = ${pyStr(text)}
+parsed_date = datetime.strptime(date_text, "%d-%m-%Y %H:%M")
+
+print("Original text:", date_text)
+print("Parsed datetime:", parsed_date)
+print("Parsed month:", parsed_date.month)
+print("Parsed hour:", parsed_date.hour)`;
+      $('parseOutput').textContent = `Original text: ${text}
+Parsed datetime: 2026-${pad(month)}-${pad(day)} 23:15:00
+Parsed month: ${month}
+Parsed hour: 23`;
+    }
+    function swapParseLab(){ parseIndex=(parseIndex+1)%parseExamples.length; const e=parseExamples[parseIndex]; $('parseDay').value=e[0]; $('parseMonth').value=e[1]; updateParseLab(); }
+
+    function updateAddLab(){
+      const ds=$('addDate').value; const days=Number($('addDays').value)||0; const [y,m,d]=dateParts(ds); const result=new Date(Date.UTC(y,m-1,d+days)); const resultText=`${result.getUTCFullYear()}-${pad(result.getUTCMonth()+1)}-${pad(result.getUTCDate())}`;
+      $('addCode').textContent = `from datetime import date, timedelta
+
+start_date = date(${y}, ${m}, ${d})
+review_date = start_date + timedelta(days=${days})
+
+print("Start date:", start_date)
+print("Days added:", ${days})
+print("Review date:", review_date)`;
+      $('addOutput').textContent = `Start date: ${ds}
+Days added: ${days}
+Review date: ${resultText}`;
+    }
+    function swapAddLab(){ addIndex=(addIndex+1)%addExamples.length; const e=addExamples[addIndex]; $('addDate').value=e[0]; $('addDays').value=e[1]; updateAddLab(); }
+
+    function updateDurationLab(){
+      const start=Number($('durationStart').value)||0; const end=Number($('durationEnd').value)||0; const hours=end-start; const minutes=hours*60;
+      $('durationCode').textContent = `from datetime import datetime
+
+job_start = datetime(2026, 7, 11, ${start}, 0)
+job_end = datetime(2026, 7, 11, ${end}, 0)
+duration = job_end - job_start
+
+print("Job start:", job_start)
+print("Job end:", job_end)
+print("Duration:", duration)
+print("Total minutes:", duration.total_seconds() / 60)`;
+      $('durationOutput').textContent = `Job start: 2026-07-11 ${pad(start)}:00:00
+Job end: 2026-07-11 ${pad(end)}:00:00
+Duration: ${hours}:00:00
+Total minutes: ${minutes.toFixed(1)}`;
+    }
+    function swapDurationLab(){ durationIndex=(durationIndex+1)%durationExamples.length; const e=durationExamples[durationIndex]; $('durationStart').value=e[0]; $('durationEnd').value=e[1]; updateDurationLab(); }
+
+    function updateExpiryLab(){
+      const ref=Number($('expiryReference').value)||1; const exp=Number($('expiryDay').value)||1; const remaining=exp-ref; const status=remaining<0?'EXPIRED':remaining<=30?'EXPIRING SOON':'VALID';
+      $('expiryCode').textContent = `from datetime import date
+
+reference_date = date(2026, 8, ${ref})
+expiry_date = date(2026, 8, ${exp})
+days_remaining = (expiry_date - reference_date).days
+
+if days_remaining < 0:
+    status = "EXPIRED"
+elif days_remaining <= 30:
+    status = "EXPIRING SOON"
+else:
+    status = "VALID"
+
+print("Days remaining:", days_remaining)
+print("Status:", status)`;
+      $('expiryOutput').textContent = `Days remaining: ${remaining}
+Status: ${status}`;
+    }
+    function swapExpiryLab(){ expiryIndex=(expiryIndex+1)%expiryExamples.length; const e=expiryExamples[expiryIndex]; $('expiryReference').value=e[0]; $('expiryDay').value=e[1]; updateExpiryLab(); }
+
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');$(tab.dataset.panel).classList.add('active');}));
+    ['currentDate','currentTime'].forEach(id=>$(id).addEventListener('input',updateCurrentLab));
+    ['formatDate','formatTime'].forEach(id=>$(id).addEventListener('input',updateFormatLab));
+    ['parseDay','parseMonth'].forEach(id=>$(id).addEventListener('input',updateParseLab));
+    ['addDate','addDays'].forEach(id=>$(id).addEventListener('input',updateAddLab));
+    ['durationStart','durationEnd'].forEach(id=>$(id).addEventListener('input',updateDurationLab));
+    ['expiryReference','expiryDay'].forEach(id=>$(id).addEventListener('input',updateExpiryLab));
+    window.addEventListener('scroll',()=>{$('topbtn').classList.toggle('show',window.scrollY>500)});
+    updateCurrentLab(); updateFormatLab(); updateParseLab(); updateAddLab(); updateDurationLab(); updateExpiryLab();
+  </script>
+</body>
+</html>
