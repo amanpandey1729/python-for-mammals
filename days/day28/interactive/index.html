@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 28 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div><strong>Python for Mammals</strong><span>Day 28 Interactive Lab</span></div></div><nav><a href="#learn">Learn</a><a href="#labs">Labs</a><a href="#challenge">Challenge</a></nav></div></header>
+  <div class="shell">
+    <div class="course-nav"><a href="../../day27/interactive/">← Day 27</a><span>•</span><a href="../../../">Home</a><span>•</span><span>Day 29 Coming Soon →</span></div>
+    <main>
+      <section class="hero"><div><span class="badge">Day 28 • Automation Essentials</span><h1>Build Reliable Paths.</h1><p class="lead">Use Python's built-in <strong>pathlib</strong> module to construct cross-platform paths, check whether files and folders exist, inspect path components, and prepare safe operational workflows.</p><div class="cta"><a class="button primary" href="#labs">Start Interactive Labs</a><a class="button secondary" href="#challenge">View Mini Challenge</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div class="quick-grid"><div class="mini"><b>6</b><span>Interactive labs</span></div><div class="mini"><b>45 min</b><span>Estimated practice</span></div><div class="mini"><b>3</b><span>Core path concepts</span></div><div class="mini"><b>1</b><span>Readiness workflow</span></div></div></div></section>
+      <section id="learn"><div class="section-title"><div><h2>Why operations teams care</h2><p class="hint">Automation frequently reads configurations, validates backups, creates report folders, scans logs, and builds output names. Reliable path handling is the foundation for all of them.</p></div></div><div class="cards"><div class="card"><span class="pill">Paths</span><h3>Build Cross-Platform Locations</h3><p><code>Path</code> objects and the <code>/</code> operator create readable paths without manually managing separators.</p></div><div class="card"><span class="pill">Validation</span><h3>Check Before Acting</h3><p><code>exists()</code>, <code>is_file()</code>, and <code>is_dir()</code> help scripts validate targets before continuing.</p></div><div class="card"><span class="pill">Operations</span><h3>Inspect and Prepare Folders</h3><p>Use path properties, <code>mkdir()</code>, and <code>iterdir()</code> for reports, inventory, and readiness checks.</p></div></div></section>
+      <section id="labs"><div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. Every visible output line is produced only by the visible Python code shown beside it.</p></div></div><div class="lab"><div class="tabs" role="tablist" aria-label="Day 28 labs"><button class="tab active" data-panel="buildlab">1. Build a Path<small>Path + / operator</small></button><button class="tab" data-panel="partslab">2. Inspect Components<small>name, stem, suffix</small></button><button class="tab" data-panel="existslab">3. Check Existence<small>exists()</small></button><button class="tab" data-panel="typelab">4. Classify Paths<small>is_file() / is_dir()</small></button><button class="tab" data-panel="listlab">5. Create & List<small>mkdir() / iterdir()</small></button><button class="tab" data-panel="reportlab">6. Readiness Report<small>combined validation</small></button></div><div>
+        <div class="workspace panel active" id="buildlab"><div class="workspace-head"><h3>Build a Report Location</h3><button class="secondary" onclick="swapBuildLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Folder Name</label><input id="buildFolder" value="reports" /></div><div><label>File Name</label><input id="buildFile" value="daily_status.txt" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="buildCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="buildOutput"></div></div></div><div class="explain">The <code>/</code> operator joins path parts. The displayed result follows the platform-neutral form produced by <code>Path.as_posix()</code>.</div></div></div>
+        <div class="workspace panel" id="partslab"><div class="workspace-head"><h3>Inspect a File Path</h3><button class="secondary" onclick="swapPartsLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Folder Name</label><input id="partsFolder" value="output" /></div><div><label>File Name</label><input id="partsFile" value="server_health.csv" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="partsCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="partsOutput"></div></div></div><div class="explain"><code>name</code>, <code>stem</code>, <code>suffix</code>, and <code>parent</code> support report naming, extension checks, and folder routing.</div></div></div>
+        <div class="workspace panel" id="existslab"><div class="workspace-head"><h3>Check Present and Missing Paths</h3><button class="secondary" onclick="swapExistsLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Created File</label><input id="existsFile" value="health.txt" /></div><div><label>Missing File</label><input id="missingFile" value="missing.txt" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="existsCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="existsOutput"></div></div></div><div class="explain">The visible code creates one temporary file and checks another path that is not created, producing deterministic results.</div></div></div>
+        <div class="workspace panel" id="typelab"><div class="workspace-head"><h3>Separate a File from a Directory</h3><button class="secondary" onclick="swapTypeLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>File Name</label><input id="typeFile" value="inventory.csv" /></div><div><label>Directory Name</label><input id="typeFolder" value="archive" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="typeCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="typeOutput"></div></div></div><div class="explain"><code>is_file()</code> and <code>is_dir()</code> validate the actual type of an existing path.</div></div></div>
+        <div class="workspace panel" id="listlab"><div class="workspace-head"><h3>Create a Folder and List Its Children</h3><button class="secondary" onclick="swapListLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>First File</label><input id="listOne" value="alerts.log" /></div><div><label>Second File</label><input id="listTwo" value="status.json" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="listCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="listOutput"></div></div></div><div class="explain"><code>mkdir()</code> prepares the folder and <code>iterdir()</code> returns its direct children as Path objects.</div></div></div>
+        <div class="workspace panel" id="reportlab"><div class="workspace-head"><h3>Generate a Path Readiness Summary</h3><button class="secondary" onclick="swapReportLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Expected File Present?</label><select id="reportPresent"><option>Yes</option><option>No</option></select></div><div><label>Required Extension</label><select id="reportSuffix"><option>.csv</option><option>.log</option><option>.txt</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="reportCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="reportOutput"></div></div></div><div class="explain">The final status is READY only when the expected file exists, is a regular file, and has the required suffix.</div></div></div>
+      </div></div></section>
+      <section id="challenge"><div class="challenge"><div><h2>Mini Challenge: Path Readiness Inspector</h2><p>Build one input-driven workflow that validates a target directory and expected operational file.</p><div class="checklist"><label class="check"><input type="checkbox" /> Collect base path, subdirectory, expected file, and extension once.</label><label class="check"><input type="checkbox" /> Build reusable Path objects with the / operator.</label><label class="check"><input type="checkbox" /> Validate existence, file type, directory type, and suffix.</label><label class="check"><input type="checkbox" /> List direct children and count files and directories.</label><label class="check"><input type="checkbox" /> Produce READY or ATTENTION and handle PermissionError and OSError.</label></div></div><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Workflow Map</div><pre>Collect inputs once
+Create base Path
+Build target directory
+Build expected file path
+Resolve target location
+Validate base path
+Validate target directory
+List direct children
+Count files
+Count directories
+Check expected file
+Compare suffix
+Decide final status
+Build summary
+Handle common errors</pre></div></div></section>
+    </main>
+    <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button><footer>Day 28 complete • Python for Mammals • pathlib: Paths, File Existence & Path Operations</footer>
+  </div>
+<script>
+const $=id=>document.getElementById(id), pyStr=v=>JSON.stringify(String(v));
+let buildIndex=0,partsIndex=0,existsIndex=0,typeIndex=0,listIndex=0,reportIndex=0;
+const buildExamples=[["reports","daily_status.txt"],["output","inventory.csv"],["logs","health.log"]];
+const partsExamples=[["output","server_health.csv"],["archive","backup_2026.log"],["reports","capacity.txt"]];
+const existsExamples=[["health.txt","missing.txt"],["config.ini","absent.ini"],["inventory.csv","unknown.csv"]];
+const typeExamples=[["inventory.csv","archive"],["health.log","reports"],["config.ini","backup"]];
+const listExamples=[["alerts.log","status.json"],["inventory.csv","health.txt"],["backup.log","summary.csv"]];
+const reportExamples=[["Yes",".csv"],["No",".log"],["Yes",".txt"]];
+
+function updateBuildLab(){
+ const folder=$("buildFolder").value,file=$("buildFile").value;
+ $("buildCode").textContent=`from pathlib import Path\n\nfolder = ${pyStr(folder)}\nfile_name = ${pyStr(file)}\nreport_path = Path(folder) / file_name\n\nprint("Path:", report_path.as_posix())\nprint("Name:", report_path.name)`;
+ $("buildOutput").textContent=`Path: ${folder}/${file}\nName: ${file}`;
+}
+function swapBuildLab(){buildIndex=(buildIndex+1)%buildExamples.length;const e=buildExamples[buildIndex];$("buildFolder").value=e[0];$("buildFile").value=e[1];updateBuildLab();}
+
+function updatePartsLab(){
+ const folder=$("partsFolder").value,file=$("partsFile").value;
+ const dot=file.lastIndexOf('.'); const stem=dot>0?file.slice(0,dot):file; const suffix=dot>0?file.slice(dot):"";
+ $("partsCode").textContent=`from pathlib import Path\n\npath = Path(${pyStr(folder)}) / ${pyStr(file)}\n\nprint("Name:", path.name)\nprint("Stem:", path.stem)\nprint("Suffix:", path.suffix)\nprint("Parent:", path.parent.as_posix())`;
+ $("partsOutput").textContent=`Name: ${file}\nStem: ${stem}\nSuffix: ${suffix}\nParent: ${folder}`;
+}
+function swapPartsLab(){partsIndex=(partsIndex+1)%partsExamples.length;const e=partsExamples[partsIndex];$("partsFolder").value=e[0];$("partsFile").value=e[1];updatePartsLab();}
+
+function updateExistsLab(){
+ const present=$("existsFile").value,missing=$("missingFile").value;
+ $("existsCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    folder = Path(temp_dir)\n    present_path = folder / ${pyStr(present)}\n    missing_path = folder / ${pyStr(missing)}\n    present_path.write_text("READY", encoding="utf-8")\n\n    print("Present exists:", present_path.exists())\n    print("Missing exists:", missing_path.exists())`;
+ $("existsOutput").textContent=`Present exists: True\nMissing exists: False`;
+}
+function swapExistsLab(){existsIndex=(existsIndex+1)%existsExamples.length;const e=existsExamples[existsIndex];$("existsFile").value=e[0];$("missingFile").value=e[1];updateExistsLab();}
+
+function updateTypeLab(){
+ const file=$("typeFile").value,folder=$("typeFolder").value;
+ $("typeCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    file_path = base / ${pyStr(file)}\n    directory_path = base / ${pyStr(folder)}\n    file_path.write_text("data", encoding="utf-8")\n    directory_path.mkdir()\n\n    print("File is file:", file_path.is_file())\n    print("File is directory:", file_path.is_dir())\n    print("Folder is file:", directory_path.is_file())\n    print("Folder is directory:", directory_path.is_dir())`;
+ $("typeOutput").textContent=`File is file: True\nFile is directory: False\nFolder is file: False\nFolder is directory: True`;
+}
+function swapTypeLab(){typeIndex=(typeIndex+1)%typeExamples.length;const e=typeExamples[typeIndex];$("typeFile").value=e[0];$("typeFolder").value=e[1];updateTypeLab();}
+
+function updateListLab(){
+ const a=$("listOne").value,b=$("listTwo").value,names=[a,b].sort((x,y)=>x.localeCompare(y));
+ $("listCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    report_dir = Path(temp_dir) / "reports"\n    report_dir.mkdir()\n    (report_dir / ${pyStr(a)}).touch()\n    (report_dir / ${pyStr(b)}).touch()\n\n    items = sorted(report_dir.iterdir(), key=lambda item: item.name)\n\n    print("Items:", [item.name for item in items])\n    print("Total:", len(items))`;
+ $("listOutput").textContent=`Items: [${names.map(n=>pyStr(n)).join(", ")}]\nTotal: 2`;
+}
+function swapListLab(){listIndex=(listIndex+1)%listExamples.length;const e=listExamples[listIndex];$("listOne").value=e[0];$("listTwo").value=e[1];updateListLab();}
+
+function updateReportLab(){
+ const present=$("reportPresent").value==="Yes",suffix=$("reportSuffix").value;
+ const actual=present?suffix:".csv"; const match=present && actual.toLowerCase()===suffix.toLowerCase(); const status=present&&match?"READY":"ATTENTION";
+ $("reportCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    target_dir = Path(temp_dir) / "reports"\n    target_dir.mkdir()\n    expected_file = target_dir / ${pyStr("daily_report"+actual)}\n    required_suffix = ${pyStr(suffix)}\n    expected_present = ${present?"True":"False"}\n\n    if expected_present:\n        expected_file.touch()\n\n    suffix_match = expected_file.exists() and expected_file.suffix.lower() == required_suffix.lower()\n    ready = expected_file.is_file() and suffix_match\n    status = "READY" if ready else "ATTENTION"\n\n    print("Directory valid:", target_dir.is_dir())\n    print("Expected file exists:", expected_file.exists())\n    print("Suffix match:", suffix_match)\n    print("Final status:", status)`;
+ $("reportOutput").textContent=`Directory valid: True\nExpected file exists: ${present?"True":"False"}\nSuffix match: ${match?"True":"False"}\nFinal status: ${status}`;
+}
+function swapReportLab(){reportIndex=(reportIndex+1)%reportExamples.length;const e=reportExamples[reportIndex];$("reportPresent").value=e[0];$("reportSuffix").value=e[1];updateReportLab();}
+
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active");}));
+[["buildFolder","buildFile"],["partsFolder","partsFile"],["existsFile","missingFile"],["typeFile","typeFolder"],["listOne","listTwo"],["reportPresent","reportSuffix"]].forEach((ids,i)=>ids.forEach(id=>$(id).addEventListener("input",[updateBuildLab,updatePartsLab,updateExistsLab,updateTypeLab,updateListLab,updateReportLab][i])));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+updateBuildLab();updatePartsLab();updateExistsLab();updateTypeLab();updateListLab();updateReportLab();
+</script></body></html>

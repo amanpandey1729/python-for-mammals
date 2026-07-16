@@ -106,8 +106,8 @@ The beginning of real automation.
 
 | Day | Topic                                       | Status  |
 | --- | ------------------------------------------- |---------|
-| 27  | OS Module                                   |   ⬜    |
-| 28  | Pathlib                                     |   ⬜    |
+| 27  | OS Module                                   |   ✅    |
+| 28  | Pathlib                                     |   ✅    |
 | 29  | Directories & File Management               |   ⬜    |
 | 30  | Subprocess Module                           |   ⬜    |
 | 31  | Running Linux Commands                      |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 26 / 45
+Day 28 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 57.78%
+███████████████░░░░░░░░░░░░░░░ 62.22%
 ```
 
 ---
