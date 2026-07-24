@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 30 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div><strong>Python for Mammals</strong><span>Day 30 Interactive Lab</span></div></div><nav><a href="#learn">Learn</a><a href="#labs">Labs</a><a href="#challenge">Challenge</a></nav></div></header>
+  <div class="shell">
+    <div class="course-nav"><a href="../../day29/interactive/">← Day 29</a><span>•</span><a href="../../../">Home</a><span>•</span><span>Day 31 Coming Soon →</span></div>
+    <main>
+      <section class="hero"><div><span class="badge">Day 30 • Automation Essentials</span><h1>Run Commands. Capture Results.</h1><p class="lead">Use Python's subprocess module to run safe external commands, capture standard output and errors, inspect return codes, and build reliable command checks.</p><div class="cta"><a class="button primary" href="#labs">Start Interactive Labs</a><a class="button secondary" href="#challenge">View Mini Challenge</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div class="quick-grid"><div class="mini"><b>6</b><span>Interactive labs</span></div><div class="mini"><b>45 min</b><span>Estimated practice</span></div><div class="mini"><b>2</b><span>Output streams</span></div><div class="mini"><b>1</b><span>Command-check workflow</span></div></div></div></section>
+
+      <section id="learn"><div class="section-title"><div><h2>Why operations teams care</h2><p class="hint">Many health checks, inventory tools, diagnostics, and administrative utilities already exist as commands. subprocess lets Python run them, capture their results, and make decisions using return codes, stdout, and stderr.</p></div></div><div class="cards"><div class="card"><span class="pill">Run</span><h3>Execute External Tools</h3><p>Use <code>subprocess.run()</code> with an argument list to call a program safely and wait for it to finish.</p></div><div class="card"><span class="pill">Capture</span><h3>Read Command Results</h3><p>Use <code>capture_output=True</code> and <code>text=True</code> to work with stdout and stderr as normal strings.</p></div><div class="card"><span class="pill">Decide</span><h3>Evaluate Success</h3><p>Inspect <code>returncode</code>, add timeouts, and handle failed or missing commands without crashing the workflow.</p></div></div></section>
+
+      <section id="labs"><div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. Every visible output line is produced only by the visible Python code shown beside it.</p></div></div><div class="lab"><div class="tabs" role="tablist" aria-label="Day 30 labs">
+        <button class="tab active" data-panel="runlab">1. Run a Command<small>subprocess.run()</small></button>
+        <button class="tab" data-panel="capturelab">2. Capture Output<small>stdout</small></button>
+        <button class="tab" data-panel="returnlab">3. Return Codes<small>success or attention</small></button>
+        <button class="tab" data-panel="errorlab">4. Capture Errors<small>stderr</small></button>
+        <button class="tab" data-panel="checklab">5. check=True<small>exception handling</small></button>
+        <button class="tab" data-panel="filterlab">6. Filter Output<small>operational parsing</small></button>
+      </div><div>
+
+        <div class="workspace panel active" id="runlab"><div class="workspace-head"><h3>Run One Safe Command</h3><button class="secondary" onclick="swapRunLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Message</label><input id="runMessage" value="Automation ready" /></div><div><label>Exit Code</label><select id="runExit"><option>0</option><option>1</option><option>2</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="runCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="runOutput"></div></div></div><div class="explain">The command uses <code>sys.executable</code>, so the same Python interpreter runs the visible <code>-c</code> code.</div></div></div>
+
+        <div class="workspace panel" id="capturelab"><div class="workspace-head"><h3>Capture Multiple Output Lines</h3><button class="secondary" onclick="swapCaptureLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Server Name</label><input id="captureServer" value="app01" /></div><div><label>Status</label><select id="captureStatus"><option>READY</option><option>WARNING</option><option>DOWN</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="captureCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="captureOutput"></div></div></div><div class="explain"><code>stdout.strip().splitlines()</code> turns captured command output into a list that automation can count or inspect.</div></div></div>
+
+        <div class="workspace panel" id="returnlab"><div class="workspace-head"><h3>Decide Status from Return Code</h3><button class="secondary" onclick="swapReturnLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Simulated Return Code</label><select id="returnCodeValue"><option>0</option><option>2</option><option>5</option></select></div><div><label>Check Name</label><input id="returnCheck" value="storage" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="returnCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="returnOutput"></div></div></div><div class="explain">A return code of zero normally means success. Non-zero meanings depend on the external tool.</div></div></div>
+
+        <div class="workspace panel" id="errorlab"><div class="workspace-head"><h3>Capture Standard Error</h3><button class="secondary" onclick="swapErrorLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Error Message</label><input id="errorMessage" value="Configuration missing" /></div><div><label>Return Code</label><select id="errorExit"><option>2</option><option>3</option><option>4</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="errorCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="errorOutput"></div></div></div><div class="explain">The visible command writes to <code>stderr</code>; the displayed error line comes directly from <code>result.stderr</code>.</div></div></div>
+
+        <div class="workspace panel" id="checklab"><div class="workspace-head"><h3>Handle check=True Failure</h3><button class="secondary" onclick="swapCheckLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Mode</label><select id="checkMode"><option>success</option><option>failure</option></select></div><div><label>Message</label><input id="checkMessage" value="Validation complete" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="checkCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="checkOutput"></div></div></div><div class="explain"><code>check=True</code> raises <code>CalledProcessError</code> only when the command returns a non-zero code.</div></div></div>
+
+        <div class="workspace panel" id="filterlab"><div class="workspace-head"><h3>Filter Captured Log Lines</h3><button class="secondary" onclick="swapFilterLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Required Level</label><select id="filterLevel"><option>WARNING</option><option>ERROR</option><option>INFO</option></select></div><div><label>Environment</label><input id="filterEnv" value="prod" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="filterCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="filterOutput"></div></div></div><div class="explain">The visible command prints all lines. Python then filters the captured output using the selected level.</div></div></div>
+
+      </div></div></section>
+
+      <section id="challenge"><div class="challenge"><div><h2>Mini Challenge: Command Health Check Runner</h2><p>Build one safe, input-driven workflow that runs a command once and reports both its output and outcome.</p><div class="checklist"><label class="check"><input type="checkbox" /> Collect check name, message, return code, and timeout once.</label><label class="check"><input type="checkbox" /> Build one command list using sys.executable and -c.</label><label class="check"><input type="checkbox" /> Capture stdout, stderr, return code, and elapsed time.</label><label class="check"><input type="checkbox" /> Handle failure, timeout, missing executable, and invalid input.</label><label class="check"><input type="checkbox" /> Produce a clean final status report.</label></div></div><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Workflow Map</div><pre>Collect inputs once
+Validate values
+Build command list
+Record start time
+Run command once
+Capture stdout
+Capture stderr
+Inspect return code
+Handle exceptions
+Record end time
+Calculate duration
+Decide final status
+Print final report</pre></div></div></section>
+    </main>
+    <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button><footer>Day 30 complete • Python for Mammals • Subprocess: Run Commands & Capture Output</footer>
+  </div>
+
+<script>
+const $=id=>document.getElementById(id), pyStr=v=>JSON.stringify(String(v));
+let runIndex=0,captureIndex=0,returnIndex=0,errorIndex=0,checkIndex=0,filterIndex=0;
+const runExamples=[["Automation ready","0"],["Inventory complete","0"],["Health check failed","2"]];
+const captureExamples=[["app01","READY"],["db02","WARNING"],["web03","DOWN"]];
+const returnExamples=[["0","storage"],["2","backup"],["5","network"]];
+const errorExamples=[["Configuration missing","2"],["Permission denied","3"],["Input invalid","4"]];
+const checkExamples=[["success","Validation complete"],["failure","Validation failed"],["success","Report ready"]];
+const filterExamples=[["WARNING","prod"],["ERROR","test"],["INFO","dev"]];
+
+function updateRunLab(){
+ const message=$("runMessage").value, exitCode=Number($("runExit").value);
+ $("runCode").textContent=`import subprocess\nimport sys\n\nresult = subprocess.run(\n    [\n        sys.executable,\n        "-c",\n        ${pyStr(`print(${JSON.stringify(message)}); raise SystemExit(${exitCode})`)}\n    ],\n    capture_output=True,\n    text=True,\n)\n\nprint("Output:", result.stdout.strip())\nprint("Return code:", result.returncode)`;
+ $("runOutput").textContent=`Output: ${message}\nReturn code: ${exitCode}`;
+}
+function swapRunLab(){runIndex=(runIndex+1)%runExamples.length;const e=runExamples[runIndex];$("runMessage").value=e[0];$("runExit").value=e[1];updateRunLab();}
+
+function updateCaptureLab(){
+ const server=$("captureServer").value,status=$("captureStatus").value;
+ const code=`print(${JSON.stringify("Server: "+server)}); print(${JSON.stringify("Status: "+status)})`;
+ $("captureCode").textContent=`import subprocess\nimport sys\n\nresult = subprocess.run(\n    [sys.executable, "-c", ${pyStr(code)}],\n    capture_output=True,\n    text=True,\n)\n\nlines = result.stdout.strip().splitlines()\nprint("Line count:", len(lines))\nfor number, line in enumerate(lines, start=1):\n    print(f"{number}. {line}")`;
+ $("captureOutput").textContent=`Line count: 2\n1. Server: ${server}\n2. Status: ${status}`;
+}
+function swapCaptureLab(){captureIndex=(captureIndex+1)%captureExamples.length;const e=captureExamples[captureIndex];$("captureServer").value=e[0];$("captureStatus").value=e[1];updateCaptureLab();}
+
+function updateReturnLab(){
+ const exitCode=Number($("returnCodeValue").value),check=$("returnCheck").value;
+ const status=exitCode===0?"SUCCESS":"ATTENTION";
+ const code=`print(${JSON.stringify("Check: "+check)}); raise SystemExit(${exitCode})`;
+ $("returnCode").textContent=`import subprocess\nimport sys\n\nresult = subprocess.run(\n    [sys.executable, "-c", ${pyStr(code)}],\n    capture_output=True,\n    text=True,\n)\n\nstatus = "SUCCESS" if result.returncode == 0 else "ATTENTION"\nprint(result.stdout.strip())\nprint("Return code:", result.returncode)\nprint("Status:", status)`;
+ $("returnOutput").textContent=`Check: ${check}\nReturn code: ${exitCode}\nStatus: ${status}`;
+}
+function swapReturnLab(){returnIndex=(returnIndex+1)%returnExamples.length;const e=returnExamples[returnIndex];$("returnCodeValue").value=e[0];$("returnCheck").value=e[1];updateReturnLab();}
+
+function updateErrorLab(){
+ const message=$("errorMessage").value,exitCode=Number($("errorExit").value);
+ const code=`import sys; print(${JSON.stringify(message)}, file=sys.stderr); raise SystemExit(${exitCode})`;
+ $("errorCode").textContent=`import subprocess\nimport sys\n\nresult = subprocess.run(\n    [sys.executable, "-c", ${pyStr(code)}],\n    capture_output=True,\n    text=True,\n)\n\nprint("Return code:", result.returncode)\nprint("Standard error:", result.stderr.strip())`;
+ $("errorOutput").textContent=`Return code: ${exitCode}\nStandard error: ${message}`;
+}
+function swapErrorLab(){errorIndex=(errorIndex+1)%errorExamples.length;const e=errorExamples[errorIndex];$("errorMessage").value=e[0];$("errorExit").value=e[1];updateErrorLab();}
+
+function updateCheckLab(){
+ const mode=$("checkMode").value,message=$("checkMessage").value;
+ const exitCode=mode==="success"?0:3;
+ const code=`import sys; print(${JSON.stringify(message)}${exitCode?`, file=sys.stderr`:""}); raise SystemExit(${exitCode})`;
+ $("checkCode").textContent=`import subprocess\nimport sys\n\ntry:\n    result = subprocess.run(\n        [sys.executable, "-c", ${pyStr(code)}],\n        capture_output=True,\n        text=True,\n        check=True,\n    )\n    print("Result:", result.stdout.strip())\n    print("Status: SUCCESS")\nexcept subprocess.CalledProcessError as error:\n    print("Result:", error.stderr.strip())\n    print("Return code:", error.returncode)\n    print("Status: ATTENTION")`;
+ $("checkOutput").textContent=mode==="success"
+   ?`Result: ${message}\nStatus: SUCCESS`
+   :`Result: ${message}\nReturn code: ${exitCode}\nStatus: ATTENTION`;
+}
+function swapCheckLab(){checkIndex=(checkIndex+1)%checkExamples.length;const e=checkExamples[checkIndex];$("checkMode").value=e[0];$("checkMessage").value=e[1];updateCheckLab();}
+
+function updateFilterLab(){
+ const level=$("filterLevel").value,env=$("filterEnv").value;
+ const lines=[`INFO: ${env} check started`,`WARNING: ${env} disk high`,`ERROR: ${env} backup failed`,`INFO: ${env} check completed`];
+ const matches=lines.filter(line=>line.startsWith(level+":"));
+ const code=lines.map(line=>`print(${JSON.stringify(line)})`).join("; ");
+ $("filterCode").textContent=`import subprocess\nimport sys\n\nresult = subprocess.run(\n    [sys.executable, "-c", ${pyStr(code)}],\n    capture_output=True,\n    text=True,\n)\n\nrequired_level = ${pyStr(level)}\nmatching_lines = [\n    line for line in result.stdout.strip().splitlines()\n    if line.startswith(required_level + ":")\n]\n\nprint("Matches:", len(matching_lines))\nfor line in matching_lines:\n    print(line)`;
+ $("filterOutput").textContent=`Matches: ${matches.length}${matches.length?"\n"+matches.join("\n"):""}`;
+}
+function swapFilterLab(){filterIndex=(filterIndex+1)%filterExamples.length;const e=filterExamples[filterIndex];$("filterLevel").value=e[0];$("filterEnv").value=e[1];updateFilterLab();}
+
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active");}));
+[["runMessage","runExit"],["captureServer","captureStatus"],["returnCodeValue","returnCheck"],["errorMessage","errorExit"],["checkMode","checkMessage"],["filterLevel","filterEnv"]].forEach((ids,i)=>ids.forEach(id=>$(id).addEventListener("input",[updateRunLab,updateCaptureLab,updateReturnLab,updateErrorLab,updateCheckLab,updateFilterLab][i])));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+updateRunLab();updateCaptureLab();updateReturnLab();updateErrorLab();updateCheckLab();updateFilterLab();
+</script></body></html>

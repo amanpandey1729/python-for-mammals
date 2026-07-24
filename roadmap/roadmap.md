@@ -108,8 +108,8 @@ The beginning of real automation.
 | --- | ------------------------------------------- |---------|
 | 27  | OS Module                                   |   ✅    |
 | 28  | Pathlib                                     |   ✅    |
-| 29  | Directories & File Management               |   ⬜    |
-| 30  | Subprocess Module                           |   ⬜    |
+| 29  | Directories & File Management               |   ✅    |
+| 30  | Subprocess Module                           |   ✅    |
 | 31  | Running Linux Commands                      |   ⬜    |
 | 32  | Configuration Files                         |   ⬜    |
 | 33  | Mini Project #4 – Linux Health Check Script |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 28 / 45
+Day 30 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 62.22%
+███████████████░░░░░░░░░░░░░░░ 66.67%
 ```
 
 ---

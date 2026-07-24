@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 29 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div><strong>Python for Mammals</strong><span>Day 29 Interactive Lab</span></div></div><nav><a href="#learn">Learn</a><a href="#labs">Labs</a><a href="#challenge">Challenge</a></nav></div></header>
+  <div class="shell">
+    <div class="course-nav"><a href="../../day28/interactive/">← Day 28</a><span>•</span><a href="../../../">Home</a><span>•</span><span><a href="../../day30/interactive/">Day 30 ➡</a></span></div>
+    <main>
+      <section class="hero"><div><span class="badge">Day 29 • Automation Essentials</span><h1>Organize Files Safely.</h1><p class="lead">Create directory structures, rename folders, and move files with Python while validating every source, destination, and overwrite risk.</p><div class="cta"><a class="button primary" href="#labs">Start Interactive Labs</a><a class="button secondary" href="#challenge">View Mini Challenge</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo" /><div class="quick-grid"><div class="mini"><b>6</b><span>Interactive labs</span></div><div class="mini"><b>45 min</b><span>Estimated practice</span></div><div class="mini"><b>3</b><span>Core file operations</span></div><div class="mini"><b>1</b><span>Routing workflow</span></div></div></div></section>
+
+      <section id="learn"><div class="section-title"><div><h2>Why operations teams care</h2><p class="hint">Reports, logs, backups, exports, and incoming files must be placed in predictable locations. Safe directory automation replaces repetitive manual organization with a controlled workflow.</p></div></div><div class="cards"><div class="card"><span class="pill">Create</span><h3>Prepare Folder Structures</h3><p>Use <code>mkdir()</code> with <code>parents=True</code> and <code>exist_ok=True</code> to prepare repeatable output locations.</p></div><div class="card"><span class="pill">Rename</span><h3>Mark Workflow Progress</h3><p>Use <code>Path.rename()</code> to rename validated practice folders, such as changing pending work to completed work.</p></div><div class="card"><span class="pill">Move</span><h3>Route Files Safely</h3><p>Use <code>shutil.move()</code> with source checks, destination checks, duplicate prevention, and preview mode.</p></div></div></section>
+
+      <section id="labs"><div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the values. Every visible output line is produced only by the visible Python code shown beside it.</p></div></div><div class="lab"><div class="tabs" role="tablist" aria-label="Day 29 labs">
+        <button class="tab active" data-panel="createlab">1. Create Folders<small>mkdir()</small></button>
+        <button class="tab" data-panel="nestedlab">2. Nested Structure<small>parents + exist_ok</small></button>
+        <button class="tab" data-panel="renamelab">3. Rename Folder<small>Path.rename()</small></button>
+        <button class="tab" data-panel="movelab">4. Move a File<small>shutil.move()</small></button>
+        <button class="tab" data-panel="previewlab">5. Preview a Move<small>dry-run safety</small></button>
+        <button class="tab" data-panel="routelab">6. Route by Extension<small>filter + move</small></button>
+      </div><div>
+
+        <div class="workspace panel active" id="createlab"><div class="workspace-head"><h3>Create an Output Folder</h3><button class="secondary" onclick="swapCreateLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Folder Name</label><input id="createFolder" value="reports" /></div><div><label>Repeat Script?</label><select id="createRepeat"><option>Yes</option><option>No</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="createCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="createOutput"></div></div></div><div class="explain"><code>exist_ok=True</code> allows an already-created directory to remain available without raising an error.</div></div></div>
+
+        <div class="workspace panel" id="nestedlab"><div class="workspace-head"><h3>Create a Nested Report Location</h3><button class="secondary" onclick="swapNestedLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Environment</label><input id="nestedEnvironment" value="test" /></div><div><label>Report Type</label><input id="nestedReport" value="daily" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="nestedCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="nestedOutput"></div></div></div><div class="explain"><code>parents=True</code> creates missing parent folders in the visible path.</div></div></div>
+
+        <div class="workspace panel" id="renamelab"><div class="workspace-head"><h3>Rename a Workflow Folder</h3><button class="secondary" onclick="swapRenameLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Current Name</label><input id="renameOld" value="pending" /></div><div><label>New Name</label><input id="renameNew" value="completed" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="renameCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="renameOutput"></div></div></div><div class="explain">The visible code creates one temporary folder, renames it, and prints results directly from the two Path objects.</div></div></div>
+
+        <div class="workspace panel" id="movelab"><div class="workspace-head"><h3>Move a File into Processed</h3><button class="secondary" onclick="swapMoveLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>File Name</label><input id="moveFile" value="health.txt" /></div><div><label>Destination Folder</label><input id="moveFolder" value="processed" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="moveCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="moveOutput"></div></div></div><div class="explain"><code>shutil.move()</code> changes the file location. The output verifies both the old and new paths.</div></div></div>
+
+        <div class="workspace panel" id="previewlab"><div class="workspace-head"><h3>Preview or Execute a Move</h3><button class="secondary" onclick="swapPreviewLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Execution Mode</label><select id="previewMode"><option>preview</option><option>move</option></select></div><div><label>File Name</label><input id="previewFile" value="inventory.csv" /></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="previewCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="previewOutput"></div></div></div><div class="explain">Preview mode prints the plan but does not call <code>shutil.move()</code>. Move mode performs the visible operation.</div></div></div>
+
+        <div class="workspace panel" id="routelab"><div class="workspace-head"><h3>Route Files by Extension</h3><button class="secondary" onclick="swapRouteLab()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Required Extension</label><select id="routeSuffix"><option>.log</option><option>.csv</option><option>.txt</option></select></div><div><label>Execution Mode</label><select id="routeMode"><option>preview</option><option>move</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Code</div><pre id="routeCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="routeOutput"></div></div></div><div class="explain">The displayed file list is created visibly, filtered by suffix, and either previewed or moved according to the visible mode.</div></div></div>
+
+      </div></div></section>
+
+      <section id="challenge"><div class="challenge"><div><h2>Mini Challenge: File Routing Assistant</h2><p>Build one input-driven workflow that discovers matching files and routes them safely.</p><div class="checklist"><label class="check"><input type="checkbox" /> Collect base, source folder, destination folder, extension, and mode once.</label><label class="check"><input type="checkbox" /> Build and reuse Path objects throughout the workflow.</label><label class="check"><input type="checkbox" /> Validate directories and prevent destination overwrites.</label><label class="check"><input type="checkbox" /> Support preview mode and real move mode.</label><label class="check"><input type="checkbox" /> Report discovered, matched, moved, skipped, and failed counts.</label></div></div><div class="codebox"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Workflow Map</div><pre>Collect inputs once
+Normalize extension
+Build source path
+Build destination path
+Validate base directory
+Validate source directory
+Create destination safely
+Discover direct child files
+Filter by extension
+Sort matching files
+Build move plan
+Check duplicates
+Preview or move
+Count outcomes
+Handle common errors
+Print final report</pre></div></div></section>
+    </main>
+    <button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button><footer>Day 29 complete • Python for Mammals • Directories: Create, Rename & Move</footer>
+  </div>
+
+<script>
+const $=id=>document.getElementById(id), pyStr=v=>JSON.stringify(String(v));
+let createIndex=0,nestedIndex=0,renameIndex=0,moveIndex=0,previewIndex=0,routeIndex=0;
+const createExamples=[["reports","Yes"],["archive","Yes"],["exports","No"]];
+const nestedExamples=[["test","daily"],["prod","capacity"],["dev","inventory"]];
+const renameExamples=[["pending","completed"],["incoming","processed"],["review","approved"]];
+const moveExamples=[["health.txt","processed"],["inventory.csv","archive"],["alert.log","reviewed"]];
+const previewExamples=[["preview","inventory.csv"],["move","health.txt"],["preview","alert.log"]];
+const routeExamples=[[".log","preview"],[".csv","move"],[".txt","preview"]];
+
+function updateCreateLab(){
+ const folder=$("createFolder").value, repeat=$("createRepeat").value==="Yes";
+ $("createCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    folder = base / ${pyStr(folder)}\n    folder.mkdir()\n\n    repeat_script = ${repeat?"True":"False"}\n    if repeat_script:\n        folder.mkdir(exist_ok=True)\n\n    print("Folder name:", folder.name)\n    print("Directory ready:", folder.is_dir())\n    print("Repeat allowed:", repeat_script)`;
+ $("createOutput").textContent=`Folder name: ${folder}\nDirectory ready: True\nRepeat allowed: ${repeat?"True":"False"}`;
+}
+function swapCreateLab(){createIndex=(createIndex+1)%createExamples.length;const e=createExamples[createIndex];$("createFolder").value=e[0];$("createRepeat").value=e[1];updateCreateLab();}
+
+function updateNestedLab(){
+ const env=$("nestedEnvironment").value, report=$("nestedReport").value;
+ $("nestedCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    target = base / "output" / ${pyStr(env)} / ${pyStr(report)}\n    target.mkdir(parents=True, exist_ok=True)\n\n    relative_target = target.relative_to(base)\n    print("Created path:", relative_target.as_posix())\n    print("Directory ready:", target.is_dir())`;
+ $("nestedOutput").textContent=`Created path: output/${env}/${report}\nDirectory ready: True`;
+}
+function swapNestedLab(){nestedIndex=(nestedIndex+1)%nestedExamples.length;const e=nestedExamples[nestedIndex];$("nestedEnvironment").value=e[0];$("nestedReport").value=e[1];updateNestedLab();}
+
+function updateRenameLab(){
+ const oldName=$("renameOld").value,newName=$("renameNew").value;
+ $("renameCode").textContent=`from pathlib import Path\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    old_path = base / ${pyStr(oldName)}\n    new_path = base / ${pyStr(newName)}\n    old_path.mkdir()\n\n    renamed_path = old_path.rename(new_path)\n\n    print("Old exists:", old_path.exists())\n    print("New exists:", renamed_path.exists())\n    print("New name:", renamed_path.name)`;
+ $("renameOutput").textContent=`Old exists: False\nNew exists: True\nNew name: ${newName}`;
+}
+function swapRenameLab(){renameIndex=(renameIndex+1)%renameExamples.length;const e=renameExamples[renameIndex];$("renameOld").value=e[0];$("renameNew").value=e[1];updateRenameLab();}
+
+function updateMoveLab(){
+ const file=$("moveFile").value,folder=$("moveFolder").value;
+ $("moveCode").textContent=`from pathlib import Path\nimport shutil\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    source_dir = base / "incoming"\n    destination_dir = base / ${pyStr(folder)}\n    source_dir.mkdir()\n    destination_dir.mkdir()\n\n    source = source_dir / ${pyStr(file)}\n    destination = destination_dir / source.name\n    source.write_text("READY", encoding="utf-8")\n\n    moved_path = Path(shutil.move(str(source), str(destination)))\n\n    print("Source exists:", source.exists())\n    print("Destination exists:", moved_path.exists())\n    print("Moved to:", moved_path.relative_to(base).as_posix())`;
+ $("moveOutput").textContent=`Source exists: False\nDestination exists: True\nMoved to: ${folder}/${file}`;
+}
+function swapMoveLab(){moveIndex=(moveIndex+1)%moveExamples.length;const e=moveExamples[moveIndex];$("moveFile").value=e[0];$("moveFolder").value=e[1];updateMoveLab();}
+
+function updatePreviewLab(){
+ const mode=$("previewMode").value,file=$("previewFile").value;
+ const moved=mode==="move";
+ $("previewCode").textContent=`from pathlib import Path\nimport shutil\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    source_dir = base / "incoming"\n    destination_dir = base / "archive"\n    source_dir.mkdir()\n    destination_dir.mkdir()\n\n    source = source_dir / ${pyStr(file)}\n    destination = destination_dir / source.name\n    source.touch()\n    mode = ${pyStr(mode)}\n\n    print("Plan:", source.name, "->", destination_dir.name)\n\n    if mode == "move":\n        shutil.move(str(source), str(destination))\n        print("Result: MOVED")\n    else:\n        print("Result: PREVIEW ONLY")\n\n    print("Source exists:", source.exists())\n    print("Destination exists:", destination.exists())`;
+ $("previewOutput").textContent=`Plan: ${file} -> archive\nResult: ${moved?"MOVED":"PREVIEW ONLY"}\nSource exists: ${moved?"False":"True"}\nDestination exists: ${moved?"True":"False"}`;
+}
+function swapPreviewLab(){previewIndex=(previewIndex+1)%previewExamples.length;const e=previewExamples[previewIndex];$("previewMode").value=e[0];$("previewFile").value=e[1];updatePreviewLab();}
+
+function updateRouteLab(){
+ const suffix=$("routeSuffix").value,mode=$("routeMode").value;
+ const files=["alert.log","health.LOG","inventory.csv","notes.txt"];
+ const matches=files.filter(name=>name.toLowerCase().endsWith(suffix.toLowerCase())).sort((a,b)=>a.localeCompare(b));
+ const action=mode==="move"?"Moved":"Planned";
+ $("routeCode").textContent=`from pathlib import Path\nimport shutil\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    base = Path(temp_dir)\n    source_dir = base / "incoming"\n    destination_dir = base / "routed"\n    source_dir.mkdir()\n    destination_dir.mkdir()\n\n    file_names = ["alert.log", "health.LOG", "inventory.csv", "notes.txt"]\n    required_suffix = ${pyStr(suffix)}\n    mode = ${pyStr(mode)}\n\n    for file_name in file_names:\n        (source_dir / file_name).touch()\n\n    matches = sorted(\n        [item for item in source_dir.iterdir()\n         if item.is_file() and item.suffix.lower() == required_suffix.lower()],\n        key=lambda item: item.name\n    )\n\n    print("Matches:", [item.name for item in matches])\n\n    if mode == "move":\n        for item in matches:\n            shutil.move(str(item), str(destination_dir / item.name))\n        print("Moved:", len(matches))\n    else:\n        print("Planned:", len(matches))`;
+ $("routeOutput").textContent=`Matches: [${matches.map(n=>pyStr(n)).join(", ")}]\n${action}: ${matches.length}`;
+}
+function swapRouteLab(){routeIndex=(routeIndex+1)%routeExamples.length;const e=routeExamples[routeIndex];$("routeSuffix").value=e[0];$("routeMode").value=e[1];updateRouteLab();}
+
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active");}));
+[["createFolder","createRepeat"],["nestedEnvironment","nestedReport"],["renameOld","renameNew"],["moveFile","moveFolder"],["previewMode","previewFile"],["routeSuffix","routeMode"]].forEach((ids,i)=>ids.forEach(id=>$(id).addEventListener("input",[updateCreateLab,updateNestedLab,updateRenameLab,updateMoveLab,updatePreviewLab,updateRouteLab][i])));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+updateCreateLab();updateNestedLab();updateRenameLab();updateMoveLab();updatePreviewLab();updateRouteLab();
+</script></body></html>
