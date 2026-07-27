@@ -110,9 +110,9 @@ The beginning of real automation.
 | 28  | Pathlib                                     |   ✅    |
 | 29  | Directories & File Management               |   ✅    |
 | 30  | Subprocess Module                           |   ✅    |
-| 31  | Running Linux Commands                      |   ⬜    |
-| 32  | Configuration Files                         |   ⬜    |
-| 33  | Mini Project #4 – Linux Health Check Script |   ⬜    |
+| 31  | Running Linux Commands                      |   ✅    |
+| 32  | Configuration Files                         |   ✅    |
+| 33  | Mini Project #4 – Linux Health Check Script |   ✅    |
 
 ---
 
@@ -122,7 +122,7 @@ Learn tools used in real-world automation projects.
 
 | Day | Topic                                               | Status  |
 | --- | --------------------------------------------------- |---------|
-| 34  | Logging Module                                      |   ⬜    |
+| 34  | Logging Module                                      |   ✅    |
 | 35  | Pandas Basics                                       |   ⬜    |
 | 36  | Excel Automation with OpenPyXL                      |   ⬜    |
 | 37  | Requests Library                                    |   ⬜    |
@@ -198,13 +198,13 @@ After Day 45, optional specialization tracks will be available.
 Current Progress:
 
 ```text
-Day 30 / 45
+Day 34 / 45
 ```
 
 Completion:
 
 ```text
-███████████████░░░░░░░░░░░░░░░ 66.67%
+███████████████░░░░░░░░░░░░░░░ 75.56%
 ```
 
 ---

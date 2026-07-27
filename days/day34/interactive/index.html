@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 34 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+<header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div><strong>Python for Mammals</strong><span>45-Day Automation Challenge</span></div></div><nav><a href="#learn">Learn</a><a href="#labs">Labs</a><a href="#challenge">Challenge</a></nav></div></header>
+<main class="shell">
+  <div class="course-nav"><a href="../../day33/interactive/">← Day 33</a><span>•</span><a href="../../../">Home</a><span>•</span><span>Day 35 Coming Soon →</span></div>
+
+  <section class="hero"><div><span class="badge">Day 34 • Professional Automation</span><h1>Make Your Automation Explain Itself.</h1><p class="lead">A script that runs unattended must leave evidence. Today you will use Python's built-in <b>logging</b> module, meaningful log levels, readable formats, and durable log files.</p><div class="cta"><a class="button primary" href="#labs">Start Interactive Labs</a><a class="button secondary" href="#challenge">View Mini Challenge</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div class="quick-grid"><div class="mini"><b>3</b><span>core topics</span></div><div class="mini"><b>6</b><span>interactive labs</span></div><div class="mini"><b>5</b><span>standard log levels</span></div><div class="mini"><b>1</b><span>logged workflow</span></div></div></div></section>
+
+  <section id="learn"><div class="section-title"><div><h2>Why operations teams care</h2><p class="hint">Cron, Task Scheduler, CI jobs, and monitoring scripts often run without an operator watching. Logs preserve what happened, when it happened, and why a decision was made.</p></div></div><div class="cards">
+    <article class="card"><span class="pill">TRACE</span><h3>Leave an execution trail</h3><p>Record workflow starts, completed steps, counts, decisions, warnings, failures, and final outcomes for later investigation.</p></article>
+    <article class="card"><span class="pill">PRIORITISE</span><h3>Use meaningful severity</h3><p>DEBUG, INFO, WARNING, ERROR, and CRITICAL help operators separate normal progress from conditions requiring attention.</p></article>
+    <article class="card"><span class="pill">PERSIST</span><h3>Write durable log files</h3><p>Use handlers and formatters to send detailed records to UTF-8 files while keeping console output focused.</p></article>
+  </div></section>
+
+  <section id="labs"><div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the inputs and compare the visible Python with its generated output. Every visible output line is produced by visible code.</p></div></div><div class="lab"><div class="tabs">
+    <button class="tab active" data-panel="basiclab">1. Basic Logger<small>logger and handler</small></button>
+    <button class="tab" data-panel="levelslab">2. Log Levels<small>severity filtering</small></button>
+    <button class="tab" data-panel="formatlab">3. Formatter<small>useful context</small></button>
+    <button class="tab" data-panel="filelab">4. Log File<small>durable records</small></button>
+    <button class="tab" data-panel="decisionlab">5. Health Decision<small>level by outcome</small></button>
+    <button class="tab" data-panel="exceptionlab">6. Exception Log<small>handled failures</small></button>
+  </div><div>
+
+    <div class="workspace panel active" id="basiclab"><div class="workspace-head"><h3>Create a Named Logger</h3><button class="secondary" onclick="swapBasic()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Logger name</label><input id="basicName" value="operations.inventory"></div><div><label>Message</label><input id="basicMessage" value="Inventory collection started"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="basicCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="basicOutput"></div></div></div><div class="explain">A logger creates records; a handler decides where those records appear. Clearing handlers keeps this copied example repeatable.</div></div></div>
+
+    <div class="workspace panel" id="levelslab"><div class="workspace-head"><h3>Filter Records by Minimum Level</h3><button class="secondary" onclick="swapLevels()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Minimum level</label><select id="levelsMinimum"><option>DEBUG</option><option>INFO</option><option selected>WARNING</option><option>ERROR</option><option>CRITICAL</option></select></div><div><label>Target</label><input id="levelsTarget" value="app-01"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="levelsCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="levelsOutput"></div></div></div><div class="explain">The chosen minimum level and every more severe level are displayed. Lower-severity records are filtered out.</div></div></div>
+
+    <div class="workspace panel" id="formatlab"><div class="workspace-head"><h3>Add Level and Logger Context</h3><button class="secondary" onclick="swapFormat()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Logger name</label><input id="formatName" value="operations.report"></div><div><label>Record count</label><input id="formatCount" type="number" value="12"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="formatCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="formatOutput"></div></div></div><div class="explain">Production logs often include timestamps too. This lab uses deterministic fields so copied code produces the exact displayed output.</div></div></div>
+
+    <div class="workspace panel" id="filelab"><div class="workspace-head"><h3>Write and Read a Log File</h3><button class="secondary" onclick="swapFile()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Processed records</label><input id="fileProcessed" type="number" value="18"></div><div><label>Skipped records</label><input id="fileSkipped" type="number" value="2"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="fileCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="fileOutput"></div></div></div><div class="explain">FileHandler writes records to disk. The visible code flushes, closes, reads, and then removes its temporary practice file.</div></div></div>
+
+    <div class="workspace panel" id="decisionlab"><div class="workspace-head"><h3>Choose Level from Operational Impact</h3><button class="secondary" onclick="swapDecision()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Observed usage %</label><input id="decisionUsage" type="number" value="88"></div><div><label>Warning threshold %</label><input id="decisionThreshold" type="number" value="80"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="decisionCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="decisionOutput"></div></div></div><div class="explain">Healthy results are normal INFO events. A threshold breach is a WARNING because the workflow completed but attention is required.</div></div></div>
+
+    <div class="workspace panel" id="exceptionlab"><div class="workspace-head"><h3>Record a Handled Conversion Failure</h3><button class="secondary" onclick="swapException()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Raw usage value</label><input id="exceptionValue" value="unknown"></div><div><label>Fallback status</label><select id="exceptionStatus"><option>INVALID</option><option>SKIPPED</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="exceptionCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="exceptionOutput"></div></div></div><div class="explain">This browser lab uses logger.error() for deterministic output. In a real except block, logger.exception() can additionally store traceback details.</div></div></div>
+
+  </div></div></section>
+
+  <section id="challenge"><div class="challenge"><div><h2>Mini Challenge: Logged Daily Operations Checker</h2><p>Collect one set of health-check inputs, validate them, evaluate disk and memory, create an operator report, and preserve a detailed execution trail in a log file.</p><div class="checklist"><label class="check"><input type="checkbox"> Inputs are collected once and validated</label><label class="check"><input type="checkbox"> Console receives WARNING and above</label><label class="check"><input type="checkbox"> File receives DEBUG and above</label><label class="check"><input type="checkbox"> Threshold decisions use meaningful levels</label><label class="check"><input type="checkbox"> Handled failures include useful context</label><label class="check"><input type="checkbox"> No credentials or secrets are logged</label></div></div><div class="codebox"><div class="bar"><span class="dot"></span>Workflow</div><pre>collect inputs once
+       ↓
+validate + convert
+       ↓
+configure logger
+       ↓
+log safe context
+       ↓
+evaluate disk + memory
+       ↓
+write report + final status
+       ↓
+log completion or exception</pre></div></div></section>
+</main>
+<button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+<footer>Day 34 complete • Python for Mammals • Logging</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const q=s=>JSON.stringify(String(s));
+
+function updateBasic(){
+  const name=$("basicName").value, message=$("basicMessage").value;
+  $("basicCode").textContent=`import logging\nimport sys\n\nlogger = logging.getLogger(${q(name)})\nlogger.setLevel(logging.INFO)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))\nlogger.addHandler(handler)\nlogger.info(${q(message)})`;
+  $("basicOutput").textContent=`INFO - ${message}`;
+}
+const basicExamples=[["operations.disk","Disk check started"],["operations.backup","Backup validation completed"],["operations.inventory","Inventory collection started"]];let basicIndex=0;
+function swapBasic(){basicIndex=(basicIndex+1)%basicExamples.length;[$("basicName").value,$("basicMessage").value]=basicExamples[basicIndex];updateBasic();}
+
+const levelOrder=["DEBUG","INFO","WARNING","ERROR","CRITICAL"];
+function updateLevels(){
+  const minimum=$("levelsMinimum").value, target=$("levelsTarget").value;
+  $("levelsCode").textContent=`import logging\nimport sys\n\nlogger = logging.getLogger("operations.levels")\nlogger.setLevel(logging.DEBUG)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setLevel(logging.${minimum})\nhandler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))\nlogger.addHandler(handler)\n\nlogger.debug("Parsed target: %s", ${q(target)})\nlogger.info("Check started for %s", ${q(target)})\nlogger.warning("Usage is approaching the limit on %s", ${q(target)})\nlogger.error("Usage data is unavailable for %s", ${q(target)})\nlogger.critical("All checks failed for %s", ${q(target)})`;
+  const messages=[`DEBUG - Parsed target: ${target}`,`INFO - Check started for ${target}`,`WARNING - Usage is approaching the limit on ${target}`,`ERROR - Usage data is unavailable for ${target}`,`CRITICAL - All checks failed for ${target}`];
+  $("levelsOutput").textContent=messages.slice(levelOrder.indexOf(minimum)).join("\n");
+}
+const levelsExamples=[["INFO","db-01"],["ERROR","batch-02"],["WARNING","app-01"]];let levelsIndex=0;
+function swapLevels(){levelsIndex=(levelsIndex+1)%levelsExamples.length;[$("levelsMinimum").value,$("levelsTarget").value]=levelsExamples[levelsIndex];updateLevels();}
+
+function updateFormat(){
+  const name=$("formatName").value, count=Number($("formatCount").value);
+  $("formatCode").textContent=`import logging\nimport sys\n\nlogger = logging.getLogger(${q(name)})\nlogger.setLevel(logging.INFO)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setFormatter(logging.Formatter("%(levelname)s | %(name)s | %(message)s"))\nlogger.addHandler(handler)\nlogger.info("Processed %s records", ${count})`;
+  $("formatOutput").textContent=`INFO | ${name} | Processed ${count} records`;
+}
+const formatExamples=[["operations.inventory","25"],["operations.cleanup","7"],["operations.report","12"]];let formatIndex=0;
+function swapFormat(){formatIndex=(formatIndex+1)%formatExamples.length;[$("formatName").value,$("formatCount").value]=formatExamples[formatIndex];updateFormat();}
+
+function updateFile(){
+  const processed=Number($("fileProcessed").value), skipped=Number($("fileSkipped").value);
+  $("fileCode").textContent=`import logging\nfrom pathlib import Path\n\nlog_path = Path("practice_operations.log")\nlogger = logging.getLogger("operations.file")\nlogger.setLevel(logging.INFO)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.FileHandler(log_path, mode="w", encoding="utf-8")\nhandler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))\nlogger.addHandler(handler)\nlogger.info("Processed records: %s", ${processed})\nlogger.warning("Skipped records: %s", ${skipped})\nhandler.flush()\nhandler.close()\nlogger.removeHandler(handler)\n\nprint(log_path.read_text(encoding="utf-8").strip())\nlog_path.unlink()`;
+  $("fileOutput").textContent=`INFO - Processed records: ${processed}\nWARNING - Skipped records: ${skipped}`;
+}
+const fileExamples=[["30","0"],["14","3"],["18","2"]];let fileIndex=0;
+function swapFile(){fileIndex=(fileIndex+1)%fileExamples.length;[$("fileProcessed").value,$("fileSkipped").value]=fileExamples[fileIndex];updateFile();}
+
+function updateDecision(){
+  const usage=Number($("decisionUsage").value), threshold=Number($("decisionThreshold").value), breached=usage>=threshold;
+  $("decisionCode").textContent=`import logging\nimport sys\n\nusage = ${usage}\nthreshold = ${threshold}\nlogger = logging.getLogger("operations.health")\nlogger.setLevel(logging.INFO)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))\nlogger.addHandler(handler)\n\nif usage >= threshold:\n    logger.warning("Usage is %s%%; threshold is %s%%", usage, threshold)\n    status = "ATTENTION"\nelse:\n    logger.info("Usage is healthy at %s%%", usage)\n    status = "HEALTHY"\n\nprint("Status:", status)`;
+  $("decisionOutput").textContent=breached?`WARNING - Usage is ${usage}%; threshold is ${threshold}%\nStatus: ATTENTION`:`INFO - Usage is healthy at ${usage}%\nStatus: HEALTHY`;
+}
+const decisionExamples=[["65","80"],["90","90"],["88","80"]];let decisionIndex=0;
+function swapDecision(){decisionIndex=(decisionIndex+1)%decisionExamples.length;[$("decisionUsage").value,$("decisionThreshold").value]=decisionExamples[decisionIndex];updateDecision();}
+
+function updateException(){
+  const raw=$("exceptionValue").value, fallback=$("exceptionStatus").value;
+  const numeric=raw.trim()!==""&&!Number.isNaN(Number(raw));
+  $("exceptionCode").textContent=`import logging\nimport sys\n\nraw_value = ${q(raw)}\nlogger = logging.getLogger("operations.convert")\nlogger.setLevel(logging.INFO)\nlogger.handlers.clear()\nlogger.propagate = False\n\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))\nlogger.addHandler(handler)\n\ntry:\n    usage = float(raw_value)\nexcept ValueError:\n    logger.error("Invalid usage value: %s", raw_value)\n    status = ${q(fallback)}\nelse:\n    logger.info("Converted usage: %s", usage)\n    status = "READY"\n\nprint("Status:", status)`;
+  $("exceptionOutput").textContent=numeric?`INFO - Converted usage: ${Number(raw)}\nStatus: READY`:`ERROR - Invalid usage value: ${raw}\nStatus: ${fallback}`;
+}
+const exceptionExamples=[["72.5","INVALID"],["not_available","SKIPPED"],["unknown","INVALID"]];let exceptionIndex=0;
+function swapException(){exceptionIndex=(exceptionIndex+1)%exceptionExamples.length;[$("exceptionValue").value,$("exceptionStatus").value]=exceptionExamples[exceptionIndex];updateException();}
+
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active");}));
+[["basicName","basicMessage"],["levelsMinimum","levelsTarget"],["formatName","formatCount"],["fileProcessed","fileSkipped"],["decisionUsage","decisionThreshold"],["exceptionValue","exceptionStatus"]].forEach((ids,i)=>ids.forEach(id=>$(id).addEventListener("input",[updateBasic,updateLevels,updateFormat,updateFile,updateDecision,updateException][i])));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+updateBasic();updateLevels();updateFormat();updateFile();updateDecision();updateException();
+</script>
+</body>
+</html>

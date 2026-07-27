@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 33 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+<header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div><strong>Python for Mammals</strong><span>45-Day Automation Challenge</span></div></div><nav><a href="#learn">Architecture</a><a href="#labs">Scenario Lab</a><a href="#challenge">Project</a></nav></div></header>
+<main class="shell">
+<div class="course-nav"><a href="../../day32/interactive/">← Day 32</a><span>•</span><a href="../../../">Home</a><span>•</span><span><a href="../../day34/interactive/">Day 34 ➡</a></span></div>
+
+<section class="hero"><div><span class="badge">Day 33 • Mini Project #4</span><h1>Operate a Real Linux Health Check Workflow.</h1><p class="lead">Select a realistic Linux incident, inspect the raw command outputs, run the complete health-check pipeline, review alerts and failures, and study the same reusable Python architecture used by the downloadable script.</p><div class="cta"><a class="button primary" href="#labs">Open Scenario Lab</a><a class="button secondary" href="#challenge">Project Requirements</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div class="quick-grid"><div class="mini"><b>5</b><span>Linux scenarios</span></div><div class="mini"><b>5</b><span>command parsers</span></div><div class="mini"><b>2</b><span>simulation/live modes</span></div><div class="mini"><b>1</b><span>end-to-end report</span></div></div></div></section>
+
+<section id="learn"><div class="section-title"><div><h2>One project, one pipeline</h2><p class="hint">This mini project uses configuration, functions, dictionaries, lists, conditions, exceptions, subprocess, pathlib, datetime, parsing, filtering, and report generation together.</p></div></div><div class="cards">
+<article class="card"><span class="pill">COLLECT</span><h3>Command layer</h3><p>Run mpstat, uptime, free, df, and ps once each. Return the same result structure for success, failure, timeout, and unavailable commands.</p></article>
+<article class="card"><span class="pill">PARSE</span><h3>Data layer</h3><p>Convert raw Linux text into CPU, load, memory, swap, filesystem, and process dictionaries.</p></article>
+<article class="card"><span class="pill">DECIDE</span><h3>Operations layer</h3><p>Apply thresholds, preserve partial results, explain every alert, and save one timestamped report.</p></article>
+</div></section>
+
+<section id="labs"><div class="section-title"><div><h2>Interactive Linux Scenario Lab</h2><p class="hint">Choose a scenario, edit thresholds, inspect raw outputs, and run the full simulated automation. The browser executes the same collection → parsing → analysis → reporting flow.</p></div></div>
+
+<div class="workspace">
+<div class="workspace-head"><h3>Health Check Controller</h3><button class="primary" onclick="runScenario()">▶ Run Health Check</button></div>
+<div class="workspace-body">
+<div class="formgrid">
+<div><label>Scenario</label><select id="scenario"><option value="healthy">Healthy server</option><option value="cpu_pressure">CPU pressure</option><option value="memory_pressure">Memory pressure</option><option value="disk_pressure">Disk pressure</option><option value="partial_failure">Partial command failure</option></select></div>
+<div><label>Server label</label><input id="serverLabel" value="linux-demo-01"></div>
+<div><label>CPU warning %</label><input id="cpuThreshold" type="number" value="75"></div>
+<div><label>Load warning per CPU</label><input id="loadThreshold" type="number" step="0.1" value="1"></div>
+<div><label>Memory warning %</label><input id="memoryThreshold" type="number" value="80"></div>
+<div><label>Swap warning %</label><input id="swapThreshold" type="number" value="50"></div>
+<div><label>Disk warning %</label><input id="diskThreshold" type="number" value="85"></div>
+<div><label>Top process count</label><input id="processCount" type="number" value="5"></div>
+</div>
+<div class="explain" id="scenarioDescription">Normal server with comfortable resource headroom.</div>
+</div>
+</div>
+
+<div style="height:18px"></div>
+
+<div class="lab"><div class="tabs">
+<button class="tab active" data-panel="rawpanel">1. Raw Linux Output<small>what commands returned</small></button>
+<button class="tab" data-panel="codepanel">2. Python Pipeline<small>visible project logic</small></button>
+<button class="tab" data-panel="metricpanel">3. Parsed Metrics<small>structured results</small></button>
+<button class="tab" data-panel="alertpanel">4. Alerts & Errors<small>why status changed</small></button>
+<button class="tab" data-panel="reportpanel">5. Final Report<small>operational output</small></button>
+</div><div>
+
+<div class="workspace panel active" id="rawpanel"><div class="workspace-head"><h3>Raw Command Outputs</h3></div><div class="workspace-body"><div class="codebox"><div class="bar">mpstat / uptime / free / df / ps</div><pre id="rawOutput"></pre></div></div></div>
+
+<div class="workspace panel" id="codepanel"><div class="workspace-head"><h3>Visible Python Architecture</h3></div><div class="workspace-body"><div class="codebox"><div class="bar">Python</div><pre id="visibleCode">def run_health_check(settings, scenario):
+    collected = collect_scenario(scenario)
+
+    cpu = parse_cpu_percent(collected["mpstat"])
+    uptime = parse_uptime(collected["uptime"])
+    memory = parse_memory(collected["free"])
+    filesystems = parse_disk(collected["df"])
+    processes = parse_processes(
+        collected["ps"],
+        settings["top_process_count"],
+    )
+
+    alerts = []
+
+    if cpu >= settings["cpu_threshold"]:
+        alerts.append(
+            f"CPU utilisation is {cpu}%"
+        )
+
+    load_limit = (
+        collected["cpu_count"]
+        * settings["load_warning_per_cpu"]
+    )
+
+    if uptime["load_1m"] >= load_limit:
+        alerts.append(
+            f"One-minute load is {uptime['load_1m']}"
+        )
+
+    if memory["memory_percent"] >= settings["memory_threshold"]:
+        alerts.append(
+            f"Memory utilisation is {memory['memory_percent']}%"
+        )
+
+    for filesystem in filesystems:
+        if filesystem["used_percent"] >= settings["disk_threshold"]:
+            alerts.append(
+                f"{filesystem['mount_point']} is "
+                f"{filesystem['used_percent']}% used"
+            )
+
+    final_status = (
+        "ATTENTION" if alerts else "HEALTHY"
+    )
+
+    return build_report(
+        cpu,
+        uptime,
+        memory,
+        filesystems,
+        processes,
+        alerts,
+        final_status,
+    )</pre></div><div class="explain">The downloadable Day33.py adds configuration validation, live subprocess execution, command failures, partial status, report saving, and all five scenarios.</div></div></div>
+
+<div class="workspace panel" id="metricpanel"><div class="workspace-head"><h3>Parsed Metrics</h3></div><div class="workspace-body"><div class="output"><div class="bar">Structured result</div><div class="outcontent" id="metricsOutput"></div></div></div></div>
+
+<div class="workspace panel" id="alertpanel"><div class="workspace-head"><h3>Operational Findings</h3></div><div class="workspace-body"><div class="output"><div class="bar">Alerts and errors</div><div class="outcontent" id="alertsOutput"></div></div></div></div>
+
+<div class="workspace panel" id="reportpanel"><div class="workspace-head"><h3>Final Linux Health Report</h3><button class="secondary" onclick="copyReport()">Copy Report</button></div><div class="workspace-body"><div class="output"><div class="bar">Generated report</div><div class="outcontent" id="finalReport"></div></div></div></div>
+
+</div></div>
+</section>
+
+<section id="challenge"><div class="challenge"><div><h2>Mini Project #4 Deliverable</h2><p>Your final script must support both simulation and live Linux execution. Learners can test incidents safely before running the same architecture on a real host.</p><div class="checklist"><label class="check"><input type="checkbox"> Five realistic Linux scenarios</label><label class="check"><input type="checkbox"> CPU, load, memory, swap, disk, and process parsing</label><label class="check"><input type="checkbox"> SUCCESS, FAILED, TIMEOUT, UNAVAILABLE handling</label><label class="check"><input type="checkbox"> HEALTHY, ATTENTION, PARTIAL, UNAVAILABLE statuses</label><label class="check"><input type="checkbox"> Timestamped report saved with pathlib</label></div></div><div class="codebox"><div class="bar">End-to-End Flow</div><pre>health_check.ini
+        ↓
+simulation or live collector
+        ↓
+standard command results
+        ↓
+five parsing functions
+        ↓
+threshold + failure analysis
+        ↓
+alerts + errors + final status
+        ↓
+print and save report</pre></div></div></section>
+</main>
+<button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+<footer>Day 33 complete • Mini Project #4 • Linux Health Check Automation</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+
+const scenarios={
+healthy:{description:"Normal server with comfortable resource headroom.",cpuCount:8,idle:87.8,loads:[1.2,1.05,.88],mem:[32000,15400,14800],swap:[4096,120],disks:[["/dev/root","/",55],["/dev/data","/data",56],["/dev/backup","/backup",50],["tmpfs","/run",5]],processes:[[1842,"java",18.4,12.5],[2210,"postgres",8.2,6.1],[3102,"python3",3.5,1.8],[995,"node",2.1,2.7],[442,"rsyslogd",.8,.3]],uptime:"up 45 days, 4:11"},
+cpu_pressure:{description:"Application processes cause sustained CPU pressure.",cpuCount:4,idle:10,loads:[6.8,6.35,5.9],mem:[16000,9300,5900],swap:[4096,320],disks:[["/dev/root","/",62],["/dev/data","/data",68],["tmpfs","/run",5]],processes:[[8421,"java",178.4,22.5],[8510,"python3",96.7,8.4],[1842,"nginx",22.1,1.7],[2210,"postgres",12.8,5.9],[442,"rsyslogd",1.1,.3]],uptime:"up 18 days, 7:09"},
+memory_pressure:{description:"Memory exhaustion with active swap usage.",cpuCount:8,idle:73.3,loads:[2.1,2.35,2.4],mem:[32000,29400,1800],swap:[8192,5120],disks:[["/dev/root","/",65],["/dev/oradata","/oradata",70],["/dev/archive","/archive",70]],processes:[[2210,"postgres",24.5,38.2],[2311,"postgres",18.4,24.7],[8421,"java",15.2,18.8],[5502,"python3",3.1,4.5],[442,"rsyslogd",.7,.3]],uptime:"up 120 days, 1:27"},
+disk_pressure:{description:"Archive and backup filesystems are almost full.",cpuCount:8,idle:76.8,loads:[1.7,1.55,1.4],mem:[16000,8600,6400],swap:[4096,180],disks:[["/dev/root","/",60],["/dev/data","/data",82],["/dev/archive","/archive",95],["/dev/backup","/backup",93],["tmpfs","/run",5]],processes:[[6102,"gzip",35.5,1.1],[6021,"backup-agent",28.2,3.4],[2210,"postgres",9.8,5.8],[442,"rsyslogd",.8,.3],[995,"node",.4,1.7]],uptime:"up 62 days, 9:48"},
+partial_failure:{description:"Disk collection fails while other checks remain usable.",cpuCount:4,idle:68.5,loads:[1.1,1.2,1.15],mem:[8000,4200,3300],swap:[2048,50],disks:null,diskError:"df: permission denied while reading mounted filesystem metadata",processes:[[1220,"python3",34.2,10.4],[1842,"java",18.8,14.1],[442,"rsyslogd",1,.4]],uptime:"up 9 days, 5:43"}
+};
+
+function rawText(s){
+ const mp=`Average: all ... %idle ${s.idle}`;
+ const up=`${s.uptime}, load average: ${s.loads.join(", ")}`;
+ const free=`Mem: total=${s.mem[0]} used=${s.mem[1]} available=${s.mem[2]}\nSwap: total=${s.swap[0]} used=${s.swap[1]}`;
+ const df=s.disks?s.disks.map(d=>`${d[0]} mounted on ${d[1]} used ${d[2]}%`).join("\n"):`COMMAND FAILED: ${s.diskError}`;
+ const ps=s.processes.map(p=>`${p[0]} ${p[1]} CPU=${p[2]}% MEM=${p[3]}%`).join("\n");
+ return `[mpstat]\n${mp}\n\n[uptime]\n${up}\n\n[free -m]\n${free}\n\n[df -P]\n${df}\n\n[ps]\n${ps}`;
+}
+
+function runScenario(){
+ const key=$("scenario").value,s=scenarios[key];
+ const server=$("serverLabel").value.trim()||"unnamed-server";
+ const cpuT=Number($("cpuThreshold").value),loadPerCpu=Number($("loadThreshold").value),memT=Number($("memoryThreshold").value),swapT=Number($("swapThreshold").value),diskT=Number($("diskThreshold").value),limit=Math.max(1,Number($("processCount").value));
+ $("scenarioDescription").textContent=s.description;
+ $("rawOutput").textContent=rawText(s);
+
+ const cpu=Math.round((100-s.idle)*100)/100;
+ const memPct=Math.round((s.mem[1]/s.mem[0]*100)*100)/100;
+ const swapPct=s.swap[0]?Math.round((s.swap[1]/s.swap[0]*100)*100)/100:0;
+ const loadLimit=Math.round((s.cpuCount*loadPerCpu)*100)/100;
+ const alerts=[],errors=[];
+
+ if(cpu>=cpuT) alerts.push(`CPU utilisation is ${cpu}% (threshold ${cpuT}%)`);
+ if(s.loads[0]>=loadLimit) alerts.push(`One-minute load is ${s.loads[0]} for ${s.cpuCount} CPUs (limit ${loadLimit})`);
+ if(memPct>=memT) alerts.push(`Memory utilisation is ${memPct}% (threshold ${memT}%)`);
+ if(swapPct>=swapT) alerts.push(`Swap utilisation is ${swapPct}% (threshold ${swapT}%)`);
+ if(s.disks){
+   s.disks.forEach(d=>{if(d[2]>=diskT) alerts.push(`Filesystem ${d[1]} is ${d[2]}% used (threshold ${diskT}%)`)});
+ }else errors.push(`disk: FAILED - ${s.diskError}`);
+
+ const finalStatus=errors.length?"PARTIAL":alerts.length?"ATTENTION":"HEALTHY";
+ const diskLines=s.disks?s.disks.map(d=>`${d[1].padEnd(12)} ${String(d[2]).padStart(3)}% ${d[2]>=diskT?"ATTENTION":"HEALTHY"}`).join("\n"):"NOT AVAILABLE";
+ const processLines=s.processes.slice(0,limit).map(p=>`${String(p[0]).padStart(6)} ${p[1].padEnd(16)} CPU ${String(p[2]).padStart(5)}% MEM ${String(p[3]).padStart(5)}%`).join("\n");
+
+ $("metricsOutput").textContent=
+`Server: ${server}
+CPU count: ${s.cpuCount}
+CPU utilisation: ${cpu}%
+Load averages: ${s.loads.join(", ")}
+Load limit: ${loadLimit}
+Memory used: ${s.mem[1]} MB / ${s.mem[0]} MB (${memPct}%)
+Memory available: ${s.mem[2]} MB
+Swap used: ${s.swap[1]} MB / ${s.swap[0]} MB (${swapPct}%)
+
+Filesystems:
+${diskLines}
+
+Top processes:
+${processLines}`;
+
+ $("alertsOutput").textContent=
+`ALERTS
+${alerts.length?alerts.map((a,i)=>`${i+1}. ${a}`).join("\n"):"No threshold breaches detected."}
+
+ERRORS
+${errors.length?errors.map((e,i)=>`${i+1}. ${e}`).join("\n"):"No command or parsing errors."}
+
+FINAL STATUS: ${finalStatus}`;
+
+ $("finalReport").textContent=
+`==============================================================================
+LINUX HEALTH CHECK REPORT
+==============================================================================
+Server              : ${server}
+Scenario            : ${key}
+Description         : ${s.description}
+CPU utilisation     : ${cpu}% | threshold=${cpuT}%
+Load averages       : ${s.loads.join(", ")}
+Load evaluation     : CPUs=${s.cpuCount} | 1m limit=${loadLimit}
+Memory utilisation  : ${memPct}% | threshold=${memT}%
+Swap utilisation    : ${swapPct}% | threshold=${swapT}%
+
+FILESYSTEMS
+------------------------------------------------------------------------------
+${diskLines}
+
+TOP CPU PROCESSES
+------------------------------------------------------------------------------
+${processLines}
+
+ALERTS
+------------------------------------------------------------------------------
+${alerts.length?alerts.map((a,i)=>`${i+1}. ${a}`).join("\n"):"No threshold breaches detected."}
+
+ERRORS
+------------------------------------------------------------------------------
+${errors.length?errors.map((e,i)=>`${i+1}. ${e}`).join("\n"):"No command or parsing errors."}
+
+==============================================================================
+FINAL STATUS: ${finalStatus}
+==============================================================================`;
+}
+
+function copyReport(){navigator.clipboard.writeText($("finalReport").textContent)}
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active")}));
+$("scenario").addEventListener("change",runScenario);
+["serverLabel","cpuThreshold","loadThreshold","memoryThreshold","swapThreshold","diskThreshold","processCount"].forEach(id=>$(id).addEventListener("input",runScenario));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+runScenario();
+</script>
+</body>
+</html>

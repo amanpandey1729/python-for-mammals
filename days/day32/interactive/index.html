@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 32 | Python for Mammals</title>
+  <style>
+    :root{
+      --bg:#f7f7f2;
+      --card:#ffffff;
+      --ink:#1f2933;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --blue:#2b6f9f;
+      --blue2:#174a70;
+      --yellow:#f2c94c;
+      --green:#16a34a;
+      --red:#dc2626;
+      --shadow:0 18px 45px rgba(31,41,51,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(43,111,159,.12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(242,201,76,.20), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+    }
+
+    .shell{width:min(1120px, calc(100% - 32px)); margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(12px);
+      background:rgba(247,247,242,.86);
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand img{
+      width:54px;
+      height:54px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:4px;
+    }
+    .brand strong{display:block; font-size:16px; line-height:1.1}
+    .brand span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:14px;
+      margin-left:14px;
+      font-weight:700;
+    }
+    .nav a:hover{color:var(--blue)}
+
+    .course-nav{
+      max-width:760px;
+      margin:18px auto 0;
+      padding:10px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(31,41,51,.05);
+    }
+    .course-nav a,.course-nav span{text-decoration:none; color:#334155; font-weight:750}
+    .course-nav a:hover{color:var(--blue)}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      padding:48px 0 28px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      color:var(--blue2);
+      font-size:13px;
+      font-weight:800;
+    }
+    h1{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      margin:18px 0 14px;
+      letter-spacing:-.04em;
+    }
+    .lead{font-size:18px; color:#475569; max-width:720px; margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    button,.button{
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:850;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:.2s transform,.2s box-shadow,.2s background;
+    }
+    button:hover,.button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue); color:#fff; box-shadow:0 10px 25px rgba(43,111,159,.20)}
+    .secondary{background:#fff; color:var(--ink); border:1px solid var(--line)}
+
+    .hero-card{
+      background:linear-gradient(180deg,#fff,rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:22px;
+    }
+    .logo-large{
+      width:100%;
+      max-width:260px;
+      display:block;
+      margin:0 auto 16px;
+      object-fit:contain;
+      border-radius:18px;
+    }
+    .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+    .mini{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-height:94px;
+    }
+    .mini b{font-size:24px; display:block}
+    .mini span{font-size:13px; color:var(--muted); font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:16px}
+    h2{font-size:clamp(24px,3vw,34px); line-height:1.1; margin:0; letter-spacing:-.025em}
+    .hint{color:var(--muted); margin:6px 0 0; max-width:720px}
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .card{
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 12px 30px rgba(31,41,51,.05);
+    }
+    .card h3{margin:0 0 8px; font-size:19px}
+    .card p{margin:0; color:#556575; font-size:15px}
+    .pill{display:inline-flex; padding:5px 9px; border-radius:999px; background:#eef6fc; color:var(--blue2); font-size:12px; font-weight:900; margin-bottom:10px}
+
+    .lab{
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .tabs{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:10px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:92px;
+    }
+    .tab{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      color:var(--ink);
+      border-radius:14px;
+      padding:12px 13px;
+      display:block;
+      margin:4px 0;
+    }
+    .tab small{display:block; color:var(--muted); margin-top:2px; font-weight:700}
+    .tab.active{background:#eef6fc; color:var(--blue2)}
+
+    .panel{display:none}
+    .panel.active{display:block}
+    .workspace{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .workspace-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:#fcfcfa;
+    }
+    .workspace-head h3{margin:0; font-size:20px}
+    .workspace-body{padding:18px}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+
+    .codebox,.output{
+      border-radius:16px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#0f172a;
+      color:#e2e8f0;
+    }
+    .bar{
+      height:36px;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:0 12px;
+      background:#111827;
+      color:#94a3b8;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px; height:10px; border-radius:50%; background:#475569}
+    pre,textarea{
+      margin:0;
+      width:100%;
+      min-height:180px;
+      padding:16px;
+      font:14px/1.55 Consolas, Monaco, monospace;
+      white-space:pre-wrap;
+    }
+    textarea{
+      border:0;
+      background:#0f172a;
+      color:#e2e8f0;
+      resize:vertical;
+      outline:none;
+    }
+    .output{background:#fbfbfb; color:var(--ink)}
+    .output .bar{background:#f1f5f9; color:#334155}
+    .outcontent{padding:16px; min-height:180px; font:14px/1.55 Consolas, Monaco, monospace; white-space:pre-wrap}
+
+    .formgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0}
+    label{font-size:13px; font-weight:900; color:#334155; display:block; margin-bottom:6px}
+    input,select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font:15px Inter, Segoe UI, Arial, sans-serif;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(43,111,159,.12)}
+    .explain{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#6b4e00;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    .quiz-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin:10px 0}
+    .result{font-weight:900; margin-top:12px}
+    .ok{color:var(--green)} .bad{color:var(--red)}
+
+    .challenge{
+      background:linear-gradient(135deg,#173b57,#2b6f9f);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      box-shadow:0 22px 55px rgba(23,59,87,.22);
+    }
+    .challenge h2{color:#fff}
+    .challenge p{color:#dbeafe}
+    .challenge .codebox{border-color:rgba(255,255,255,.18)}
+    .checklist{display:grid; gap:10px; margin-top:16px}
+    .check{display:flex; gap:10px; align-items:flex-start; padding:12px; background:rgba(255,255,255,.10); border-radius:14px; color:#eef6ff}
+    .check input{width:auto; margin-top:4px; accent-color:var(--yellow)}
+
+    footer{padding:30px 0 44px; color:var(--muted); text-align:center; font-size:14px}
+    .topbtn{position:fixed; right:18px; bottom:18px; z-index:20; border-radius:999px; padding:12px 14px; background:#111827; color:white; display:none}
+    .topbtn.show{display:inline-flex}
+
+    @media(max-width:900px){
+      .hero,.lab,.split,.challenge{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .tabs{position:static; display:grid; grid-template-columns:1fr 1fr}
+      .nav nav{display:none}
+    }
+    @media(max-width:620px){
+      .cards,.quick-grid,.formgrid,.tabs{grid-template-columns:1fr}
+      .hero{padding-top:28px}
+      .brand img{width:46px;height:46px}
+      .workspace-head{align-items:flex-start; flex-direction:column}
+      pre,textarea,.outcontent{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+<header><div class="shell nav"><div class="brand"><img src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div><strong>Python for Mammals</strong><span>45-Day Automation Challenge</span></div></div><nav><a href="#learn">Learn</a><a href="#labs">Labs</a><a href="#challenge">Challenge</a></nav></div></header>
+<main class="shell">
+  <div class="course-nav"><a href="../../day31/interactive/">← Day 31</a><span>•</span><a href="../../../">Home</a><span>•</span><span><a href="../../day33/interactive/">Day 33 ➡</a></span></div>
+
+  <section class="hero"><div><span class="badge">Day 32 • Automation Essentials</span><h1>Change Settings, Not Working Code.</h1><p class="lead">Store thresholds, paths, environment names, report options, and feature switches outside your Python logic. Today you will create and read INI files with <b>configparser</b>.</p><div class="cta"><a class="button primary" href="#labs">Start Interactive Labs</a><a class="button secondary" href="#challenge">View Mini Challenge</a></div></div><div class="hero-card"><img class="logo-large" src="../../../assets/python-for-mammals-logo.png" alt="Python for Mammals logo"><div class="quick-grid"><div class="mini"><b>2</b><span>core topics</span></div><div class="mini"><b>6</b><span>interactive labs</span></div><div class="mini"><b>INI</b><span>human-readable settings</span></div><div class="mini"><b>1</b><span>complete workflow</span></div></div></div></section>
+
+  <section id="learn"><div class="section-title"><div><h2>Why operations teams care</h2><p class="hint">The same automation may run in test, staging, and production with different thresholds and destinations. Configuration keeps those differences out of the program logic.</p></div></div><div class="cards">
+    <article class="card"><span class="pill">STORE</span><h3>Separate settings</h3><p>Keep environment names, thresholds, folders, filenames, and switches in an INI file instead of scattering them through Python code.</p></article>
+    <article class="card"><span class="pill">READ</span><h3>Load predictable values</h3><p>Use ConfigParser to read sections and keys, then use typed getters for integers, floats, and booleans.</p></article>
+    <article class="card"><span class="pill">VALIDATE</span><h3>Fail clearly</h3><p>Check required sections, missing keys, allowed environments, and threshold ranges before the automation starts real work.</p></article>
+  </div></section>
+
+  <section id="labs"><div class="section-title"><div><h2>Interactive Labs</h2><p class="hint">Change the inputs and compare the visible Python with its generated output. Every output line maps to a visible print() statement.</p></div></div><div class="lab"><div class="tabs">
+    <button class="tab active" data-panel="inilab">1. Build INI<small>store settings</small></button>
+    <button class="tab" data-panel="readlab">2. Read Values<small>sections and keys</small></button>
+    <button class="tab" data-panel="typedlab">3. Typed Getters<small>int and boolean</small></button>
+    <button class="tab" data-panel="fallbacklab">4. Fallback<small>optional settings</small></button>
+    <button class="tab" data-panel="validatelab">5. Validate<small>range and environment</small></button>
+    <button class="tab" data-panel="reportlab">6. Config Report<small>combined workflow</small></button>
+  </div><div>
+
+    <div class="workspace panel active" id="inilab"><div class="workspace-head"><h3>Store Settings in INI Format</h3><button class="secondary" onclick="swapIni()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Environment</label><select id="iniEnv"><option>test</option><option>production</option><option>staging</option></select></div><div><label>Disk threshold</label><input id="iniDisk" type="number" value="80"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="iniCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="iniOutput"></div></div></div><div class="explain">ConfigParser writes sections and values. The generated file remains readable by both people and Python.</div></div></div>
+
+    <div class="workspace panel" id="readlab"><div class="workspace-head"><h3>Read Sections and Values</h3><button class="secondary" onclick="swapRead()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Application name</label><input id="readName" value="Daily Reporter"></div><div><label>Environment</label><select id="readEnv"><option>test</option><option>production</option><option>development</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="readCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="readOutput"></div></div></div><div class="explain">read_string() is used here so the example is fully self-contained. A file-based script normally uses config.read(path).</div></div></div>
+
+    <div class="workspace panel" id="typedlab"><div class="workspace-head"><h3>Convert Configuration Values</h3><button class="secondary" onclick="swapTyped()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Retry count</label><input id="typedRetry" type="number" value="3"></div><div><label>Alerts enabled</label><select id="typedAlerts"><option value="yes">yes</option><option value="no">no</option></select></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="typedCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="typedOutput"></div></div></div><div class="explain">Configuration starts as text. getint() and getboolean() return useful Python types for calculations and decisions.</div></div></div>
+
+    <div class="workspace panel" id="fallbacklab"><div class="workspace-head"><h3>Use a Fallback for an Optional Setting</h3><button class="secondary" onclick="swapFallback()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Include owner key?</label><select id="fallbackInclude"><option value="no">no</option><option value="yes">yes</option></select></div><div><label>Owner when included</label><input id="fallbackOwner" value="Platform Team"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="fallbackCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="fallbackOutput"></div></div></div><div class="explain">Fallbacks suit optional values. Required values should be validated instead of silently replaced.</div></div></div>
+
+    <div class="workspace panel" id="validatelab"><div class="workspace-head"><h3>Validate Operational Settings</h3><button class="secondary" onclick="swapValidate()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Environment</label><input id="validateEnv" value="production"></div><div><label>Threshold</label><input id="validateThreshold" type="number" value="85"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="validateCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="validateOutput"></div></div></div><div class="explain">Reading successfully does not prove a value is operationally valid. Validate allowed names and numeric ranges before doing work.</div></div></div>
+
+    <div class="workspace panel" id="reportlab"><div class="workspace-head"><h3>Drive a Health Decision from Configuration</h3><button class="secondary" onclick="swapReport()">Swap values</button></div><div class="workspace-body"><div class="formgrid"><div><label>Observed usage %</label><input id="reportUsage" type="number" value="88"></div><div><label>Configured threshold %</label><input id="reportThreshold" type="number" value="80"></div></div><div class="split"><div class="codebox"><div class="bar"><span class="dot"></span>Python</div><pre id="reportCode"></pre></div><div class="output"><div class="bar">Output</div><div class="outcontent" id="reportOutput"></div></div></div><div class="explain">The decision logic stays unchanged. Changing the configuration threshold changes the result.</div></div></div>
+
+  </div></div></section>
+
+  <section id="challenge"><div class="challenge"><div><h2>Mini Challenge: Configuration-Driven Operations Reporter</h2><p>Create one workflow that loads operations.ini once, validates it, evaluates an observation, and produces a report without asking for the same input twice.</p><div class="checklist"><label class="check"><input type="checkbox"> Required sections and keys are validated</label><label class="check"><input type="checkbox"> Typed values and ranges are checked</label><label class="check"><input type="checkbox"> Environment mismatch becomes SKIPPED</label><label class="check"><input type="checkbox"> Missing or malformed configuration is handled</label><label class="check"><input type="checkbox"> No password or token is stored in the INI file</label></div></div><div class="codebox"><div class="bar"><span class="dot"></span>Workflow</div><pre>operations.ini
+      ↓
+load once
+      ↓
+validate sections + values
+      ↓
+read typed settings
+      ↓
+evaluate observation
+      ↓
+create report + final status</pre></div></div></section>
+</main>
+<button class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+<footer>Day 32 complete • Python for Mammals • Configuration Files</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const q=s=>JSON.stringify(String(s));
+function clampText(v){return String(v).trim();}
+
+function updateIni(){
+  const env=$("iniEnv").value, disk=$("iniDisk").value;
+  $("iniCode").textContent=`from configparser import ConfigParser\nfrom io import StringIO\n\nconfig = ConfigParser()\nconfig["application"] = {"environment": ${q(env)}}\nconfig["monitoring"] = {"disk_threshold": ${q(disk)}}\n\nstream = StringIO()\nconfig.write(stream)\nprint(stream.getvalue().strip())`;
+  $("iniOutput").textContent=`[application]\nenvironment = ${env}\n\n[monitoring]\ndisk_threshold = ${disk}`;
+}
+const iniExamples=[["production","90"],["staging","75"],["test","80"]];let iniIndex=0;
+function swapIni(){iniIndex=(iniIndex+1)%iniExamples.length;[$("iniEnv").value,$("iniDisk").value]=iniExamples[iniIndex];updateIni();}
+
+function updateRead(){
+  const name=$("readName").value, env=$("readEnv").value;
+  $("readCode").textContent=`from configparser import ConfigParser\n\ntext = """[application]\nname = ${name}\nenvironment = ${env}\n"""\nconfig = ConfigParser()\nconfig.read_string(text)\n\nprint("Sections:", config.sections())\nprint("Name:", config.get("application", "name"))\nprint("Environment:", config.get("application", "environment"))`;
+  $("readOutput").textContent=`Sections: ['application']\nName: ${name}\nEnvironment: ${env}`;
+}
+const readExamples=[["Inventory Reporter","production"],["Patch Reporter","development"],["Daily Reporter","test"]];let readIndex=0;
+function swapRead(){readIndex=(readIndex+1)%readExamples.length;[$("readName").value,$("readEnv").value]=readExamples[readIndex];updateRead();}
+
+function updateTyped(){
+  const retry=$("typedRetry").value, alerts=$("typedAlerts").value, boolText=alerts==="yes"?"True":"False";
+  $("typedCode").textContent=`from configparser import ConfigParser\n\ntext = """[runtime]\nretry_count = ${retry}\nalerts_enabled = ${alerts}\n"""\nconfig = ConfigParser()\nconfig.read_string(text)\n\nretry_count = config.getint("runtime", "retry_count")\nalerts_enabled = config.getboolean("runtime", "alerts_enabled")\nprint("Retry count:", retry_count, type(retry_count).__name__)\nprint("Alerts enabled:", alerts_enabled, type(alerts_enabled).__name__)`;
+  $("typedOutput").textContent=`Retry count: ${Number(retry)} int\nAlerts enabled: ${boolText} bool`;
+}
+const typedExamples=[["5","no"],["2","yes"],["3","yes"]];let typedIndex=0;
+function swapTyped(){typedIndex=(typedIndex+1)%typedExamples.length;[$("typedRetry").value,$("typedAlerts").value]=typedExamples[typedIndex];updateTyped();}
+
+function updateFallback(){
+  const include=$("fallbackInclude").value==="yes", owner=$("fallbackOwner").value;
+  const ownerLine=include?`owner = ${owner}\n`:"";
+  const result=include?owner:"Operations Team";
+  $("fallbackCode").textContent=`from configparser import ConfigParser\n\ntext = """[application]\nname = Daily Reporter\n${ownerLine}"""\nconfig = ConfigParser()\nconfig.read_string(text)\n\nowner = config.get("application", "owner", fallback="Operations Team")\nprint("Owner:", owner)`;
+  $("fallbackOutput").textContent=`Owner: ${result}`;
+}
+const fallbackExamples=[["yes","Platform Team"],["no","Support Team"],["yes","Monitoring Team"]];let fallbackIndex=0;
+function swapFallback(){fallbackIndex=(fallbackIndex+1)%fallbackExamples.length;[$("fallbackInclude").value,$("fallbackOwner").value]=fallbackExamples[fallbackIndex];updateFallback();}
+
+function updateValidate(){
+  const env=clampText($("validateEnv").value).toLowerCase(), threshold=Number($("validateThreshold").value);
+  const envStatus=["development","test","staging","production"].includes(env)?"VALID":"INVALID";
+  const thresholdStatus=threshold>=0&&threshold<=100?"VALID":"INVALID";
+  $("validateCode").textContent=`environment = ${q(env)}\nthreshold = ${threshold}\nallowed = {"development", "test", "staging", "production"}\n\nenvironment_status = "VALID" if environment in allowed else "INVALID"\nthreshold_status = "VALID" if 0 <= threshold <= 100 else "INVALID"\nprint("Environment:", environment_status)\nprint("Threshold:", threshold_status)`;
+  $("validateOutput").textContent=`Environment: ${envStatus}\nThreshold: ${thresholdStatus}`;
+}
+const validateExamples=[["qa","85"],["staging","120"],["test","70"]];let validateIndex=0;
+function swapValidate(){validateIndex=(validateIndex+1)%validateExamples.length;[$("validateEnv").value,$("validateThreshold").value]=validateExamples[validateIndex];updateValidate();}
+
+function updateReport(){
+  const usage=Number($("reportUsage").value), threshold=Number($("reportThreshold").value);
+  const status=usage>=threshold?"ATTENTION":"HEALTHY";
+  $("reportCode").textContent=`from configparser import ConfigParser\n\ntext = """[monitoring]\ndisk_threshold = ${threshold}\n"""\nconfig = ConfigParser()\nconfig.read_string(text)\n\nobserved_usage = ${usage}\ndisk_threshold = config.getint("monitoring", "disk_threshold")\nstatus = "ATTENTION" if observed_usage >= disk_threshold else "HEALTHY"\nprint("Observed usage:", observed_usage)\nprint("Configured threshold:", disk_threshold)\nprint("Status:", status)`;
+  $("reportOutput").textContent=`Observed usage: ${usage}\nConfigured threshold: ${threshold}\nStatus: ${status}`;
+}
+const reportExamples=[["72","80"],["91","90"],["88","80"]];let reportIndex=0;
+function swapReport(){reportIndex=(reportIndex+1)%reportExamples.length;[$("reportUsage").value,$("reportThreshold").value]=reportExamples[reportIndex];updateReport();}
+
+document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));tab.classList.add("active");$(tab.dataset.panel).classList.add("active");}));
+[["iniEnv","iniDisk"],["readName","readEnv"],["typedRetry","typedAlerts"],["fallbackInclude","fallbackOwner"],["validateEnv","validateThreshold"],["reportUsage","reportThreshold"]].forEach((ids,i)=>ids.forEach(id=>$(id).addEventListener("input",[updateIni,updateRead,updateTyped,updateFallback,updateValidate,updateReport][i])));
+window.addEventListener("scroll",()=>{$("topbtn").classList.toggle("show",window.scrollY>500)});
+updateIni();updateRead();updateTyped();updateFallback();updateValidate();updateReport();
+</script>
+</body>
+</html>
