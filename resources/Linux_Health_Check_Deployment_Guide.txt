@@ -1,0 +1,309 @@
+LINUX OS HEALTH CHECK - DEPLOYMENT GUIDE
+=========================================
+
+Files
+-----
+linux_health_check.py
+    Generates text, HTML and JSON reports using only the Python standard library.
+
+1. INSTALL THE SCRIPT
+---------------------
+sudo mkdir -p /opt/os-health
+sudo cp linux_health_check.py /opt/os-health/
+sudo chmod 750 /opt/os-health/linux_health_check.py
+
+Create a protected report directory:
+
+sudo mkdir -p /var/log/os-health
+sudo chmod 750 /var/log/os-health
+
+Test it:
+
+sudo /usr/bin/python3 /opt/os-health/linux_health_check.py \
+    --output-dir /var/log/os-health
+
+For a lighter login-time report:
+
+/usr/bin/python3 /opt/os-health/linux_health_check.py \
+    --brief \
+    --format text \
+    --output-dir "$HOME/.os-health"
+
+2. METHOD A - RUN AUTOMATICALLY AT INTERACTIVE LOGIN
+----------------------------------------------------
+Recommended location: ~/.bash_profile
+
+Add:
+
+# Run a brief OS health check only for interactive login shells.
+if [[ $- == *i* ]] && command -v python3 >/dev/null 2>&1; then
+    mkdir -p "$HOME/.os-health"
+    /usr/bin/python3 /opt/os-health/linux_health_check.py \
+        --brief \
+        --format text \
+        --output-dir "$HOME/.os-health"
+fi
+
+Important:
+- Use --brief at login so the shell does not pause for iostat/vmstat diagnostics.
+- Do not place the command in .bashrc without the interactive-shell guard.
+- .bashrc may execute repeatedly for subshells, scp, automation and remote commands.
+
+Apply without logging out:
+
+source ~/.bash_profile
+
+System-wide login execution can be configured in /etc/profile.d/os-health.sh:
+
+sudo tee /etc/profile.d/os-health.sh >/dev/null <<'EOF'
+if [[ $- == *i* ]] && command -v python3 >/dev/null 2>&1; then
+    mkdir -p "$HOME/.os-health"
+    /usr/bin/python3 /opt/os-health/linux_health_check.py \
+        --brief \
+        --format text \
+        --output-dir "$HOME/.os-health"
+fi
+EOF
+
+sudo chmod 644 /etc/profile.d/os-health.sh
+
+3. METHOD B - HOURLY CRON REPORT
+--------------------------------
+Create a wrapper:
+
+sudo tee /opt/os-health/run_health_check.sh >/dev/null <<'EOF'
+#!/bin/bash
+set -u
+
+PYTHON=/usr/bin/python3
+SCRIPT=/opt/os-health/linux_health_check.py
+REPORT_DIR=/var/log/os-health
+LOG_FILE=/var/log/os-health/cron.log
+
+mkdir -p "$REPORT_DIR"
+
+"$PYTHON" "$SCRIPT" \
+    --output-dir "$REPORT_DIR" \
+    --format text html json \
+    >>"$LOG_FILE" 2>&1
+
+exit_code=$?
+
+# Keep 14 days of generated reports.
+find "$REPORT_DIR" -maxdepth 1 -type f \
+    \( -name 'os_health_*.txt' -o -name 'os_health_*.html' -o -name 'os_health_*.json' \) \
+    -mtime +14 -delete
+
+exit "$exit_code"
+EOF
+
+sudo chmod 750 /opt/os-health/run_health_check.sh
+
+Edit root's crontab:
+
+sudo crontab -e
+
+Run every hour at minute 5:
+
+5 * * * * /opt/os-health/run_health_check.sh
+
+Verify:
+
+sudo crontab -l
+sudo tail -100 /var/log/os-health/cron.log
+
+Cron uses a minimal environment. Always use absolute paths.
+
+4. METHOD C - HOURLY CRON AND MAIL THE TEXT REPORT
+--------------------------------------------------
+Prerequisite: a working local mail client/MTA, for example Postfix plus mailx.
+
+RHEL / Oracle Linux:
+sudo dnf install -y postfix s-nail
+sudo systemctl enable --now postfix
+
+Ubuntu / Debian:
+sudo apt-get update
+sudo apt-get install -y postfix bsd-mailx
+sudo systemctl enable --now postfix
+
+First confirm email delivery manually:
+
+echo "OS health mail test" | mail -s "Mail test from $(hostname -f)" dba-team@example.com
+
+Create a mail wrapper:
+
+sudo tee /opt/os-health/run_and_mail_health.sh >/dev/null <<'EOF'
+#!/bin/bash
+set -u
+
+PYTHON=/usr/bin/python3
+SCRIPT=/opt/os-health/linux_health_check.py
+REPORT_DIR=/var/log/os-health
+RECIPIENT=dba-team@example.com
+HOST=$(/bin/hostname -f 2>/dev/null || /bin/hostname)
+STAMP=$(/bin/date +%Y%m%d_%H%M%S)
+REPORT="$REPORT_DIR/os_health_mail_${HOST}_${STAMP}.txt"
+
+mkdir -p "$REPORT_DIR"
+
+"$PYTHON" "$SCRIPT" \
+    --format text \
+    --output-dir "$REPORT_DIR" \
+    >"$REPORT" 2>&1
+
+exit_code=$?
+
+if [ "$exit_code" -eq 2 ]; then
+    STATUS=CRITICAL
+elif [ "$exit_code" -eq 1 ]; then
+    STATUS=WARNING
+elif [ "$exit_code" -eq 0 ]; then
+    STATUS=OK
+else
+    STATUS=SCRIPT_ERROR
+fi
+
+/usr/bin/mail \
+    -s "[$STATUS] Hourly OS Health Check - $HOST" \
+    "$RECIPIENT" <"$REPORT"
+
+find "$REPORT_DIR" -maxdepth 1 -type f -name 'os_health_mail_*.txt' -mtime +14 -delete
+exit "$exit_code"
+EOF
+
+Change RECIPIENT in the wrapper and then:
+
+sudo chmod 750 /opt/os-health/run_and_mail_health.sh
+sudo crontab -e
+
+5 * * * * /opt/os-health/run_and_mail_health.sh >>/var/log/os-health/mail_cron.log 2>&1
+
+Note:
+Mail submission is not the same as successful external delivery. Corporate SMTP relay,
+DNS, firewall, sender rewriting and authentication may still need to be configured.
+
+5. METHOD D - LET THE PYTHON SCRIPT USE LOCAL SENDMAIL
+------------------------------------------------------
+The script supports:
+
+sudo /usr/bin/python3 /opt/os-health/linux_health_check.py \
+    --output-dir /var/log/os-health \
+    --email dba-team@example.com
+
+This method requires /usr/sbin/sendmail or another sendmail-compatible executable
+provided by Postfix/Sendmail.
+
+Cron example:
+
+5 * * * * /usr/bin/python3 /opt/os-health/linux_health_check.py --output-dir /var/log/os-health --email dba-team@example.com >>/var/log/os-health/sendmail_cron.log 2>&1
+
+6. METHOD E - SYSTEMD SERVICE AND TIMER
+--------------------------------------
+A systemd timer is generally easier to audit than cron and provides journal logging.
+
+Create the service:
+
+sudo tee /etc/systemd/system/os-health.service >/dev/null <<'EOF'
+[Unit]
+Description=Generate Linux OS health-check report
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/os-health/linux_health_check.py --output-dir /var/log/os-health --format text html json
+User=root
+Group=root
+Nice=10
+EOF
+
+Create the timer:
+
+sudo tee /etc/systemd/system/os-health.timer >/dev/null <<'EOF'
+[Unit]
+Description=Run Linux OS health check every hour
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=120
+Unit=os-health.service
+
+[Install]
+WantedBy=timers.target
+EOF
+
+Enable and test:
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now os-health.timer
+sudo systemctl start os-health.service
+
+Inspect:
+
+systemctl list-timers os-health.timer
+systemctl status os-health.timer
+journalctl -u os-health.service --since today
+ls -ltr /var/log/os-health
+
+7. OPTIONAL PACKAGES FOR MORE DETAIL
+------------------------------------
+The Python script works without third-party Python packages.
+
+For iostat:
+RHEL / Oracle Linux:
+sudo dnf install -y sysstat
+
+Ubuntu / Debian:
+sudo apt-get install -y sysstat
+
+For ss:
+RHEL / Oracle Linux:
+sudo dnf install -y iproute
+
+Ubuntu / Debian:
+sudo apt-get install -y iproute2
+
+The script reports that a command is unavailable instead of crashing.
+
+8. THRESHOLD EXAMPLE
+--------------------
+/usr/bin/python3 /opt/os-health/linux_health_check.py \
+    --output-dir /var/log/os-health \
+    --cpu-warning 70 \
+    --cpu-critical 90 \
+    --memory-warning 75 \
+    --memory-critical 90 \
+    --filesystem-warning 80 \
+    --filesystem-critical 90
+
+9. INTERPRETING EXIT CODES
+--------------------------
+0  Healthy
+1  Warning or unknown result
+2  Critical
+3  Script/runtime error
+
+This allows external monitoring:
+
+/usr/bin/python3 /opt/os-health/linux_health_check.py --brief
+case $? in
+    0) echo "Healthy" ;;
+    1) echo "Warning" ;;
+    2) echo "Critical" ;;
+    *) echo "Script failure" ;;
+esac
+
+10. SECURITY AND OPERATIONS NOTES
+--------------------------------
+- Store reports in a directory readable only by the intended operations team.
+- Reports contain hostnames, IP addresses, process arguments and listening ports.
+- Avoid embedding SMTP passwords in the script or crontab.
+- Prefer a company SMTP relay configured in Postfix or another local MTA.
+- Running as root provides the fullest process, service and socket visibility.
+- Test on a non-production server before enterprise rollout.
+- Tune thresholds for the workload; a generic threshold is not an SLA.
+- Hourly email of healthy reports can create alert fatigue. A better production pattern is:
+    * save every hourly report;
+    * email WARNING/CRITICAL reports;
+    * send one scheduled daily summary.
